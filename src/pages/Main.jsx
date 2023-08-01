@@ -7,6 +7,9 @@ export default function Main() {
       <Link to='/test'>
         <button className='border'>Click me !</button>
       </Link>
+      <Link to='/maptest'>
+        <button className='ml-10 border'>Map API Test</button>
+      </Link>
     </main>
   );
 }

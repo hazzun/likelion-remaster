@@ -3,6 +3,7 @@ import RoutingTest from './pages/RoutingTest';
 import Main from './pages/Main';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import MapTest from './pages/MapTest';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Main />}></Route>
           <Route path='/test' element={<RoutingTest />}></Route>
+          <Route path='/maptest' element={<MapTest />}></Route>
         </Routes>
       </div>
       <Footer></Footer>

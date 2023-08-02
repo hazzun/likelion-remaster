@@ -7,6 +7,7 @@ export default function MapTest() {
   const mapElement = useRef(null);
 
   const [myLocation, setMyLocation] = useState('');
+  const [isInfoModal, setIsInfoModal] = useState(false);
 
   useEffect(() => {
     const success = (position) => {
@@ -19,7 +20,7 @@ export default function MapTest() {
       window.alert('현재위치를 알수 없습니다.');
     };
     if (navigator.geolocation) {
-      navigator.geolocation.watchPosition(success, error);
+      navigator.geolocation.getCurrentPosition(success, error);
     }
   }, []);
 
@@ -102,25 +103,43 @@ export default function MapTest() {
 
     naver.maps.Event.addListener(marker, 'click', function (e) {
       if (infowindow.getMap()) {
+        map.setCenter(location);
         infowindow.close();
+        setIsInfoModal(false);
       } else {
+        map.setCenter(location);
         infowindow.open(map, marker);
+        setIsInfoModal(true);
       }
     });
   }, [myLocation]);
 
   return (
     <>
-      <div ref={mapElement} className='w-full h-screen'>
-        <img
-          src='/img/mark.png'
-          width='25'
-          height='25'
-          alt='현재 위치'
-          className='z-20'
-        />
-        <div className='z-30'> test testsetest</div>
-      </div>
+      {isInfoModal ? (
+        <>
+          {/* <div className='h-full relative'> */}
+          <div
+            ref={mapElement}
+            className='z-10 w-full h-[60%] rounded-b-3xl'
+          ></div>
+          <div className='z-30 h-[45%] absolute bottom-0 left-0 right-0 bg-gray-200 rounded-t-[30px] pt-10 pl-5 pr-5'>
+            <img
+              src='/img/mark.png'
+              width='25'
+              height='25'
+              alt='현재 위치'
+              className=''
+            />
+            <div className=''> test testsetest</div>
+          </div>
+          {/* </div> */}
+        </>
+      ) : (
+        <>
+          <div ref={mapElement} className='w-full h-full'></div>
+        </>
+      )}
     </>
   );
 }

@@ -1,19 +1,18 @@
-import { useRef, useEffect, useState } from "react";
-import { ReactComponent as Location } from "../../assets/svg/location.svg";
 import BottomButton from "../BottomButton";
-
+import { ReactComponent as Location } from "../../assets/svg/location.svg";
+import { useRef, useEffect, useState } from "react";
 // import mark from '../img/mark.png';
 
 const { naver } = window;
 
-export default function Map({ click }) {
+export default function MapTest({ click }) {
   const mapElement = useRef(null);
 
   const [myLocation, setMyLocation] = useState("");
   const [isInfoModal, setIsInfoModal] = useState(false);
   const [selectedMarkerInfo, setSelectedMarkerInfo] = useState(null);
-  const [markers, setMarkers] = useState([]);
-  const [isMarkerClick, setIsMarkerClick] = useState(false);
+  // const [markers, setMarkers] = useState([]);
+  // const [isMarkerClick, setIsMarkerClick] = useState(false);
 
   useEffect(() => {
     const success = (position) => {
@@ -40,17 +39,15 @@ export default function Map({ click }) {
       );
 
     const mapOptions = {
-      // baseTileOpacity: 0.9,
       padding: 100,
       center: new naver.maps.LatLng(myLocation.latitude, myLocation.longitude),
-      zoom: 10, // default = 16
+      zoom: 15, // default = 16
       scaleControl: false,
       zoomControl: true,
       zoomControlOptions: {
         position: naver.maps.Position.TOP_RIGHT,
       },
     };
-    /*    mapOption 을 포함한  map 객체 생성!!    */
     const map = new naver.maps.Map(mapElement.current, mapOptions);
 
     /*    내 위치 마커생성    */
@@ -63,11 +60,14 @@ export default function Map({ click }) {
     };
     new naver.maps.Marker(markerOptions);
     /* ----------------- */
-    const markerIcon = "/images/marker.png";
+
+    // const markerIcon = '/images/marker.png';
+
     const markerData = [
       { latitude: 37.4114916235998, longitude: 127.12920236033524 }, // 야탑역
       { latitude: 37.3102050791496, longitude: 126.85350336500038 }, // 한대앞역
       { latitude: 37.51541730466366, longitude: 127.07299456527649 }, // 잠실
+      { latitude: 37.8154173046637, longitude: 127.47299456527652 }, // 잠실
     ];
     const markersArray = markerData.map((locations) => {
       const markers = new naver.maps.Marker({
@@ -83,14 +83,18 @@ export default function Map({ click }) {
         //   anchor: new naver.maps.Point(25, 26),
         // },
       });
+
       naver.maps.Event.addListener(markers, "click", () => {
-        setIsInfoModal(!isInfoModal);
+        setIsInfoModal((prev) => !prev);
         setSelectedMarkerInfo(locations);
-        setIsMarkerClick(!isMarkerClick);
+        // setIsMarkerClick((prev) => !prev);
         // map.setCenter(locations);
       });
+      return markers;
     });
-    setMarkers(markersArray);
+    console.log(markersArray);
+
+    // setMarkers(markersArray);
   }, [myLocation]);
 
   return (

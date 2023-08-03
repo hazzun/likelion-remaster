@@ -10,7 +10,7 @@ export default function MapTest() {
   const [isInfoModal, setIsInfoModal] = useState(false);
   const [selectedMarkerInfo, setSelectedMarkerInfo] = useState(null);
   // const [markers, setMarkers] = useState([]);
-  const [isMarkerClick, setIsMarkerClick] = useState(false);
+  // const [isMarkerClick, setIsMarkerClick] = useState(false);
 
   useEffect(() => {
     const success = (position) => {
@@ -85,7 +85,7 @@ export default function MapTest() {
       naver.maps.Event.addListener(markers, 'click', () => {
         setIsInfoModal((prev) => !prev);
         setSelectedMarkerInfo(locations);
-        setIsMarkerClick((prev) => !prev);
+        // setIsMarkerClick((prev) => !prev);
         // map.setCenter(locations);
       });
       return markers;

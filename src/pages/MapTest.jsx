@@ -9,7 +9,7 @@ export default function MapTest() {
   const [myLocation, setMyLocation] = useState('');
   const [isInfoModal, setIsInfoModal] = useState(false);
   const [selectedMarkerInfo, setSelectedMarkerInfo] = useState(null);
-  const [markers, setMarkers] = useState([]);
+  // const [markers, setMarkers] = useState([]);
   const [isMarkerClick, setIsMarkerClick] = useState(false);
 
   useEffect(() => {
@@ -59,12 +59,13 @@ export default function MapTest() {
     new naver.maps.Marker(markerOptions);
     /* ----------------- */
 
-    const markerIcon = '/images/marker.png';
+    // const markerIcon = '/images/marker.png';
 
     const markerData = [
       { latitude: 37.4114916235998, longitude: 127.12920236033524 }, // 야탑역
       { latitude: 37.3102050791496, longitude: 126.85350336500038 }, // 한대앞역
       { latitude: 37.51541730466366, longitude: 127.07299456527649 }, // 잠실
+      { latitude: 37.8154173046637, longitude: 127.47299456527652 }, // 잠실
     ];
     const markersArray = markerData.map((locations) => {
       const markers = new naver.maps.Marker({
@@ -82,14 +83,16 @@ export default function MapTest() {
       });
 
       naver.maps.Event.addListener(markers, 'click', () => {
-        setIsInfoModal(!isInfoModal);
+        setIsInfoModal((prev) => !prev);
         setSelectedMarkerInfo(locations);
-        setIsMarkerClick(!isMarkerClick);
+        setIsMarkerClick((prev) => !prev);
         // map.setCenter(locations);
       });
+      return markers;
     });
+    console.log(markersArray);
 
-    setMarkers(markersArray);
+    // setMarkers(markersArray);
   }, [myLocation]);
 
   return (

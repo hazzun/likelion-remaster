@@ -79,18 +79,20 @@ export default function MapTest() {
     /*     markerOption 을 포함한 marker 객체 생성!!    */
     let marker = new naver.maps.Marker(markerOptions);
 
-    // let markerOptionss = {
-    //   position: new naver.maps.LatLng(37.5656, 126.9769),
-    //   map,
-    //   icon: {
-    //     url: content,
-    //     size: new naver.maps.Size(50, 52),
-    //     origin: new naver.maps.Point(0, 0),
-    //     anchor: new naver.maps.Point(25, 26),
-    //   },
-    // };
-    // let marker = new naver.maps.Marker(markerOptionss);
+    const markerData = [
+      { latitude: 37.4114916235998, longitude: 127.12920236033524 }, // 야탑역
+      { latitude: 37.3102050791496, longitude: 126.85350336500038 }, // 한대앞역
+      { latitude: 37.51541730466366, longitude: 127.07299456527649 }, // 잠실
+    ];
+    const markersArray = markerData.map((location) => {
+      const marker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(location.latitude, location.longitude),
+        map: map,
+      });
+      return marker;
+    });
 
+    /*    contentString을 포함한 infoWindow (= 마커 클릭하면 나오는 정보) 생성!!     */
     let infowindow = new naver.maps.InfoWindow({
       content: contentString,
 
@@ -123,7 +125,7 @@ export default function MapTest() {
             ref={mapElement}
             className='z-10 w-full h-[60%] rounded-b-3xl'
           ></div>
-          <div className='z-30 h-[45%] absolute bottom-0 left-0 right-0 bg-gray-200 rounded-t-[30px] pt-10 pl-5 pr-5'>
+          <div className='z-30 h-[45%] absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] pt-10 pl-5 pr-5 shadow-t-2xl'>
             <img
               src='/img/mark.png'
               width='25'

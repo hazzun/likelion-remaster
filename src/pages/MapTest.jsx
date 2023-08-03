@@ -8,6 +8,9 @@ export default function MapTest() {
 
   const [myLocation, setMyLocation] = useState('');
   const [isInfoModal, setIsInfoModal] = useState(false);
+  const [selectedMarkerInfo, setSelectedMarkerInfo] = useState(null);
+  const [markers, setMarkers] = useState([]);
+  const [isMarkerClick, setIsMarkerClick] = useState(false);
 
   useEffect(() => {
     const success = (position) => {
@@ -24,18 +27,6 @@ export default function MapTest() {
     }
   }, []);
 
-  let contentString = [
-    '<div class="iw_inner">',
-    '   <h3>서울특별시청</h3>',
-    '   <p>서울특별시 중구 태평로1가 31 | 서울특별시 중구 세종대로 110 서울특별시청<br>',
-    '       02-120 | 공공,사회기관 > 특별,광역시청<br>',
-    '       <a href="http://www.seoul.go.kr" target="_blank">www.seoul.go.kr/</a>',
-    '   </p>',
-    '</div>',
-  ].join('');
-
-  const content = `<img src='/img/mark.png' width="85" height="85" alt="현재 위치"/>`;
-
   useEffect(() => {
     // console.log(mapElement.current);
     if (!mapElement.current || !naver)
@@ -45,73 +36,60 @@ export default function MapTest() {
         </>
       );
 
-    // 지도에 표시할 위치의 위도와 경도 좌표를 파라미터로 넣기
-    const location = new naver.maps.LatLng(
-      myLocation.latitude,
-      myLocation.longitude
-    );
     const mapOptions = {
-      // baseTileOpacity: 0.9,
       padding: 100,
-      center: location,
-      // zoom: 18, // default = 16
+      center: new naver.maps.LatLng(myLocation.latitude, myLocation.longitude),
+      zoom: 10, // default = 16
       scaleControl: false,
       zoomControl: true,
       zoomControlOptions: {
         position: naver.maps.Position.TOP_RIGHT,
       },
     };
-    /*    mapOption 을 포함한  map 객체 생성!!    */
     const map = new naver.maps.Map(mapElement.current, mapOptions);
-    /* ----------------- */
-    /* ----------------- */
-    /* ----------------- */
+
+    /*    내 위치 마커생성    */
     let markerOptions = {
-      position: location,
+      position: new naver.maps.LatLng(
+        myLocation.latitude,
+        myLocation.longitude
+      ),
       map,
-      icon: {
-        url: content,
-        size: new naver.maps.Size(50, 52),
-        origin: new naver.maps.Point(0, 0),
-        anchor: new naver.maps.Point(25, 26),
-      },
     };
-    /*     markerOption 을 포함한 marker 객체 생성!!    */
-    let marker = new naver.maps.Marker(markerOptions);
+    new naver.maps.Marker(markerOptions);
+    /* ----------------- */
 
-    // let markerOptionss = {
-    //   position: new naver.maps.LatLng(37.5656, 126.9769),
-    //   map,
-    //   icon: {
-    //     url: content,
-    //     size: new naver.maps.Size(50, 52),
-    //     origin: new naver.maps.Point(0, 0),
-    //     anchor: new naver.maps.Point(25, 26),
-    //   },
-    // };
-    // let marker = new naver.maps.Marker(markerOptionss);
+    const markerIcon = '/images/marker.png';
 
-    let infowindow = new naver.maps.InfoWindow({
-      content: contentString,
+    const markerData = [
+      { latitude: 37.4114916235998, longitude: 127.12920236033524 }, // 야탑역
+      { latitude: 37.3102050791496, longitude: 126.85350336500038 }, // 한대앞역
+      { latitude: 37.51541730466366, longitude: 127.07299456527649 }, // 잠실
+    ];
+    const markersArray = markerData.map((locations) => {
+      const markers = new naver.maps.Marker({
+        position: new naver.maps.LatLng(
+          locations.latitude,
+          locations.longitude
+        ),
+        map: map,
+        // icon: {
+        //   url: markerIcon,
+        //   size: new naver.maps.Size(50, 52),
+        //   origin: new naver.maps.Point(0, 0),
+        //   anchor: new naver.maps.Point(25, 26),
+        // },
+      });
 
-      borderWidth: 0,
-      disableAnchor: true,
-      backgroundColor: 'transparent',
-
-      pixelOffset: new naver.maps.Point(0, -10),
+      naver.maps.Event.addListener(markers, 'click', () => {
+        setIsInfoModal(!isInfoModal);
+        setSelectedMarkerInfo(locations);
+        setIsMarkerClick(!isMarkerClick);
+        // map.setCenter(locations);
+      });
     });
 
-    naver.maps.Event.addListener(marker, 'click', function (e) {
-      if (infowindow.getMap()) {
-        map.setCenter(location);
-        infowindow.close();
-        setIsInfoModal(false);
-      } else {
-        map.setCenter(location);
-        infowindow.open(map, marker);
-        setIsInfoModal(true);
-      }
-    });
+    setMarkers(markersArray);
   }, [myLocation]);
 
   return (
@@ -123,15 +101,14 @@ export default function MapTest() {
             ref={mapElement}
             className='z-10 w-full h-[60%] rounded-b-3xl'
           ></div>
-          <div className='z-30 h-[45%] absolute bottom-0 left-0 right-0 bg-gray-200 rounded-t-[30px] pt-10 pl-5 pr-5'>
-            <img
-              src='/img/mark.png'
-              width='25'
-              height='25'
-              alt='현재 위치'
-              className=''
-            />
-            <div className=''> test testsetest</div>
+          <div className='z-30 h-[45%] absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] pt-10 pl-5 pr-5 shadow-t-2xl'>
+            {selectedMarkerInfo && (
+              <div>
+                {/* <h3>{selectedMarkerInfo.title}</h3> */}
+                <p>Latitude: {selectedMarkerInfo.latitude}</p>
+                <p>Longitude: {selectedMarkerInfo.longitude}</p>
+              </div>
+            )}
           </div>
           {/* </div> */}
         </>

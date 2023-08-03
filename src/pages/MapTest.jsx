@@ -83,10 +83,12 @@ export default function MapTest() {
       });
 
       naver.maps.Event.addListener(markers, 'click', () => {
-        setIsInfoModal((prev) => !prev);
-        setSelectedMarkerInfo(locations);
-        setIsMarkerClick((prev) => !prev);
-        // map.setCenter(locations);
+        if (!isMarkerClick) {
+          setIsInfoModal((prev) => !prev);
+          setSelectedMarkerInfo(locations);
+          setIsMarkerClick((prev) => !prev);
+          // map.setCenter(locations);
+        }
       });
       return markers;
     });

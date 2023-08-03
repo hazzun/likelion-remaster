@@ -39,7 +39,7 @@ export default function MapTest() {
     const mapOptions = {
       padding: 100,
       center: new naver.maps.LatLng(myLocation.latitude, myLocation.longitude),
-      zoom: 10, // default = 16
+      zoom: 15, // default = 16
       scaleControl: false,
       zoomControl: true,
       zoomControlOptions: {

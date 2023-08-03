@@ -17,7 +17,7 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [page, setPage] = useState(2);
+  const [page, setPage] = useState(1);
 
   let title;
   let backHandler;

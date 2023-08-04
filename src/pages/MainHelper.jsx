@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 
 const { kakao } = window;
 
 export default function MainHelper() {
   const [userLocation, setUserLocation] = useState();
+  const [helpInfo, setHelpInfo] = useState();
+  const [isInfoModal, setIsInfoModal] = useState(false);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -27,18 +30,102 @@ export default function MainHelper() {
       const options = {
         //지도를 생성할 때 필요한 기본 옵션
         center: userLocation, //지도의 중심좌표.
-        level: 3, //지도의 레벨(확대, 축소 정도)
+        level: 10, //지도의 레벨(확대, 축소 정도), default = 3
       };
 
       const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 
+      /* ---------------------------------------------------------------------------- */
+      /* --------------------------- 도움요청자의 정보 받아오기 ---------------------------- */
+      /* ---------------------------------------------------------------------------- */
+      let positions = [
+        {
+          title: '수원역',
+          cate: ['핸드폰', '노트북', '사람살려'],
+          latlng: new kakao.maps.LatLng(37.266714775928556, 127.00048478122952),
+        },
+        {
+          title: '판교',
+          cate: ['키오스크', '사람살려'],
+          latlng: new kakao.maps.LatLng(37.39033774639587, 127.0905994639179),
+        },
+        {
+          title: '인천국제공항',
+          cate: ['인터넷뱅킹', '키오스크', '사람살려'],
+          latlng: new kakao.maps.LatLng(37.47686451580999, 126.42996911223717),
+        },
+        {
+          title: '야탑역',
+          cate: ['핸드폰', '노트북', '인터넷뱅킹'],
+          latlng: new kakao.maps.LatLng(37.4114916235998, 127.12920236033524),
+        },
+        {
+          title: '한대앞역',
+          cate: ['핸드폰', '키오스크'],
+          latlng: new kakao.maps.LatLng(37.3102050791496, 126.85350336500038),
+        },
+        {
+          title: '잠실역',
+          cate: ['인터넷뱅킹', '사람살려'],
+          latlng: new kakao.maps.LatLng(37.51541730466366, 127.07299456527649),
+        },
+        {
+          title: 'test',
+          cate: ['핸드폰', '노트북', '인터넷뱅킹', '키오스크', '사람살려'],
+          latlng: new kakao.maps.LatLng(37.4051373046637, 126.99999456527652),
+        },
+      ];
+      let helpImage = '/images/marker.png';
+      // let helpMarker;
+
+      for (let i = 0; i < positions.length; i++) {
+        // 마커 이미지의 이미지 크기 입니다
+        let helpImageSize = new kakao.maps.Size(20, 40);
+
+        // 마커 이미지를 생성합니다
+        let helpMarkerImage = new kakao.maps.MarkerImage(
+          helpImage,
+          helpImageSize
+        );
+
+        // 마커를 생성합니다
+        const helpMarker = new kakao.maps.Marker({
+          map: map, // 마커를 표시할 지도
+          position: positions[i].latlng, // 마커를 표시할 위치
+          title: positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+          image: helpMarkerImage, // 마커 이미지
+        });
+
+        kakao.maps.event.addListener(
+          helpMarker,
+          'click',
+          // helpInfoOpen(positions[i].title, positions[i].latlng)
+          helpInfoOpen(positions[i])
+        );
+      }
+
+      // 특정 마커를 클릭하면 동작하는 함수
+      function helpInfoOpen(info) {
+        return function () {
+          setIsInfoModal(!isInfoModal);
+          document.getElementById('map').style.height = '60%';
+          map.setCenter(info.latlng);
+
+          setHelpInfo(info);
+        };
+      }
+      /* ---------------------------------------------------------------------------- */
+      /* --------------------------- 도움요청자의 정보 받기완료 ---------------------------- */
+      /* ---------------------------------------------------------------------------- */
+
       const displayMarker = (userLocation) => {
-        var imageSrc = '/images/marker.png', // 마커이미지의 주소입니다
-          imageSize = new kakao.maps.Size(20, 40), // 마커이미지의 크기입니다
+        let imageSrc =
+            'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png', // 마커이미지의 주소입니다
+          imageSize = new kakao.maps.Size(24, 35), // 마커이미지의 크기입니다
           imageOption = { offset: new kakao.maps.Point(27, 69) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
         // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-        var markerImage = new kakao.maps.MarkerImage(
+        let markerImage = new kakao.maps.MarkerImage(
           imageSrc,
           imageSize,
           imageOption
@@ -54,6 +141,7 @@ export default function MainHelper() {
         // 지도 중심좌표를 접속위치로 변경합니다
         map.setCenter(userLocation);
       };
+
       // 마커와 인포윈도우를 표시합니다
       displayMarker(userLocation);
     }
@@ -63,13 +151,33 @@ export default function MainHelper() {
     <>
       {!userLocation ? (
         <>
-          <div className='w-full h-full flex items-center justify-center text-center'>
-            현재 위치를 불러오는 중 ... <br /> (예상 소요시간 : 5초)
+          <div className='w-full h-full flex flex-col items-center justify-center text-center gap-8'>
+            <AiOutlineLoading3Quarters className='animate-spin text-[40px]' />
+            <p className='text-md text-gray-500'>
+              현재 위치를 불러오는 중 ... <br /> (예상 소요시간 : 5초)
+            </p>
           </div>
         </>
       ) : (
         <>
-          <div id='map' className='w-full h-full'></div>
+          {isInfoModal ? (
+            <>
+              <div id='map' className='w-full rounded-b-3xl'></div>
+              {helpInfo && (
+                <div className='z-30 flex flex-col justify-between h-[45%] absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] pt-10 pl-5 pr-5 shadow-t-2xl'>
+                  <div>
+                    <h3>{helpInfo.title}</h3>
+                    <p>위도: {helpInfo.latlng.La}</p>
+                    <p>경도: {helpInfo.latlng.Ma}</p>
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              <div id='map' className='w-full h-full'></div>
+            </>
+          )}
         </>
       )}
     </>

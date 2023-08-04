@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { BiMicrophone } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
+import BottomButton from '../components/BottomButton';
 
 const { kakao } = window;
 
@@ -107,6 +109,7 @@ export default function MainHelper() {
       // 특정 마커를 클릭하면 동작하는 함수
       function helpInfoOpen(info) {
         return function () {
+          console.log(info);
           setIsInfoModal(!isInfoModal);
           document.getElementById('map').style.height = '60%';
           map.setCenter(info.latlng);
@@ -164,12 +167,47 @@ export default function MainHelper() {
             <>
               <div id='map' className='w-full rounded-b-3xl'></div>
               {helpInfo && (
-                <div className='z-30 flex flex-col justify-between h-[45%] absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] pt-10 pl-5 pr-5 shadow-t-2xl'>
-                  <div>
-                    <h3>{helpInfo.title}</h3>
-                    <p>위도: {helpInfo.latlng.La}</p>
-                    <p>경도: {helpInfo.latlng.Ma}</p>
+                <div className='z-30 flex flex-col justify-between h-[45%] absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] pt-10 pl-5 pr-5 pb-5 shadow-t-2xl'>
+                  <div className='flex items-center gap-5'>
+                    <div className='w-16 h-16 rounded-full bg-gray-300'></div>
+                    <div className='flex flex-col'>
+                      <span className='font-bold'>user1234 님</span>
+                      <span className='text-gray-500'>60대 남성</span>
+                    </div>
                   </div>
+                  <div className='flex flex-col'>
+                    <div className='flex gap-2 mb-5'>
+                      {helpInfo.cate.map((i) => {
+                        return (
+                          <span className='bg-gray-300 px-2 py-1 rounded-md'>
+                            {i}
+                          </span>
+                        );
+                      })}
+                    </div>
+                    <div>
+                      <span className='font-extrabold mr-8'>위치</span>
+                      <span>{helpInfo.title}</span>
+                    </div>
+                    <div>
+                      <span className='font-extrabold mr-8'>거리</span>
+                      <span>
+                        {helpInfo.latlng.La}, {helpInfo.latlng.Ma}
+                      </span>
+                    </div>
+                    <div>
+                      <span className='font-extrabold mr-8'>시간</span>
+                      <span>구현해야함</span>
+                    </div>
+                    <button className='flex items-center justify-center w-[50%] h-[45px] mt-4 rounded-2xl bg-[#D9D9D9]'>
+                      <p className='flex items-center text-[20px] font-medium'>
+                        <BiMicrophone />
+                        음성내용 듣기
+                      </p>
+                    </button>
+                  </div>
+
+                  <BottomButton text={'도움 수락하기'} />
                 </div>
               )}
             </>

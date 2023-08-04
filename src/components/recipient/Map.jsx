@@ -1,14 +1,14 @@
-import BottomButton from "../BottomButton";
-import { ReactComponent as Location } from "../../assets/svg/location.svg";
-import { useRef, useEffect, useState } from "react";
+import BottomButton from '../BottomButton';
+import { ReactComponent as Location } from '../../assets/svg/location.svg';
+import { useRef, useEffect, useState } from 'react';
 // import mark from '../img/mark.png';
 
 const { naver } = window;
 
-export default function MapTest({ click }) {
+export default function Map({ click }) {
   const mapElement = useRef(null);
 
-  const [myLocation, setMyLocation] = useState("");
+  const [myLocation, setMyLocation] = useState('');
   const [isInfoModal, setIsInfoModal] = useState(false);
   const [selectedMarkerInfo, setSelectedMarkerInfo] = useState(null);
   // const [markers, setMarkers] = useState([]);
@@ -22,7 +22,7 @@ export default function MapTest({ click }) {
       });
     };
     const error = () => {
-      window.alert("현재위치를 알수 없습니다.");
+      window.alert('현재위치를 알수 없습니다.');
     };
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(success, error);
@@ -84,7 +84,7 @@ export default function MapTest({ click }) {
         // },
       });
 
-      naver.maps.Event.addListener(markers, "click", () => {
+      naver.maps.Event.addListener(markers, 'click', () => {
         setIsInfoModal((prev) => !prev);
         setSelectedMarkerInfo(locations);
         // setIsMarkerClick((prev) => !prev);
@@ -99,7 +99,7 @@ export default function MapTest({ click }) {
 
   return (
     <>
-      <p className="mt-[2.5rem] mb-[1.125rem] px-5 font-medium text-[1.125rem]">
+      <p className='mt-[2.5rem] mb-[1.125rem] px-5 font-medium text-[1.125rem]'>
         현재 위치가 맞는지 확인해주세요.
       </p>
       {isInfoModal ? (
@@ -107,9 +107,9 @@ export default function MapTest({ click }) {
           {/* <div className='h-full relative'> */}
           <div
             ref={mapElement}
-            className="z-10 w-full h-[60%] rounded-b-3xl"
+            className='z-10 w-full h-[60%] rounded-b-3xl'
           ></div>
-          <div className="z-30 h-[45%] absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] pt-10 pl-5 pr-5 shadow-t-2xl">
+          <div className='z-30 h-[45%] absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] pt-10 pl-5 pr-5 shadow-t-2xl'>
             {selectedMarkerInfo && (
               <div>
                 {/* <h3>{selectedMarkerInfo.title}</h3> */}
@@ -122,18 +122,18 @@ export default function MapTest({ click }) {
         </>
       ) : (
         <>
-          <div ref={mapElement} className="w-full h-[80%]"></div>
+          <div ref={mapElement} className='w-full h-[80%]'></div>
         </>
       )}
-      <div className="absolute bottom-0 w-full z-[101] h-[12rem] pt-[1.375rem] bg-white rounded-t-[1.125rem] px-5 drop-shadow-[0_4px_16px_rgba(0,0,0,0.5)]">
-        <div className="flex mb-[0.25rem]">
+      <div className='absolute bottom-0 w-full z-[101] h-[12rem] pt-[1.375rem] bg-white rounded-t-[1.125rem] px-5 drop-shadow-[0_4px_16px_rgba(0,0,0,0.5)]'>
+        <div className='flex mb-[0.25rem]'>
           <Location />
-          <p className="ml-[0.5rem] heading-2">마로니에 공원</p>
+          <p className='ml-[0.5rem] heading-2'>마로니에 공원</p>
         </div>
-        <p className="text-[1.125rem] mb-[0.875rem]">
+        <p className='text-[1.125rem] mb-[0.875rem]'>
           경기도 안산시 상록구 사동 1554
         </p>
-        <BottomButton text="이 위치로 도움 받기" click={click} />
+        <BottomButton text='이 위치로 도움 받기' click={click} />
       </div>
     </>
   );

@@ -1,7 +1,6 @@
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Header from './components/Header';
-import MapTest from './pages/MapTest';
 import First from './components/sign-up/First';
 import Recipient from './pages/Recipient';
 import MainHelper from './pages/MainHelper';
@@ -31,7 +30,6 @@ function App() {
       <div className='pt-[56px] h-screen'>
         <Routes>
           <Route path='/' element={<First />}></Route>
-          <Route path='/MapTest' element={<MapTest />}></Route>
           <Route path='/MainHelper' element={<MainHelper />}></Route>
           <Route
             path='/recipient'

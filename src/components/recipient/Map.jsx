@@ -38,11 +38,10 @@ export default function Map() {
       const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 
       // 주소-좌표 변환 객체를 생성
-      let geocoder = new kakao.maps.services.Geocoder();
+      const geocoder = new kakao.maps.services.Geocoder();
 
       /* ---------------------------------------------------------------------------- */
       /* ------------------ 가져온 위치정보를 통해 하단 팝업창 세부정보 갱신하기 ----------------- */
-      /* ---------------------------------------------------------------------------- */
       const callback = (result, status) => {
         if (status === kakao.maps.services.Status.OK) {
           console.log(
@@ -61,7 +60,6 @@ export default function Map() {
 
       /* ---------------------------------------------------------------------------- */
       /* ------------------------------ 마커 초기 세팅 --------------------------------- */
-      /* ---------------------------------------------------------------------------- */
       let imageSrc =
           'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png', // 마커이미지의 주소
         imageSize = new kakao.maps.Size(24, 35), // 마커이미지의 크기
@@ -89,8 +87,7 @@ export default function Map() {
 
       /* ---------------------------------------------------------------------------- */
       /* ------------------- 마커를 옮기고 내려놓은 마커의 위치를 가져오기 --------------------- */
-      /* ---------------------------------------------------------------------------- */
-      kakao.maps.event.addListener(marker, 'mouseup', function () {
+      kakao.maps.event.addListener(marker, 'dragend', function () {
         let moveMarker = marker.getPosition();
         map.setCenter(moveMarker);
 
@@ -102,15 +99,10 @@ export default function Map() {
           if (status === kakao.maps.services.Status.OK) {
             console.log(
               '주소 = ',
-              result[0].address.address_name + '\n장소명 = ',
-
-              result[0].address.region_2depth_name
+              result[0].address.address_name + '\n장소명 = '
             );
             setCallLoc(result[0].address.address_name);
-            setPlaceName(
-              result[0].address.building_name ||
-                result[0].address.region_2depth_name
-            );
+            searchPlaceByAddress(result[0].address.address_name);
           }
         };
         geocoder.coord2Address(
@@ -118,10 +110,47 @@ export default function Map() {
           moveMarker.getLat(),
           callback
         );
+        function searchPlaceByAddress(address) {
+          let places = new kakao.maps.services.Places();
+          places.keywordSearch(address, function (result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+              if (result.length > 0) {
+                console.log(result);
+                setPlaceName(result[0].place_name);
+              } else {
+                console.log('해당 위치에 해당하는 건물명을 찾을 수 없습니다.');
+              }
+            }
+          });
+        }
+        // geocoder.addressSearch(
+        //   '경기도 안양시 만안구 태평로 214',
+        //   function (result, status) {
+        //     // 정상적으로 검색이 완료됐으면
+        //     if (status === kakao.maps.services.Status.OK) {
+        //       console.log(result);
+        //     }
+        //   }
+        // );
       });
       /* ---------------------------------------------------------------------------- */
     }
   }, [userLocation]);
+  // useState(() => {
+  //   const ps = new kakao.maps.services.Places();
+  //   if (callLoc) {
+  //     // 키워드로 장소를 검색합니다
+  //     ps.keywordSearch(`${callLoc}`, placesSearchCB);
+
+  //     // 키워드 검색 완료 시 호출되는 콜백함수 입니다
+  //     function placesSearchCB(data, status, pagination) {
+  //       if (status === kakao.maps.services.Status.OK) {
+  //         console.log(data);
+  //         console.log('변경된 마커 위치 : ', callLoc);
+  //       }
+  //     }
+  //   }
+  // }, [callLoc]);
 
   return (
     <>
@@ -136,7 +165,7 @@ export default function Map() {
         <>
           <div id='map' className='w-full h-[72%] '></div>
           <div className='z-30 flex flex-col justify-between h-[30%] absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] pt-10 pl-5 pr-5 pb-5 shadow-t-2xl'>
-            <div className='flex items-center gap-5'>위치정보 title</div>
+            <div className='flex items-center gap-5'>{placeName}</div>
             <div className=''>{callLoc}</div>
             <BottomButton text={'이 위치로 도움받기'} />
           </div>

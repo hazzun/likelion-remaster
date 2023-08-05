@@ -1,140 +1,147 @@
+import React, { useEffect, useState } from 'react';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import BottomButton from '../BottomButton';
-import { ReactComponent as Location } from '../../assets/svg/location.svg';
-import { useRef, useEffect, useState } from 'react';
-// import mark from '../img/mark.png';
 
-const { naver } = window;
+const { kakao } = window;
 
-export default function Map({ click }) {
-  const mapElement = useRef(null);
+export default function Map() {
+  const [userLocation, setUserLocation] = useState();
+  const [callLoc, setCallLoc] = useState();
+  const [placeName, setPlaceName] = useState();
 
-  const [myLocation, setMyLocation] = useState('');
-  const [isInfoModal, setIsInfoModal] = useState(false);
-  const [selectedMarkerInfo, setSelectedMarkerInfo] = useState(null);
-  // const [markers, setMarkers] = useState([]);
-  // const [isMarkerClick, setIsMarkerClick] = useState(false);
-
+  /* 페이지가 처음 로드됨과 동시에 현재위치정보 가져오기 */
   useEffect(() => {
-    const success = (position) => {
-      setMyLocation({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      });
-    };
-    const error = () => {
-      window.alert('현재위치를 알수 없습니다.');
-    };
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(success, error);
+      // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+      navigator.geolocation.getCurrentPosition((position) => {
+        let lat = position.coords.latitude; // 위도
+        let lon = position.coords.longitude; // 경도
+
+        setUserLocation(new kakao.maps.LatLng(lat, lon)); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성
+      });
+    } else {
+      // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치를 설정
+      alert('위치정보 수집을 동의해주세요');
     }
   }, []);
 
+  /* 위치정보 가져온 뒤 도움요청자가 요청할 장소를 고르는 코드 */
   useEffect(() => {
-    // console.log(mapElement.current);
-    if (!mapElement.current || !naver)
-      return (
-        <>
-          <div>지도를 불러오지 못했습니다</div>
-        </>
+    if (userLocation) {
+      const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+      const options = {
+        //지도를 생성할 때 필요한 기본 옵션
+        center: userLocation, //지도의 중심좌표.
+        level: 3, //지도의 레벨(확대, 축소 정도), default = 3
+      };
+
+      const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+
+      // 주소-좌표 변환 객체를 생성
+      let geocoder = new kakao.maps.services.Geocoder();
+
+      /* ---------------------------------------------------------------------------- */
+      /* ------------------ 가져온 위치정보를 통해 하단 팝업창 세부정보 갱신하기 ----------------- */
+      /* ---------------------------------------------------------------------------- */
+      const callback = (result, status) => {
+        if (status === kakao.maps.services.Status.OK) {
+          console.log(
+            '사용자 위치정보를 통해 얻은 주소 = ',
+            result[0].address.address_name
+          );
+          setCallLoc(result[0].address.address_name);
+        }
+      };
+      geocoder.coord2Address(
+        userLocation.getLng(),
+        userLocation.getLat(),
+        callback
+      );
+      /* ---------------------------------------------------------------------------- */
+
+      /* ---------------------------------------------------------------------------- */
+      /* ------------------------------ 마커 초기 세팅 --------------------------------- */
+      /* ---------------------------------------------------------------------------- */
+      let imageSrc =
+          'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png', // 마커이미지의 주소
+        imageSize = new kakao.maps.Size(24, 35), // 마커이미지의 크기
+        imageOption = { offset: new kakao.maps.Point(27, 69) }; // 마커이미지의 옵션. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정
+
+      // 마커의 이미지정보를 가지고 있는 마커이미지를 생성
+      let markerImage = new kakao.maps.MarkerImage(
+        imageSrc,
+        imageSize,
+        imageOption
       );
 
-    const mapOptions = {
-      padding: 100,
-      center: new naver.maps.LatLng(myLocation.latitude, myLocation.longitude),
-      zoom: 15, // default = 16
-      scaleControl: false,
-      zoomControl: true,
-      zoomControlOptions: {
-        position: naver.maps.Position.TOP_RIGHT,
-      },
-    };
-    const map = new naver.maps.Map(mapElement.current, mapOptions);
-
-    /*    내 위치 마커생성    */
-    let markerOptions = {
-      position: new naver.maps.LatLng(
-        myLocation.latitude,
-        myLocation.longitude
-      ),
-      map,
-    };
-    new naver.maps.Marker(markerOptions);
-    /* ----------------- */
-
-    // const markerIcon = '/images/marker.png';
-
-    const markerData = [
-      { latitude: 37.4114916235998, longitude: 127.12920236033524 }, // 야탑역
-      { latitude: 37.3102050791496, longitude: 126.85350336500038 }, // 한대앞역
-      { latitude: 37.51541730466366, longitude: 127.07299456527649 }, // 잠실
-      { latitude: 37.8154173046637, longitude: 127.47299456527652 }, // 잠실
-    ];
-    const markersArray = markerData.map((locations) => {
-      const markers = new naver.maps.Marker({
-        position: new naver.maps.LatLng(
-          locations.latitude,
-          locations.longitude
-        ),
+      // 마커 생성
+      let marker = new kakao.maps.Marker({
         map: map,
-        // icon: {
-        //   url: markerIcon,
-        //   size: new naver.maps.Size(50, 52),
-        //   origin: new naver.maps.Point(0, 0),
-        //   anchor: new naver.maps.Point(25, 26),
-        // },
+        position: userLocation,
+        image: markerImage,
+        draggable: true,
+        clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정
       });
 
-      naver.maps.Event.addListener(markers, 'click', () => {
-        setIsInfoModal((prev) => !prev);
-        setSelectedMarkerInfo(locations);
-        // setIsMarkerClick((prev) => !prev);
-        // map.setCenter(locations);
-      });
-      return markers;
-    });
-    console.log(markersArray);
+      marker.setMap(map); // 마커가 지도 위에 표시되도록 설정
+      map.setCenter(userLocation); // 지도 중심좌표를 접속위치로 변경
+      /* ---------------------------------------------------------------------------- */
 
-    // setMarkers(markersArray);
-  }, [myLocation]);
+      /* ---------------------------------------------------------------------------- */
+      /* ------------------- 마커를 옮기고 내려놓은 마커의 위치를 가져오기 --------------------- */
+      /* ---------------------------------------------------------------------------- */
+      kakao.maps.event.addListener(marker, 'mouseup', function () {
+        let moveMarker = marker.getPosition();
+        map.setCenter(moveMarker);
+
+        let message = '클릭한 위치의 위도는 ' + moveMarker.getLat() + ' 이고, ';
+        message += '경도는 ' + moveMarker.getLng() + '임';
+        console.log(message);
+
+        const callback = (result, status) => {
+          if (status === kakao.maps.services.Status.OK) {
+            console.log(
+              '주소 = ',
+              result[0].address.address_name + '\n장소명 = ',
+
+              result[0].address.region_2depth_name
+            );
+            setCallLoc(result[0].address.address_name);
+            setPlaceName(
+              result[0].address.building_name ||
+                result[0].address.region_2depth_name
+            );
+          }
+        };
+        geocoder.coord2Address(
+          moveMarker.getLng(),
+          moveMarker.getLat(),
+          callback
+        );
+      });
+      /* ---------------------------------------------------------------------------- */
+    }
+  }, [userLocation]);
 
   return (
     <>
-      <p className='mt-[2.5rem] mb-[1.125rem] px-5 font-medium text-[1.125rem]'>
-        현재 위치가 맞는지 확인해주세요.
-      </p>
-      {isInfoModal ? (
-        <>
-          {/* <div className='h-full relative'> */}
-          <div
-            ref={mapElement}
-            className='z-10 w-full h-[60%] rounded-b-3xl'
-          ></div>
-          <div className='z-30 h-[45%] absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] pt-10 pl-5 pr-5 shadow-t-2xl'>
-            {selectedMarkerInfo && (
-              <div>
-                {/* <h3>{selectedMarkerInfo.title}</h3> */}
-                <p>Latitude: {selectedMarkerInfo.latitude}</p>
-                <p>Longitude: {selectedMarkerInfo.longitude}</p>
-              </div>
-            )}
-          </div>
-          {/* </div> */}
-        </>
+      {!userLocation ? (
+        <div className='w-full h-full flex flex-col items-center justify-center text-center gap-8'>
+          <AiOutlineLoading3Quarters className='animate-spin text-[40px]' />
+          <p className='text-md text-gray-500'>
+            현재 위치를 불러오는 중 ... <br /> (예상 소요시간 : 5초)
+          </p>
+        </div>
       ) : (
         <>
-          <div ref={mapElement} className='w-full h-[80%]'></div>
+          <div id='map' className='w-full h-[72%] '></div>
+          <div className='z-30 flex flex-col justify-between h-[30%] absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] pt-10 pl-5 pr-5 pb-5 shadow-t-2xl'>
+            <div className='flex items-center gap-5'>위치정보 title</div>
+            <div className=''>{callLoc}</div>
+            <BottomButton text={'이 위치로 도움받기'} />
+          </div>
         </>
       )}
-      <div className='absolute bottom-0 w-full z-[101] h-[12rem] pt-[1.375rem] bg-white rounded-t-[1.125rem] px-5 drop-shadow-[0_4px_16px_rgba(0,0,0,0.5)]'>
-        <div className='flex mb-[0.25rem]'>
-          <Location />
-          <p className='ml-[0.5rem] heading-2'>마로니에 공원</p>
-        </div>
-        <p className='text-[1.125rem] mb-[0.875rem]'>
-          경기도 안산시 상록구 사동 1554
-        </p>
-        <BottomButton text='이 위치로 도움 받기' click={click} />
-      </div>
     </>
   );
 }

@@ -33,30 +33,39 @@ export default function SaveModal({ isVisible, onClose, fileBlob, usertoken }) {
     }),
   })
   
-  const file = fileBlob
-  const t_filename = usertoken + file.name
+  const clickUpload = () => {
 
-  const upload = new AWS.S3.ManagedUpload({
-    params: {
-      Bucket: "record-upload-bucket",
-      Key: t_filename,
-      Body: file,
-    },
-  })
+    const file = new File([fileBlob], "soundBlob.mp3", {
+      lastModified: new Date().getTime(),
+    });
 
-  /* promise 작동이 이상하다... ㅎ ㅏ...  */
+    const t_filename = usertoken + file.name
+    console.log(file)
+    console.log(file.type)
 
-  const promise = upload.promise()
+    const upload = new AWS.S3.ManagedUpload({
+      params: {
+        Bucket: "record-upload-bucket",
+        Key: t_filename,
+        Body: file,
+      },
+    })
 
-  promise.then(
-    function (data) {
-      alert("업로드에 성공했습니다.")
-      onClose();
-    },
-    function (err) {
-      return alert("오류가 발생했습니다: ", err.message)
-    }
-  )
+    const promise = upload.promise()
+
+    promise.then(
+      function (data) {
+        alert("업로드에 성공했습니다.")
+        // 백엔드에 usertoken으로 해당하는 유저에게 t_filename 값과 위도경도값 전달해줘야 함
+        // 이후 요청 입력된 화면으로 이동 /
+        onClose();
+      },
+      function (err) {
+        return alert("오류가 발생했습니다: ", err.message)
+      }
+    )
+
+  }
 
   return createPortal(
     <ModalBg>
@@ -66,7 +75,7 @@ export default function SaveModal({ isVisible, onClose, fileBlob, usertoken }) {
           <button onClick={() => onClose()}>
             재녹음
           </button>
-          <button onClick={() => upload()}>확인</button>
+          <button onClick={() => clickUpload()}>확인</button>
         </div>
       </ModalBox>
     </ModalBg>,

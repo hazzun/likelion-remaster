@@ -2,6 +2,7 @@ import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Header from './components/Header';
 import First from './components/sign-up/First';
+import Record from './pages/Record';
 import Recipient from './pages/Recipient';
 import MainHelper from './pages/MainHelper';
 
@@ -31,6 +32,7 @@ function App() {
         <Routes>
           <Route path='/' element={<First />}></Route>
           <Route path='/MainHelper' element={<MainHelper />}></Route>
+          <Route path='/record' element={<Record />}></Route>
           <Route
             path='/recipient'
             element={<Recipient page={page} next={() => setPage(page + 1)} />}

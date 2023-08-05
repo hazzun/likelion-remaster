@@ -1,18 +1,10 @@
-import {
-  // Link,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-// import Main from "./pages/Main";
 import Header from './components/Header';
-// import Footer from "./components/Footer";
-import MapTest from './pages/MapTest';
 import First from './components/sign-up/First';
 import Record from './pages/Record';
 import Recipient from './pages/Recipient';
+import MainHelper from './pages/MainHelper';
 
 function App() {
   const location = useLocation();
@@ -35,14 +27,11 @@ function App() {
 
   return (
     <div className='relative w-full bg-white min-h-screen'>
-      {/* header, footer 임의로 넣어놨습니다. 따라서, 추후 디자인 초안에 따라 수정 될 예정입니다 */}
       <Header title={title} back={backHandler} />
       <div className='pt-[56px] h-screen'>
         <Routes>
           <Route path='/' element={<First />}></Route>
-          {/* <Route path="/test" element={<RoutingTest />}></Route> */}
-          <Route path='/MapTest' element={<MapTest />}></Route>
-          {/* <Route path="/main" element={<Main />}></Route> */}
+          <Route path='/MainHelper' element={<MainHelper />}></Route>
           <Route path='/record' element={<Record />}></Route>
           <Route
             path='/recipient'
@@ -50,7 +39,6 @@ function App() {
           ></Route>
         </Routes>
       </div>
-      {/* <Footer></Footer> */}
     </div>
   );
 }

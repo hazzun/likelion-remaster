@@ -11,6 +11,7 @@ import Header from './components/Header';
 // import Footer from "./components/Footer";
 import MapTest from './pages/MapTest';
 import First from './components/sign-up/First';
+import Record from './pages/Record';
 import Recipient from './pages/Recipient';
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
           {/* <Route path="/test" element={<RoutingTest />}></Route> */}
           <Route path='/MapTest' element={<MapTest />}></Route>
           {/* <Route path="/main" element={<Main />}></Route> */}
+          <Route path='/record' element={<Record />}></Route>
           <Route
             path='/recipient'
             element={<Recipient page={page} next={() => setPage(page + 1)} />}

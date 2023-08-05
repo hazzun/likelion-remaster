@@ -42,7 +42,6 @@ export default function Record() {
         // downloadFileExtension="mp3"
         showVisualizer={true}
       />
-      <br />
       {/* <button onClick={recorderControls.stopRecording}>Stop recording</button> */}
       <button onClick={()=>setModalShow(true)}>저장</button>
 

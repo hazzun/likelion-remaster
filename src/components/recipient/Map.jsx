@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { FaMapMarkerAlt } from 'react-icons/fa';
 import BottomButton from '../BottomButton';
 
 const { kakao } = window;
 
-export default function Map() {
+export default function Map({ click }) {
   const [userLocation, setUserLocation] = useState();
   const [callLoc, setCallLoc] = useState();
   const [placeName, setPlaceName] = useState();
@@ -49,6 +50,7 @@ export default function Map() {
             result[0].address.address_name
           );
           setCallLoc(result[0].address.address_name);
+          searchPlaceByAddress(result[0].address.address_name);
         }
       };
       geocoder.coord2Address(
@@ -86,14 +88,15 @@ export default function Map() {
       /* ---------------------------------------------------------------------------- */
 
       /* ---------------------------------------------------------------------------- */
-      /* ------------------- 마커를 옮기고 내려놓은 마커의 위치를 가져오기 --------------------- */
+      /* ------------------- 마커를 옮기고 내려놓은 마커의 위치와 건물명 가져오기 --------------------- */
       kakao.maps.event.addListener(marker, 'dragend', function () {
         let moveMarker = marker.getPosition();
         map.setCenter(moveMarker);
 
-        let message = '클릭한 위치의 위도는 ' + moveMarker.getLat() + ' 이고, ';
-        message += '경도는 ' + moveMarker.getLng() + '임';
-        console.log(message);
+        // console.log(
+        //   '클릭한 위치의 위도는 ' + moveMarker.getLat() + ' 이고, ',
+        //   '경도는 ' + moveMarker.getLng() + '임'
+        // );
 
         const callback = (result, status) => {
           if (status === kakao.maps.services.Status.OK) {
@@ -110,47 +113,25 @@ export default function Map() {
           moveMarker.getLat(),
           callback
         );
-        function searchPlaceByAddress(address) {
-          let places = new kakao.maps.services.Places();
-          places.keywordSearch(address, function (result, status) {
-            if (status === kakao.maps.services.Status.OK) {
-              if (result.length > 0) {
-                console.log(result);
-                setPlaceName(result[0].place_name);
-              } else {
-                console.log('해당 위치에 해당하는 건물명을 찾을 수 없습니다.');
-              }
-            }
-          });
-        }
-        // geocoder.addressSearch(
-        //   '경기도 안양시 만안구 태평로 214',
-        //   function (result, status) {
-        //     // 정상적으로 검색이 완료됐으면
-        //     if (status === kakao.maps.services.Status.OK) {
-        //       console.log(result);
-        //     }
-        //   }
-        // );
       });
       /* ---------------------------------------------------------------------------- */
     }
   }, [userLocation]);
-  // useState(() => {
-  //   const ps = new kakao.maps.services.Places();
-  //   if (callLoc) {
-  //     // 키워드로 장소를 검색합니다
-  //     ps.keywordSearch(`${callLoc}`, placesSearchCB);
 
-  //     // 키워드 검색 완료 시 호출되는 콜백함수 입니다
-  //     function placesSearchCB(data, status, pagination) {
-  //       if (status === kakao.maps.services.Status.OK) {
-  //         console.log(data);
-  //         console.log('변경된 마커 위치 : ', callLoc);
-  //       }
-  //     }
-  //   }
-  // }, [callLoc]);
+  // 건물명 찾기 함수
+  const searchPlaceByAddress = (address) => {
+    let places = new kakao.maps.services.Places();
+    places.keywordSearch(address, function (result, status) {
+      if (status === kakao.maps.services.Status.OK) {
+        if (result.length > 0) {
+          console.log(result);
+          setPlaceName(result[0].place_name);
+        } else {
+          console.log('해당 위치에 해당하는 건물명을 찾을 수 없습니다.');
+        }
+      }
+    });
+  };
 
   return (
     <>
@@ -162,14 +143,20 @@ export default function Map() {
           </p>
         </div>
       ) : (
-        <>
-          <div id='map' className='w-full h-[72%] '></div>
-          <div className='z-30 flex flex-col justify-between h-[30%] absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] pt-10 pl-5 pr-5 pb-5 shadow-t-2xl'>
-            <div className='flex items-center gap-5'>{placeName}</div>
-            <div className=''>{callLoc}</div>
-            <BottomButton text={'이 위치로 도움받기'} />
+        <div className='flex flex-col h-full'>
+          <div className='bg-white p-3 font-semibold text-lg'>
+            핀을 이동하여 도움을 요청할 장소를 골라주세요!
           </div>
-        </>
+          <div id='map' className='w-full h-[73%]'></div>
+          <div className='z-30 flex flex-col h-[23%] justify-between absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] p-8 pl-5 pr-5 shadow-t-2xl'>
+            <div className='flex items-center gap-3 font-bold text-2xl'>
+              <FaMapMarkerAlt />
+              {placeName}
+            </div>
+            <div className='text-lg'>{callLoc}</div>
+            <BottomButton text={'이 위치로 도움받기'} click={click} />
+          </div>
+        </div>
       )}
     </>
   );

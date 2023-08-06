@@ -31,7 +31,7 @@ function App() {
       <div className='pt-[56px] h-screen'>
         <Routes>
           <Route path='/' element={<First />}></Route>
-          <Route path='/MainHelper' element={<MainHelper />}></Route>
+          <Route path='/mainhelper' element={<MainHelper />}></Route>
           <Route path='/record' element={<Record />}></Route>
           <Route
             path='/recipient'

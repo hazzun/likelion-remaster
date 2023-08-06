@@ -5,6 +5,8 @@ import First from './components/sign-up/First';
 import Record from './pages/Record';
 import Recipient from './pages/Recipient';
 import MainHelper from './pages/MainHelper';
+import BeforeMeeting from './pages/BeforeMeeting';
+import Meeting from './pages/Meeting';
 
 function App() {
   const location = useLocation();
@@ -33,6 +35,8 @@ function App() {
           <Route path='/' element={<First />}></Route>
           <Route path='/mainhelper' element={<MainHelper />}></Route>
           <Route path='/record' element={<Record />}></Route>
+          <Route path='/beforemeeting' element={<BeforeMeeting />}></Route>
+          <Route path='/meeting' element={<Meeting />}></Route>
           <Route
             path='/recipient'
             element={<Recipient page={page} next={() => setPage(page + 1)} />}

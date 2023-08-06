@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { BiMicrophone } from 'react-icons/bi';
 import BottomButton from '../components/BottomButton';
+import { Link } from 'react-router-dom';
 
 const { kakao } = window;
 
@@ -205,8 +206,9 @@ export default function MainHelper() {
                       </p>
                     </button>
                   </div>
-
-                  <BottomButton text={'도움 수락하기'} />
+                  <Link to='/BeforeMeeting'>
+                    <BottomButton text={'도움 수락하기'} />
+                  </Link>
                 </div>
               )}
             </>

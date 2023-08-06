@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { BiMicrophone } from 'react-icons/bi';
-import { Link } from 'react-router-dom';
 import BottomButton from '../components/BottomButton';
 
 const { kakao } = window;
@@ -110,7 +109,7 @@ export default function MainHelper() {
       function helpInfoOpen(info) {
         return function () {
           console.log(info);
-          setIsInfoModal(!isInfoModal);
+          setIsInfoModal((isInfoModal) => !isInfoModal);
           document.getElementById('map').style.height = '60%';
           map.setCenter(info.latlng);
 
@@ -140,7 +139,7 @@ export default function MainHelper() {
           position: userLocation,
           image: markerImage,
         });
-
+        marker.setMap(map); // 마커가 지도 위에 표시되도록 설정
         // 지도 중심좌표를 접속위치로 변경합니다
         map.setCenter(userLocation);
       };

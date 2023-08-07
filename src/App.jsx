@@ -23,7 +23,7 @@ function App() {
       backHandler = page === 1 ? () => navigate(-1) : () => setPage(page - 1);
       break;
     default:
-      title = '에이블';
+      title = '와봐유';
       backHandler = () => navigate(-1);
   }
 

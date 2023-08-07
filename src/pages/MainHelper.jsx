@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
-import { BiMicrophone } from 'react-icons/bi';
 import BottomButton from '../components/BottomButton';
+import LoadingIcon from '../components/icons/LoadingIcon';
+import RecordIcon from '../components/icons/RecordIcon';
+import ToggleClose from '../components/icons/ToggleClose';
+import ToggleOpen from '../components/icons/ToggleOpen';
 import { Link } from 'react-router-dom';
 
 const { kakao } = window;
@@ -10,6 +12,18 @@ export default function MainHelper() {
   const [userLocation, setUserLocation] = useState();
   const [helpInfo, setHelpInfo] = useState();
   const [isInfoModal, setIsInfoModal] = useState(false);
+  const [onToggle, setOnToggle] = useState(false);
+  const categories = [
+    '전체',
+    '금융',
+    '쇼핑',
+    '인터넷',
+    '기기고장',
+    '문서 및 이메일 작성',
+    '영상 및 사진',
+    '예약/예매',
+    '기타',
+  ];
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -32,7 +46,7 @@ export default function MainHelper() {
       const options = {
         //지도를 생성할 때 필요한 기본 옵션
         center: userLocation, //지도의 중심좌표.
-        level: 10, //지도의 레벨(확대, 축소 정도), default = 3
+        level: 9, //지도의 레벨(확대, 축소 정도), default = 3
       };
 
       const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
@@ -151,11 +165,11 @@ export default function MainHelper() {
   }, [userLocation]);
 
   return (
-    <>
+    <div className='relative h-full'>
       {!userLocation ? (
         <>
           <div className='w-full h-full flex flex-col items-center justify-center text-center gap-8'>
-            <AiOutlineLoading3Quarters className='animate-spin text-[40px]' />
+            <LoadingIcon size='large' />
             <p className='text-md text-gray-500'>
               현재 위치를 불러오는 중 ... <br /> (예상 소요시간 : 5초)
             </p>
@@ -163,9 +177,29 @@ export default function MainHelper() {
         </>
       ) : (
         <>
+          <div className='absolute p-2 bg-cate-rgba h-[150px] z-50 flex gap-[2px]'>
+            <div>
+              {categories.map((item, key) => (
+                <button
+                  key={key}
+                  className='bg-[#FED130] px-[10px] py-[2px] rounded-2xl text-lg m-1'
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={() => {
+                console.log('close');
+              }}
+              className='flex pt-1 hover:cursor-default'
+            >
+              <ToggleClose size={'medium'} />
+            </button>
+          </div>
           {isInfoModal ? (
             <>
-              <div id='map' className='w-full rounded-b-3xl'></div>
+              <div id='map' className='absolute w-full rounded-b-3xl'></div>
               {helpInfo && (
                 <div className='z-30 flex flex-col justify-between h-[45%] absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] pt-10 pl-5 pr-5 pb-5 shadow-t-2xl'>
                   <div className='flex items-center gap-5'>
@@ -177,10 +211,13 @@ export default function MainHelper() {
                   </div>
                   <div className='flex flex-col'>
                     <div className='flex gap-2 mb-5'>
-                      {helpInfo.cate.map((i) => {
+                      {helpInfo.cate.map((item, key) => {
                         return (
-                          <span className='bg-gray-300 px-2 py-1 rounded-md'>
-                            {i}
+                          <span
+                            key={key}
+                            className='bg-gray-300 px-2 py-1 rounded-md'
+                          >
+                            {item}
                           </span>
                         );
                       })}
@@ -201,7 +238,7 @@ export default function MainHelper() {
                     </div>
                     <button className='flex items-center justify-center w-[50%] h-[45px] mt-4 rounded-2xl bg-[#D9D9D9]'>
                       <p className='flex items-center text-[20px] font-medium'>
-                        <BiMicrophone />
+                        <RecordIcon size={'medium'} />
                         음성내용 듣기
                       </p>
                     </button>
@@ -219,6 +256,6 @@ export default function MainHelper() {
           )}
         </>
       )}
-    </>
+    </div>
   );
 }

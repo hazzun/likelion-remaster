@@ -2,7 +2,6 @@ import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Header from './components/Header';
 import First from './components/sign-up/First';
-import Record from './pages/Record';
 import Recipient from './pages/Recipient';
 import MainHelper from './pages/MainHelper';
 import BeforeMeeting from './pages/BeforeMeeting';
@@ -34,7 +33,6 @@ function App() {
         <Routes>
           <Route path='/' element={<First />}></Route>
           <Route path='/mainhelper' element={<MainHelper />}></Route>
-          <Route path='/record' element={<Record />}></Route>
           <Route path='/beforemeeting' element={<BeforeMeeting />}></Route>
           <Route path='/meeting' element={<Meeting />}></Route>
           <Route

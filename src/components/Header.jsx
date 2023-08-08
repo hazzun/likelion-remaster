@@ -6,7 +6,7 @@ export default function Header({ title, back }) {
       <button onClick={back}>
         <BackButton />
       </button>
-      <p className="text-[1.25rem]">{title}</p>
+      <p className="text-[20px] font-bold">{title}</p>
       <div className="w-[9px]" />
     </div>
   );

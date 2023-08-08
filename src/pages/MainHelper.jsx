@@ -4,6 +4,7 @@ import LoadingIcon from '../components/icons/LoadingIcon';
 import RecordIcon from '../components/icons/RecordIcon';
 import ToggleClose from '../components/icons/ToggleClose';
 import ToggleOpen from '../components/icons/ToggleOpen';
+import ProfileImage from '../components/ProfileImage';
 import { Link } from 'react-router-dom';
 
 const { kakao } = window;
@@ -12,7 +13,7 @@ export default function MainHelper() {
   const [userLocation, setUserLocation] = useState();
   const [helpInfo, setHelpInfo] = useState();
   const [isInfoModal, setIsInfoModal] = useState(false);
-  const [onToggle, setOnToggle] = useState(false);
+  const [onToggle, setOnToggle] = useState(true);
 
   const category = [
     '전체',
@@ -69,7 +70,7 @@ export default function MainHelper() {
         },
         {
           title: '인천국제공항',
-          cate: ['인터넷뱅킹', '키오스크', '사람살려'],
+          cate: ['인터넷뱅킹', '키오스크'],
           latlng: new kakao.maps.LatLng(37.47686451580999, 126.42996911223717),
         },
         {
@@ -89,7 +90,7 @@ export default function MainHelper() {
         },
         {
           title: 'test',
-          cate: ['핸드폰', '노트북', '인터넷뱅킹', '키오스크', '사람살려'],
+          cate: ['핸드폰', '키오스크', '사람살려'],
           latlng: new kakao.maps.LatLng(37.4051373046637, 126.99999456527652),
         },
       ];
@@ -127,7 +128,7 @@ export default function MainHelper() {
         return function () {
           console.log(info);
           setIsInfoModal((isInfoModal) => !isInfoModal);
-          document.getElementById('map').style.height = '60%';
+          // document.getElementById('map').style.height = '60%';
           map.setCenter(info.latlng);
 
           setHelpInfo(info);
@@ -225,11 +226,14 @@ export default function MainHelper() {
 
           {isInfoModal ? (
             <>
-              <div id='map' className='absolute w-full rounded-b-3xl'></div>
+              <div
+                id='map'
+                className='absolute w-full rounded-b-3xl h-[60%]'
+              ></div>
               {helpInfo && (
-                <div className='z-30 flex flex-col justify-between h-[45%] absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] pt-10 pl-5 pr-5 pb-5 shadow-t-2xl'>
+                <div className='z-30 flex flex-col gap-3 justify-between absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] p-5 shadow-t-2xl'>
                   <div className='flex items-center gap-5'>
-                    <div className='w-16 h-16 rounded-full bg-gray-300'></div>
+                    <ProfileImage size='small' />
                     <div className='flex flex-col'>
                       <span className='font-bold'>user1234 님</span>
                       <span className='text-gray-500'>60대 남성</span>
@@ -241,7 +245,7 @@ export default function MainHelper() {
                         return (
                           <span
                             key={key}
-                            className='bg-gray-300 px-2 py-1 rounded-md'
+                            className='bg-[#FFF9E9] px-2 py-1 rounded-md text-[16px] font-semibold'
                           >
                             {item}
                           </span>
@@ -254,16 +258,17 @@ export default function MainHelper() {
                     </div>
                     <div>
                       <span className='font-extrabold mr-8'>거리</span>
-                      <span>
+                      {/* <span>
                         {helpInfo.latlng.La}, {helpInfo.latlng.Ma}
-                      </span>
+                      </span> */}
+                      <span>10분</span>
                     </div>
                     <div>
                       <span className='font-extrabold mr-8'>시간</span>
                       <span>구현해야함</span>
                     </div>
-                    <button className='flex items-center justify-center w-[50%] h-[45px] mt-4 rounded-2xl bg-[#D9D9D9]'>
-                      <p className='flex items-center text-[20px] font-medium'>
+                    <button className='flex items-center justify-center w-[70%] h-[45px] mt-4 rounded-2xl bg-[#5A5A5A]'>
+                      <p className='flex items-center text-[#FFC700] text-[16px] font-medium gap-2'>
                         <RecordIcon size={'medium'} />
                         음성내용 듣기
                       </p>

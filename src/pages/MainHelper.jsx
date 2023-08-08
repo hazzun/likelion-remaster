@@ -13,7 +13,8 @@ export default function MainHelper() {
   const [helpInfo, setHelpInfo] = useState();
   const [isInfoModal, setIsInfoModal] = useState(false);
   const [onToggle, setOnToggle] = useState(false);
-  const categories = [
+
+  const category = [
     '전체',
     '금융',
     '쇼핑',
@@ -24,6 +25,7 @@ export default function MainHelper() {
     '예약/예매',
     '기타',
   ];
+  const categoryy = ['전체', '금융', '문서 및 이메일 작성'];
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -177,26 +179,50 @@ export default function MainHelper() {
         </>
       ) : (
         <>
-          <div className='absolute p-2 bg-cate-rgba h-[150px] z-50 flex gap-[2px]'>
-            <div>
-              {categories.map((item, key) => (
-                <button
-                  key={key}
-                  className='bg-[#FED130] px-[10px] py-[2px] rounded-2xl text-lg m-1'
-                >
-                  {item}
-                </button>
-              ))}
+          {onToggle ? (
+            <div className='absolute p-2 bg-cate-rgba z-50 flex w-full justify-between gap-[2px]'>
+              <div className='overflow-auto'>
+                {categoryy.map((item, key) => (
+                  <button
+                    key={key}
+                    className='bg-[#FED130] px-[10px] py-[2px] rounded-2xl text-lg m-1'
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => {
+                  setOnToggle(false);
+                }}
+                className='flex pt-1 hover:cursor-default'
+              >
+                <ToggleOpen size={'medium'} />
+              </button>
             </div>
-            <button
-              onClick={() => {
-                console.log('close');
-              }}
-              className='flex pt-1 hover:cursor-default'
-            >
-              <ToggleClose size={'medium'} />
-            </button>
-          </div>
+          ) : (
+            <div className='absolute p-2 bg-cate-rgba z-50 flex w-full justify-between gap-[2px]'>
+              <div className='overflow-auto'>
+                {category.map((item, key) => (
+                  <button
+                    key={key}
+                    className='bg-[#FED130] px-[10px] py-[2px] rounded-2xl text-lg m-1'
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => {
+                  setOnToggle(true);
+                }}
+                className='flex pt-1 hover:cursor-default'
+              >
+                <ToggleClose size={'medium'} />
+              </button>
+            </div>
+          )}
+
           {isInfoModal ? (
             <>
               <div id='map' className='absolute w-full rounded-b-3xl'></div>

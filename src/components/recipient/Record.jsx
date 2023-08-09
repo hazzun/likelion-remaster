@@ -1,55 +1,75 @@
-import { useState } from "react";
-import { ReactComponent as Mic } from "../../assets/svg/mic.svg";
+import React, { useState, useEffect } from 'react';
+import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
+import SaveModal from '../SaveModal';
+import axios from 'axios';
 
-export default function Record({}) {
-  const [save, setSave] = useState(false);
+export default function Record() {
+
+  // 추후 로그인 검사코드 추가 
+  const [usertoken, setUsertoken] = useState('');
+
+  useEffect(() => {
+    setUsertoken('유저토큰코드');
+  }, []);
+
+  const recorderControls = useAudioRecorder(
+    {
+      noiseSuppression: true,
+      echoCancellation: true,
+    }, (err) => console.table(err)
+  );
+
+  const [existAudio, setExistAudio] = useState(false);
+  const [t_blob, setT_blob] = useState();
+  const addAudioElement = (blob) => {
+    const saveBtn = document.getElementById('saveBtn')
+    const url = URL.createObjectURL(blob)
+    setT_blob(blob)
+    if(existAudio) {
+      const audio = document.querySelector('audio')
+      audio.src = url
+      audio.controls = true
+      document.getElementById('myDiv').insertBefore(audio, saveBtn)
+    } else {
+      const audio = document.createElement('audio')
+      setExistAudio(true)
+      audio.src = url
+      audio.controls = true
+      document.getElementById('myDiv').insertBefore(audio, saveBtn)
+    }
+  };
+  
+  const [modalShow, setModalShow] = useState(false)
+  const clickHelp = () => {
+    if(existAudio) {
+      setModalShow(true)
+    }
+    else {
+      alert("녹음 후 도움을 요청해 주세요 :)")
+    }
+  }
 
   return (
-    <div className="overflow-hidden">
-      <div className="w-full px-5">
-        <p className="mt-[2.5rem] mb-[2.625rem] font-medium text-[1.125rem]">
-          도움이 필요한 내용을 녹음해주세요.
-        </p>
-        <div className="w-full mb-[2.125rem] flex flex-col items-center">
-          <button onClick={() => setSave(true)}>
-            <div className="h-[11.8rem] w-[11.8rem] mb-[2.125rem] flex justify-center items-center rounded-full border-4 border-solid border-[#D9D9D9]">
-              <div className="h-[10.125rem] w-[10.125rem] flex justify-center items-center bg-[#D9D9D9] rounded-full drop-shadow-[0_0_6px_rgba(0,0,0,0.2)]">
-                <Mic />
-              </div>
-            </div>
-          </button>
-          <p className="font-medium text-[1.125rem]">00:00:00</p>
-        </div>
+    <div className='w-full bg-white'>
+      <div className='p-3 font-semibold text-[24px] mb-[118.62px]'>
+          도움이 필요한 내용을 녹음해 주세요.
       </div>
-      <div className="w-full">
-        <p className="relative left-[26.7%] text-[0.5rem] color-gray3">00:00</p>
+      <div className="flex flex-col items-center justify-center gap-10 mb-[118.62px]">
+        <AudioRecorder
+          onRecordingComplete={(blob) => addAudioElement(blob)}
+          recorderControls={recorderControls}
+          showVisualizer={true}
+        />
       </div>
-      <div className="h-[6.125rem] w-full bg-[#D9D9D9]">
-        <div className="relative h-full w-[0.0625rem] bg-black left-[30%]"></div>
+      <div id='myDiv' className='flex flex-col items-center justify-center gap-10'>
+        <button id='saveBtn' className='font-semibold text-[20px] bg-[#FED130] px-11 py-2 rounded-full' onClick={() => clickHelp()}>도움 요청하기</button>
       </div>
 
-      {/* 모달창 */}
-      {save ? (
-        <div
-          className="fixed h-full w-full inset-x-0 inset-y-0 px-8"
-          style={{ background: "rgba(0, 0, 0, 0.3)" }}
-        >
-          <div
-            className="absolute inset-y-2/4 inset-x-2/4 bg-white h-[10.125rem] w-full max-w-[19.375rem] rounded-[0.625rem]"
-            style={{ transform: "translate(-50%, -50%)" }}
-          >
-            <div>
-              <p>저장하시겠습니까?</p>
-              <div>
-                <button>재녹음</button>
-                <button>확인</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        ""
-      )}
+      <SaveModal
+        isVisible={modalShow}
+        onClose={() => setModalShow(false)} 
+        usertoken={usertoken} fileBlob={t_blob}
+      />
     </div>
   );
 }

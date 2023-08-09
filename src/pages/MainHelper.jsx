@@ -15,6 +15,7 @@ export default function MainHelper() {
   const [isInfoModal, setIsInfoModal] = useState(false);
   const [onToggle, setOnToggle] = useState(true);
   const [cateSelect, setCateSelect] = useState('전체');
+  const [distance, setDistance] = useState(0);
 
   const category = [
     '전체',
@@ -90,7 +91,7 @@ export default function MainHelper() {
           latlng: new kakao.maps.LatLng(37.51541730466366, 127.07299456527649),
         },
         {
-          title: 'test',
+          title: '어디게?',
           cate: ['핸드폰', '키오스크', '사람살려'],
           latlng: new kakao.maps.LatLng(37.4051373046637, 126.99999456527652),
         },
@@ -116,25 +117,24 @@ export default function MainHelper() {
           image: helpMarkerImage, // 마커 이미지
         });
 
-        kakao.maps.event.addListener(
-          helpMarker,
-          'click',
-          // helpInfoOpen(positions[i].title, positions[i].latlng)
+        kakao.maps.event.addListener(helpMarker, 'click', () =>
           helpInfoOpen(positions[i])
         );
       }
 
       // 특정 마커를 클릭하면 동작하는 함수
-      function helpInfoOpen(info) {
-        return function () {
-          console.log(info);
-          setIsInfoModal((isInfoModal) => !isInfoModal);
-          // document.getElementById('map').style.height = '60%';
-          map.setCenter(info.latlng);
+      const helpInfoOpen = (info) => {
+        let line = new kakao.maps.Polyline({
+          path: [userLocation, info.latlng], // 선을 구성하는 좌표 배열입니다 클릭한 위치를 넣어줍니다
+        });
+        setDistance(Math.round(line.getLength()));
 
-          setHelpInfo(info);
-        };
-      }
+        console.log(info);
+        setIsInfoModal((isInfoModal) => !isInfoModal);
+        map.setCenter(info.latlng);
+
+        setHelpInfo(info);
+      };
       /* ---------------------------------------------------------------------------- */
       /* --------------------------- 도움요청자의 정보 받기완료 ---------------------------- */
       /* ---------------------------------------------------------------------------- */
@@ -290,11 +290,11 @@ export default function MainHelper() {
                       {/* <span>
                         {helpInfo.latlng.La}, {helpInfo.latlng.Ma}
                       </span> */}
-                      <span>10분</span>
+                      <span>{distance} m</span>
                     </div>
                     <div>
                       <span className='font-extrabold mr-8'>시간</span>
-                      <span>구현해야함</span>
+                      <span>도보 약 {Math.floor(distance / 67)}분 소요</span>
                     </div>
                     <button className='flex items-center justify-center w-[70%] h-[45px] mt-4 rounded-2xl bg-[#5A5A5A]'>
                       <p className='flex items-center text-[#FFC700] text-[16px] font-medium gap-2'>

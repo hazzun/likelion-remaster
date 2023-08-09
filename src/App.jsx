@@ -4,6 +4,7 @@ import Header from './components/Header';
 import First from './components/sign-up/First';
 import Recipient from './pages/Recipient';
 import MainHelper from './pages/MainHelper';
+import ReqConfirm from './pages/ReqConfirm';
 import BeforeMeeting from './pages/BeforeMeeting';
 import Meeting from './pages/Meeting';
 
@@ -33,6 +34,7 @@ function App() {
         <Routes>
           <Route path='/' element={<First />}></Route>
           <Route path='/mainhelper' element={<MainHelper />}></Route>
+          <Route path='/reqconfirm' element={<ReqConfirm />}></Route>
           <Route path='/beforemeeting' element={<BeforeMeeting />}></Route>
           <Route path='/meeting' element={<Meeting />}></Route>
           <Route

@@ -14,6 +14,7 @@ export default function MainHelper() {
   const [helpInfo, setHelpInfo] = useState();
   const [isInfoModal, setIsInfoModal] = useState(false);
   const [onToggle, setOnToggle] = useState(true);
+  const [cateSelect, setCateSelect] = useState('전체');
 
   const category = [
     '전체',
@@ -26,7 +27,7 @@ export default function MainHelper() {
     '예약/예매',
     '기타',
   ];
-  const categoryy = ['전체', '금융', '문서 및 이메일 작성'];
+  const categoryClose = ['전체', '금융', '문서 및 이메일 작성'];
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -164,8 +165,14 @@ export default function MainHelper() {
 
       // 마커와 인포윈도우를 표시합니다
       displayMarker(userLocation);
+
+      // category select
     }
   }, [userLocation]);
+
+  const selectCategory = (item) => {
+    if (item !== cateSelect) setCateSelect(item);
+  };
 
   return (
     <div className='relative h-full'>
@@ -183,14 +190,25 @@ export default function MainHelper() {
           {onToggle ? (
             <div className='absolute p-2 bg-cate-rgba z-50 flex w-full justify-between gap-[2px]'>
               <div className='overflow-auto'>
-                {categoryy.map((item, key) => (
-                  <button
-                    key={key}
-                    className='bg-[#FED130] px-[10px] py-[2px] rounded-2xl text-lg m-1'
-                  >
-                    {item}
-                  </button>
-                ))}
+                {categoryClose.map((item, key) =>
+                  item === cateSelect ? (
+                    <button
+                      key={key}
+                      className='bg-[#FED130] px-[10px] py-[2px] rounded-2xl text-lg m-1'
+                      onClick={() => selectCategory(item)}
+                    >
+                      {item}
+                    </button>
+                  ) : (
+                    <button
+                      key={key}
+                      className='bg-white border border-[#D9D9D9] text-[18px] px-[10px] py-[2px] rounded-2xl text-lg m-1'
+                      onClick={() => selectCategory(item)}
+                    >
+                      {item}
+                    </button>
+                  )
+                )}
               </div>
               <button
                 onClick={() => {
@@ -204,14 +222,25 @@ export default function MainHelper() {
           ) : (
             <div className='absolute p-2 bg-cate-rgba z-50 flex w-full justify-between gap-[2px]'>
               <div className='overflow-auto'>
-                {category.map((item, key) => (
-                  <button
-                    key={key}
-                    className='bg-[#FED130] px-[10px] py-[2px] rounded-2xl text-lg m-1'
-                  >
-                    {item}
-                  </button>
-                ))}
+                {category.map((item, key) =>
+                  item === cateSelect ? (
+                    <button
+                      key={key}
+                      className='bg-[#FED130] px-[10px] py-[2px] rounded-2xl text-lg m-1'
+                      onClick={() => selectCategory(item)}
+                    >
+                      {item}
+                    </button>
+                  ) : (
+                    <button
+                      key={key}
+                      className='bg-white border border-[#D9D9D9] text-[18px] px-[10px] py-[2px] rounded-2xl text-lg m-1'
+                      onClick={() => selectCategory(item)}
+                    >
+                      {item}
+                    </button>
+                  )
+                )}
               </div>
               <button
                 onClick={() => {

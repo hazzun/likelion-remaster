@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
-import { BiMicrophone } from 'react-icons/bi';
 import BottomButton from '../components/BottomButton';
+import LoadingIcon from '../components/icons/LoadingIcon';
+import RecordIcon from '../components/icons/RecordIcon';
+import ToggleClose from '../components/icons/ToggleClose';
+import ToggleOpen from '../components/icons/ToggleOpen';
+import ProfileImage from '../components/ProfileImage';
 import { Link } from 'react-router-dom';
 
 const { kakao } = window;
@@ -10,6 +13,22 @@ export default function MainHelper() {
   const [userLocation, setUserLocation] = useState();
   const [helpInfo, setHelpInfo] = useState();
   const [isInfoModal, setIsInfoModal] = useState(false);
+  const [onToggle, setOnToggle] = useState(true);
+  const [cateSelect, setCateSelect] = useState('전체');
+  const [distance, setDistance] = useState(0);
+
+  const category = [
+    '전체',
+    '금융',
+    '쇼핑',
+    '인터넷',
+    '기기고장',
+    '문서 및 이메일 작성',
+    '영상 및 사진',
+    '예약/예매',
+    '기타',
+  ];
+  const categoryClose = ['전체', '금융', '문서 및 이메일 작성'];
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -32,7 +51,7 @@ export default function MainHelper() {
       const options = {
         //지도를 생성할 때 필요한 기본 옵션
         center: userLocation, //지도의 중심좌표.
-        level: 10, //지도의 레벨(확대, 축소 정도), default = 3
+        level: 9, //지도의 레벨(확대, 축소 정도), default = 3
       };
 
       const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
@@ -53,7 +72,7 @@ export default function MainHelper() {
         },
         {
           title: '인천국제공항',
-          cate: ['인터넷뱅킹', '키오스크', '사람살려'],
+          cate: ['인터넷뱅킹', '키오스크'],
           latlng: new kakao.maps.LatLng(37.47686451580999, 126.42996911223717),
         },
         {
@@ -72,8 +91,8 @@ export default function MainHelper() {
           latlng: new kakao.maps.LatLng(37.51541730466366, 127.07299456527649),
         },
         {
-          title: 'test',
-          cate: ['핸드폰', '노트북', '인터넷뱅킹', '키오스크', '사람살려'],
+          title: '어디게?',
+          cate: ['핸드폰', '키오스크', '사람살려'],
           latlng: new kakao.maps.LatLng(37.4051373046637, 126.99999456527652),
         },
       ];
@@ -98,25 +117,24 @@ export default function MainHelper() {
           image: helpMarkerImage, // 마커 이미지
         });
 
-        kakao.maps.event.addListener(
-          helpMarker,
-          'click',
-          // helpInfoOpen(positions[i].title, positions[i].latlng)
+        kakao.maps.event.addListener(helpMarker, 'click', () =>
           helpInfoOpen(positions[i])
         );
       }
 
       // 특정 마커를 클릭하면 동작하는 함수
-      function helpInfoOpen(info) {
-        return function () {
-          console.log(info);
-          setIsInfoModal((isInfoModal) => !isInfoModal);
-          document.getElementById('map').style.height = '60%';
-          map.setCenter(info.latlng);
+      const helpInfoOpen = (info) => {
+        let line = new kakao.maps.Polyline({
+          path: [userLocation, info.latlng], // 선을 구성하는 좌표 배열입니다 클릭한 위치를 넣어줍니다
+        });
+        setDistance(Math.round(line.getLength()));
 
-          setHelpInfo(info);
-        };
-      }
+        console.log(info);
+        setIsInfoModal((isInfoModal) => !isInfoModal);
+        map.setCenter(info.latlng);
+
+        setHelpInfo(info);
+      };
       /* ---------------------------------------------------------------------------- */
       /* --------------------------- 도움요청자의 정보 받기완료 ---------------------------- */
       /* ---------------------------------------------------------------------------- */
@@ -147,15 +165,21 @@ export default function MainHelper() {
 
       // 마커와 인포윈도우를 표시합니다
       displayMarker(userLocation);
+
+      // category select
     }
   }, [userLocation]);
 
+  const selectCategory = (item) => {
+    if (item !== cateSelect) setCateSelect(item);
+  };
+
   return (
-    <>
+    <div className='relative h-full'>
       {!userLocation ? (
         <>
           <div className='w-full h-full flex flex-col items-center justify-center text-center gap-8'>
-            <AiOutlineLoading3Quarters className='animate-spin text-[40px]' />
+            <LoadingIcon size='large' />
             <p className='text-md text-gray-500'>
               현재 위치를 불러오는 중 ... <br /> (예상 소요시간 : 5초)
             </p>
@@ -163,13 +187,82 @@ export default function MainHelper() {
         </>
       ) : (
         <>
+          {onToggle ? (
+            <div className='absolute p-2 bg-cate-rgba z-50 flex w-full justify-between gap-[2px]'>
+              <div className='overflow-auto'>
+                {categoryClose.map((item, key) =>
+                  item === cateSelect ? (
+                    <button
+                      key={key}
+                      className='bg-[#FED130] px-[10px] py-[2px] rounded-2xl text-lg m-1'
+                      onClick={() => selectCategory(item)}
+                    >
+                      {item}
+                    </button>
+                  ) : (
+                    <button
+                      key={key}
+                      className='bg-white border border-[#D9D9D9] text-[18px] px-[10px] py-[2px] rounded-2xl text-lg m-1'
+                      onClick={() => selectCategory(item)}
+                    >
+                      {item}
+                    </button>
+                  )
+                )}
+              </div>
+              <button
+                onClick={() => {
+                  setOnToggle(false);
+                }}
+                className='flex pt-1 hover:cursor-default'
+              >
+                <ToggleOpen size={'medium'} />
+              </button>
+            </div>
+          ) : (
+            <div className='absolute p-2 bg-cate-rgba z-50 flex w-full justify-between gap-[2px]'>
+              <div className='overflow-auto'>
+                {category.map((item, key) =>
+                  item === cateSelect ? (
+                    <button
+                      key={key}
+                      className='bg-[#FED130] px-[10px] py-[2px] rounded-2xl text-lg m-1'
+                      onClick={() => selectCategory(item)}
+                    >
+                      {item}
+                    </button>
+                  ) : (
+                    <button
+                      key={key}
+                      className='bg-white border border-[#D9D9D9] text-[18px] px-[10px] py-[2px] rounded-2xl text-lg m-1'
+                      onClick={() => selectCategory(item)}
+                    >
+                      {item}
+                    </button>
+                  )
+                )}
+              </div>
+              <button
+                onClick={() => {
+                  setOnToggle(true);
+                }}
+                className='flex pt-1 hover:cursor-default'
+              >
+                <ToggleClose size={'medium'} />
+              </button>
+            </div>
+          )}
+
           {isInfoModal ? (
             <>
-              <div id='map' className='w-full rounded-b-3xl'></div>
+              <div
+                id='map'
+                className='absolute w-full rounded-b-3xl h-[60%]'
+              ></div>
               {helpInfo && (
-                <div className='z-30 flex flex-col justify-between h-[45%] absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] pt-10 pl-5 pr-5 pb-5 shadow-t-2xl'>
+                <div className='z-30 flex flex-col gap-3 justify-between absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] p-5 shadow-t-2xl'>
                   <div className='flex items-center gap-5'>
-                    <div className='w-16 h-16 rounded-full bg-gray-300'></div>
+                    <ProfileImage size='small' />
                     <div className='flex flex-col'>
                       <span className='font-bold'>user1234 님</span>
                       <span className='text-gray-500'>60대 남성</span>
@@ -177,10 +270,13 @@ export default function MainHelper() {
                   </div>
                   <div className='flex flex-col'>
                     <div className='flex gap-2 mb-5'>
-                      {helpInfo.cate.map((i) => {
+                      {helpInfo.cate.map((item, key) => {
                         return (
-                          <span className='bg-gray-300 px-2 py-1 rounded-md'>
-                            {i}
+                          <span
+                            key={key}
+                            className='bg-[#FFF9E9] px-2 py-1 rounded-md text-[16px] font-semibold'
+                          >
+                            {item}
                           </span>
                         );
                       })}
@@ -191,17 +287,18 @@ export default function MainHelper() {
                     </div>
                     <div>
                       <span className='font-extrabold mr-8'>거리</span>
-                      <span>
+                      {/* <span>
                         {helpInfo.latlng.La}, {helpInfo.latlng.Ma}
-                      </span>
+                      </span> */}
+                      <span>{distance} m</span>
                     </div>
                     <div>
                       <span className='font-extrabold mr-8'>시간</span>
-                      <span>구현해야함</span>
+                      <span>도보 약 {Math.floor(distance / 67)}분 소요</span>
                     </div>
-                    <button className='flex items-center justify-center w-[50%] h-[45px] mt-4 rounded-2xl bg-[#D9D9D9]'>
-                      <p className='flex items-center text-[20px] font-medium'>
-                        <BiMicrophone />
+                    <button className='flex items-center justify-center w-[70%] h-[45px] mt-4 rounded-2xl bg-[#5A5A5A]'>
+                      <p className='flex items-center text-[#FFC700] text-[16px] font-medium gap-2'>
+                        <RecordIcon size={'medium'} />
                         음성내용 듣기
                       </p>
                     </button>
@@ -219,6 +316,6 @@ export default function MainHelper() {
           )}
         </>
       )}
-    </>
+    </div>
   );
 }

@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
@@ -16,6 +19,9 @@ module.exports = {
       },
       colors: {
         'cate-rgba': 'rgba(247, 247, 247, 0.75)',
+      },
+      fontFamily: {
+        'sans': ['Pretendard', ...defaultTheme.fontFamily.sans],
       },
     },
   },

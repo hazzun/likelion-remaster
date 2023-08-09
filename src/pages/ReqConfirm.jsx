@@ -1,16 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import ReactAudioPlayer from 'react-audio-player';
 import axios from 'axios';
 
 export default function ReqConfirm() {
-  
-  // aws에 파일 요청
 
+  // 백엔드에서 GET 해오는 함수
+  const [mp3Url, setMp3Url] = useState("");
+
+  useEffect(() => {
+    setMp3Url("https://record-upload-bucket.s3.ap-northeast-2.amazonaws.com/Christmas_Is_Coming.mp3");
+  }) 
+  
   // audio 재생 함수
+  // 추후 수정 예정
+  const style = {
+    ReactAudioPlayer: {
+      backgroundColor: "#5A5A5A",
+
+    },
+  };
 
   // 경과시간 계산
 
   // 요청 취소 POST
 
+  
   return (
     <div className='w-full bg-white'>
       <div className="pt-3 pb-12 px-4 font-medium text-2xl">
@@ -35,6 +49,13 @@ export default function ReqConfirm() {
             음성내용 듣기
           </button>
         </div>
+      </div>
+      <div className="flex items-center justify-center">
+        <ReactAudioPlayer
+          src={mp3Url}
+          controls
+          style={style.ReactAudioPlayer}
+        />
       </div>
       <hr/>
       <div className="flex px-4 py-5 justify-between">

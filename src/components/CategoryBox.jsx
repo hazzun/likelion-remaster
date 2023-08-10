@@ -6,7 +6,7 @@ export default function CategoryBox({ text, click, check }) {
       <div
         className={`flex justify-center items-center h-[2.375rem] rounded-3xl ${
           check
-            ? "bg-[#CACACA]"
+            ? "bg-[#FFC700]"
             : "border border-solid	border-[#D9D9D9] text-[#D9D9D9]"
         }`}
       >

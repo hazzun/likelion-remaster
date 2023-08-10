@@ -27,7 +27,7 @@ export default function ReqConfirm() {
         return `${betweenTime}${value.name}`;
       }
     }
-    return '00';
+    return '0분';
   }
 
   const isoStartTime = startTime

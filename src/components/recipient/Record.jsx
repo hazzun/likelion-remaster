@@ -50,8 +50,8 @@ export default function Record() {
   }
 
   return (
-    <div className='w-full bg-white'>
-      <div className='p-3 font-semibold text-[24px] mb-[118.62px]'>
+    <div className='w-full bg-white px-5'>
+      <div className='font-semibold text-[24px] mb-[118.62px]'>
           도움이 필요한 내용을 녹음해 주세요.
       </div>
       <div className="flex flex-col items-center justify-center gap-10 mb-[118.62px]">

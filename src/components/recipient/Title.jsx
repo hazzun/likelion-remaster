@@ -17,9 +17,9 @@ export default function Title({ click }) {
   ];
 
   return (
-    <div className="flex flex-col justify-between pt-8 pb-[2.125rem] px-5 h-full">
+    <div className="flex flex-col justify-between pb-[2.125rem] px-5 h-full">
       <div>
-        <p className="font-semibold text-[24px] mb-[2.3025rem]">
+        <p className="font-semibold text-[24px] py-5">
           도움이 필요한 분야를 선택해주세요.
         </p>
         <div className="w-[85%] grid grid-cols-4 gap-2">

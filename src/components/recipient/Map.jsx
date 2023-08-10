@@ -144,7 +144,7 @@ export default function Map({ click }) {
         </div>
       ) : (
         <div className='flex flex-col h-full'>
-          <div className='py-8 px-5 font-semibold text-[24px]'>
+          <div className='py-5 px-5 font-semibold text-[24px]'>
             핀을 이동하여<br/>도움을 요청할 장소를 골라주세요!
           </div>
           <div id='map' className='w-full h-[73%]'></div>

@@ -24,7 +24,7 @@ function App() {
       break;
     default:
       title = '와봐유';
-      backHandler = () => navigate(-1);
+      backHandler = () => navigate("/");
   }
 
   return (

@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import SignUp from "./pages/SignUp";
 import Recipient from "./pages/Recipient";
 import MainHelper from "./pages/MainHelper";
+import ReqConfirm from "./pages/ReqConfirm";
 import BeforeMeeting from "./pages/BeforeMeeting";
 import Meeting from "./pages/Meeting";
 
@@ -22,8 +23,8 @@ function App() {
       backHandler = page === 1 ? () => navigate(-1) : () => setPage(page - 1);
       break;
     default:
-      title = "에이블";
-      backHandler = () => navigate(-1);
+      title = "와봐유";
+      backHandler = () => navigate("/");
   }
 
   return (
@@ -33,6 +34,7 @@ function App() {
         <Routes>
           <Route path="/" element={<SignUp />}></Route>
           <Route path="/mainhelper" element={<MainHelper />}></Route>
+          <Route path="/reqconfirm" element={<ReqConfirm />}></Route>
           <Route path="/beforemeeting" element={<BeforeMeeting />}></Route>
           <Route path="/meeting" element={<Meeting />}></Route>
           <Route

@@ -63,6 +63,9 @@ export default function ReqConfirm() {
   }
   
   // 요청 취소 POST
+  const clickCancel = () => {
+    
+  }
   
   return (
     <div className='w-full bg-white'>
@@ -83,8 +86,8 @@ export default function ReqConfirm() {
           </div>
           <div>다이소 중앙점</div>
         </div>
-        <div className="text-center">
-          <button className="mb-5 py-3.5 px-24 text-[#FFC700] bg-[#5A5A5A] text-center rounded-2xl"
+        <div className="flex items-center justify-center text-center bg-[#5A5A5A] rounded-2xl mb-5">
+          <button className="w-full py-4 text-[#FFC700] text-center "
                   onClick={() => clickListenBtn()}
                   id="audio">
             음성내용 듣기
@@ -106,6 +109,15 @@ export default function ReqConfirm() {
             <div className="font-semibold text-xl">{runningTime}</div>
             {/*<div className="font-normal text-xs">분</div>*/}
           </div>
+        </div>
+      </div>
+      <div className='px-4'>
+        <button onClick={clickCancel} 
+                className="w-[175px] h-[40px] rounded-2xl font-medium text-[16px] border-2">
+          요청 취소하기
+        </button>
+        <div className="pt-2 font-normal text-[12px] color-[#797979]">
+          요청한 도움을 취소하고 싶나요?<br/>위 버튼을 눌러 초기화면으로 돌아갈 수 있어요
         </div>
       </div>
     </div>

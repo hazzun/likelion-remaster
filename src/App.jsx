@@ -1,5 +1,5 @@
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from './components/Header';
 import First from './components/sign-up/First';
 import Recipient from './pages/Recipient';
@@ -7,6 +7,8 @@ import MainHelper from './pages/MainHelper';
 import ReqConfirm from './pages/ReqConfirm';
 import BeforeMeeting from './pages/BeforeMeeting';
 import Meeting from './pages/Meeting';
+import Splash from './components/Splash';
+import Login from './pages/Login';
 
 function App() {
   const location = useLocation();
@@ -14,22 +16,39 @@ function App() {
 
   const [page, setPage] = useState(1);
 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // 잠시 후 스플래시 화면 숨기기
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000); // 예: 2초 동안 스플래시 화면 보여주기
+  }, []);
+
   let title;
   let backHandler;
+  let visiable;
 
   switch (location.pathname) {
+    case '/login':
+      visiable = false;
+      break;
     case '/recipient':
       title = '도움 글 작성';
       backHandler = page === 1 ? () => navigate(-1) : () => setPage(page - 1);
       break;
     default:
       title = '와봐유';
-      backHandler = () => navigate("/");
+      backHandler = () => navigate('/');
   }
 
   return (
     <div className='relative w-full bg-white min-h-screen'>
-      <Header title={title} back={backHandler} />
+      <Routes>
+        {/* <Route path='/login' element={loading ? <Splash /> : <Login />}></Route> */}
+        <Route path='/login' element={loading ? <Splash /> : <Login />}></Route>
+      </Routes>
+      <Header title={title} back={backHandler} visiable={visiable} />
       <div className='pt-[56px] h-screen'>
         <Routes>
           <Route path='/' element={<First />}></Route>

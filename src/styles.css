@@ -13,6 +13,7 @@
     overflow-x: hidden;
     overflow-y: auto;
     /* background-color: #cccccc; */
+    -webkit-user-select: none;
   }
 }
 

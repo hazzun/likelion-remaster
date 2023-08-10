@@ -1,8 +1,11 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { createPortal } from 'react-dom';
 import AWS from "aws-sdk"
 
 export default function SaveModal({ isVisible, onClose, fileBlob, usertoken }) {
+  
+  const navigate = useNavigate();
   
   if(!isVisible) return null;
 
@@ -13,7 +16,7 @@ export default function SaveModal({ isVisible, onClose, fileBlob, usertoken }) {
       IdentityPoolId: process.env.REACT_APP_AWS_CONFIG,
     }),
   })
-  
+
   const clickUpload = () => {
 
     const file = new File([fileBlob], "soundBlob.mp3", {
@@ -37,9 +40,11 @@ export default function SaveModal({ isVisible, onClose, fileBlob, usertoken }) {
     promise.then(
       function (data) {
         alert("업로드에 성공했습니다.")
-        // 백엔드에 usertoken으로 해당하는 유저에게 t_filename 값과 위도경도값 전달해줘야 함
-        // 이후 요청 입력된 화면으로 이동
-        onClose();
+        const start = new Date(new Date().getTime());
+        console.log(start)
+        // 백엔드에 POST
+        // 이후 ReqConfirm으로 이동
+        navigate("/reqconfirm");
       },
       function (err) {
         return alert("오류가 발생했습니다: ", err.message)

@@ -5,6 +5,7 @@ import RecordIcon from '../components/icons/RecordIcon';
 import ToggleClose from '../components/icons/ToggleClose';
 import ToggleOpen from '../components/icons/ToggleOpen';
 import ProfileImage from '../components/ProfileImage';
+import { AiOutlineClose } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 
 const { kakao } = window;
@@ -51,7 +52,7 @@ export default function MainHelper() {
       const options = {
         //지도를 생성할 때 필요한 기본 옵션
         center: userLocation, //지도의 중심좌표.
-        level: 9, //지도의 레벨(확대, 축소 정도), default = 3
+        level: 4, //지도의 레벨(확대, 축소 정도), default = 3
       };
 
       const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
@@ -125,12 +126,12 @@ export default function MainHelper() {
       // 특정 마커를 클릭하면 동작하는 함수
       const helpInfoOpen = (info) => {
         let line = new kakao.maps.Polyline({
-          path: [userLocation, info.latlng], // 선을 구성하는 좌표 배열입니다 클릭한 위치를 넣어줍니다
+          path: [userLocation, info.latlng],
         });
         setDistance(Math.round(line.getLength()));
 
         console.log(info);
-        setIsInfoModal((isInfoModal) => !isInfoModal);
+        setIsInfoModal(() => true);
         map.setCenter(info.latlng);
 
         setHelpInfo(info);
@@ -175,7 +176,7 @@ export default function MainHelper() {
   };
 
   return (
-    <div className='relative h-full'>
+    <div className='relative h-full flex flex-col'>
       {!userLocation ? (
         <>
           <div className='w-full h-full flex flex-col items-center justify-center text-center gap-8'>
@@ -255,18 +256,21 @@ export default function MainHelper() {
 
           {isInfoModal ? (
             <>
-              <div
-                id='map'
-                className='absolute w-full rounded-b-3xl h-[60%]'
-              ></div>
+              <div id='map' className='w-full flex-1 h-[135%]'></div>
               {helpInfo && (
-                <div className='z-30 flex flex-col gap-3 justify-between absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] p-5 shadow-t-2xl'>
+                <div className=' z-30 flex flex-col gap-3 justify-between bottom-0 left-0 right-0 relative bg-white rounded-t-[30px] p-5 shadow-t-2xl'>
                   <div className='flex items-center gap-5'>
                     <ProfileImage size='small' />
                     <div className='flex flex-col'>
                       <span className='font-bold'>user1234 님</span>
                       <span className='text-gray-500'>60대 남성</span>
                     </div>
+                    <button
+                      className='absolute top-0 right-0 mt-7 mr-7 text-xl'
+                      onClick={() => setIsInfoModal(false)}
+                    >
+                      <AiOutlineClose />
+                    </button>
                   </div>
                   <div className='flex flex-col'>
                     <div className='flex gap-2 mb-5'>
@@ -311,7 +315,7 @@ export default function MainHelper() {
             </>
           ) : (
             <>
-              <div id='map' className='w-full h-full'></div>
+              <div id='map' className='w-full flex-1'></div>
             </>
           )}
         </>

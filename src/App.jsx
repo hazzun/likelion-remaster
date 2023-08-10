@@ -22,7 +22,7 @@ function App() {
     // 잠시 후 스플래시 화면 숨기기
     setTimeout(() => {
       setLoading(false);
-    }, 2000); // 예: 2초 동안 스플래시 화면 보여주기
+    }, 3000); // 3초 동안 스플래시 화면 보여주기
   }, []);
 
   let title;
@@ -30,7 +30,7 @@ function App() {
   let visiable;
 
   switch (location.pathname) {
-    case '/login':
+    case '/':
       visiable = false;
       break;
     case '/recipient':
@@ -46,12 +46,12 @@ function App() {
     <div className='relative w-full bg-white min-h-screen'>
       <Routes>
         {/* <Route path='/login' element={loading ? <Splash /> : <Login />}></Route> */}
-        <Route path='/login' element={loading ? <Splash /> : <Login />}></Route>
+        <Route path='/' element={loading ? <Splash /> : <Login />}></Route>
       </Routes>
       <Header title={title} back={backHandler} visiable={visiable} />
       <div className='pt-[56px] h-screen'>
         <Routes>
-          <Route path='/' element={<First />}></Route>
+          <Route path='/signup' element={<First />}></Route>
           <Route path='/mainhelper' element={<MainHelper />}></Route>
           <Route path='/reqconfirm' element={<ReqConfirm />}></Route>
           <Route path='/beforemeeting' element={<BeforeMeeting />}></Route>

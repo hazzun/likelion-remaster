@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import ReactAudioPlayer from 'react-audio-player';
 import axios from 'axios';
+import CancelModal from '../components/CancelModal';
 
 export default function ReqConfirm() {
+
+  // 추후 로그인 검사코드 추가 
+  const [usertoken, setUsertoken] = useState('');
 
   // 백엔드에서 GET 해오는 함수
   const [mp3Url, setMp3Url] = useState("");
@@ -62,9 +66,9 @@ export default function ReqConfirm() {
     }
   }
   
-  // 요청 취소 POST
+  const [modalShow, setModalShow] = useState(false)
   const clickCancel = () => {
-    
+    setModalShow(true)
   }
   
   return (
@@ -120,6 +124,12 @@ export default function ReqConfirm() {
           요청한 도움을 취소하고 싶나요?<br/>위 버튼을 눌러 초기화면으로 돌아갈 수 있어요
         </div>
       </div>
+
+      <CancelModal
+        isVisible={modalShow}
+        onClose={() => setModalShow(false)} 
+        usertoken={usertoken}
+      />
     </div>
   );
 }

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 export default function First() {
   return (
-    <div className='pt-[56px] h-screen'>
     <div className='flex flex-col justify-between pt-10 pb-[2.8075rem] px-5 h-full'>
       <div>
         <p className='mb-3.5 heading-1'>
@@ -37,7 +36,6 @@ export default function First() {
           </p>
         </div>
       </div>
-    </div>
     </div>
   );
 }

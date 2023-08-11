@@ -6,7 +6,6 @@ export default function BeforeMeeting() {
   let username = 'user0123';
   let helpername = 'user9876';
   return (
-    <div className='pt-[56px] h-screen'>
     <div className='h-full flex flex-col items-center justify-between p-8'>
       <div className='font-bold text-center text-3xl pt-8'>
         {username} 님의
@@ -36,7 +35,6 @@ export default function BeforeMeeting() {
       <Link to='/meeting' className='w-full'>
         <BottomButton text={'도착'} />
       </Link>
-    </div>
     </div>
   );
 }

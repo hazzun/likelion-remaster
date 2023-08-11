@@ -49,7 +49,7 @@ function App() {
         <Route path='/' element={loading ? <Splash /> : <Login />}></Route>
       </Routes>
       <Header title={title} back={backHandler} visiable={visiable} />
-      <div>
+      <div className='pt-[56px] h-screen'>
         <Routes>
           <Route path='/signup' element={<First />}></Route>
           <Route path='/mainhelper' element={<MainHelper />}></Route>

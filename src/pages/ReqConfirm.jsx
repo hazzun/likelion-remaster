@@ -73,7 +73,6 @@ export default function ReqConfirm() {
   }
   
   return (
-    <div className='pt-[56px] h-screen'>
     <div className='w-full bg-white'>
       <div className="pt-3 pb-12 px-4 font-medium text-2xl">
           작성한 내용을 확인해 주세요.
@@ -136,7 +135,6 @@ export default function ReqConfirm() {
         onClose={() => setModalShow(false)} 
         usertoken={usertoken}
       />
-    </div>
     </div>
   );
 }

@@ -4,7 +4,6 @@ import IncompleteButton from '../components/IncompleteButton';
 
 export default function Meeting() {
   return (
-    <div className='pt-[56px] h-screen'>
     <div className='h-full flex flex-col'>
       <div className='flex h-full items-center justify-center'>
         지금 문제를 해결중입니다
@@ -13,7 +12,6 @@ export default function Meeting() {
         <CompleteButton />
         <IncompleteButton />
       </div>
-    </div>
     </div>
   );
 }

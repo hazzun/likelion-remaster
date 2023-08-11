@@ -22,7 +22,7 @@ function App() {
     // 잠시 후 스플래시 화면 숨기기
     setTimeout(() => {
       setLoading(false);
-    }, 3000); // 3초 동안 스플래시 화면 보여주기
+    }, 1500); // 1.5초 동안 스플래시 화면 보여주기
   }, []);
 
   let title;

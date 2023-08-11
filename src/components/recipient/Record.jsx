@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 import SaveModal from '../SaveModal';
-import { BsFillMicFill, BsFillStopFill, BsFillPlayFill } from 'react-icons/bs';
+import { BsFillMicFill, BsFillStopFill } from 'react-icons/bs';
 import axios from 'axios';
 
 export default function Record() {
@@ -45,22 +45,34 @@ export default function Record() {
   /* 녹음 시작 멈춤 관리 */
   const [recording, setRecording] = useState(false);
   useEffect(() => {
-    if(recording) {  
+    if(!recording) {  
       recorderControls.stopRecording();
       console.log("녹음 중지")
     }
-    if(!recording){
+    else{
       recorderControls.startRecording();
       console.log("녹음 시작")
     }
   }, [recording]);
-
-  const startAudio = () => {
+  
+  /* 재생 시작 멈춤 관리 */
+  const [start, setStart] = useState(false);
+  const clickListenBtn = () => {
     const audio = document.querySelector('audio');
     if(audio != null){
-      audio.play();
+      if(start) {
+        setStart(false);
+        audio.pause();
+        audio.currentTime = 0
+        console.log("재생 멈춤")
+      }
+      else {
+        setStart(true);
+        audio.play();
+        console.log("재생 시작")
+      }
     } else {
-      alert("먼저 녹음을 진행해 주세요!")
+      alert("녹음된 내용이 없습니다!")
     }
   }
   
@@ -96,12 +108,13 @@ export default function Record() {
               <BsFillStopFill color='#FFC700' size='50' className='blinking'/>
           }
         </button>
-        <button onClick={startAudio}
-                className='bg-[#5C5C5C] rounded-full p-5'>
-          <BsFillPlayFill color='#FFC700' size='50'/>
-        </button>
       </div>
-      <div id='myDiv' className='flex flex-col items-center justify-center gap-10'>
+      <div id='myDiv' className='flex flex-col items-center justify-center gap-5'>
+        <button className='w-full h-[3.25rem] text-xl font-medium rounded-2xl bg-[#5C5C5C] text-[#FFC700]' 
+                onClick={() => clickListenBtn()}
+        >
+          녹음된 내용 확인하기
+        </button>
         <button id='saveBtn' 
                 className='w-full h-[3.25rem] text-xl font-medium rounded-2xl bg-[#FFC700]' 
                 onClick={() => clickHelp()}

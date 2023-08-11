@@ -12,7 +12,7 @@ export default function Login() {
   console.log(autoLogin);
 
   return (
-    <div className='h-screen text-center flex flex-col justify-center gap-20'>
+    <div className='h-screen text-center flex flex-col justify-center gap-20 overflow-scroll'>
       <div className='flex flex-col justify-center'>
         <div className='flex gap-2 justify-center items-center'>
           <img
@@ -24,20 +24,32 @@ export default function Login() {
         </div>
         <p className='text-[#5C5C5C]'>도움을 품앗이해요</p>
         <form className='mt-20 flex flex-col gap-1 items-center justify-center'>
-          <input
-            className='border-2 rounded-lg w-[68%] h-[40px]'
-            type='text'
-            placeholder='아이디'
-          />
-          <input
-            className='border-2 rounded-lg w-[68%] h-[40px]'
-            type='password'
-            placeholder='비밀번호'
-          />
-          <button className='w-[68%] h-[40px] bg-[#FFC700] rounded-lg my-4'>
+          <div className='w-[75%]'>
+            <div className='flex flex-row gap-1 items-center justify-between w-full'>
+              <div className="text-[#CACACA] text-[16px] w-[80px] text-left pl-0.5">
+                아이디
+              </div>
+              <input
+                className='border-2 rounded-lg w-[100%] h-[40px] pl-[10px] mb-1'
+                type='text'
+                placeholder='14자리 이하'
+              />
+            </div>
+            <div className='flex flex-row gap-1 items-center justify-between w-full'>
+              <div className="text-[#CACACA] text-[16px] w-[80px] text-left pl-0.5">
+                비밀번호
+              </div>
+              <input
+                className='border-2 rounded-lg w-[100%] h-[40px] pl-[10px]'
+                type='password'
+                placeholder='8-14자 영문, 숫자, 특수기호'
+              />
+            </div>
+          </div>
+          <button className='w-[75%] h-[40px] bg-[#FFC700] rounded-lg my-4'>
             <span>로그인</span>
           </button>
-          <div className='text-[12px] text-[#828282] flex w-[68%] justify-between'>
+          <div className='text-[12px] text-[#828282] flex w-[75%] justify-between'>
             <div className='flex items-center gap-1'>
               <input
                 id='auto-login'

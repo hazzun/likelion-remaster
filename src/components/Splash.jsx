@@ -6,13 +6,15 @@ import splashBottom from '../assets/splashBottom.png';
 
 export default function Splash() {
   return (
-    <div>
+    <div className="h-full flex flex-col">
+      <div>
       <img
         src={splashTop}
         alt='둥근 위쪽 원'
-        className='w-[50%] fixed top-0 right-0'
+        className='absolute w-[100%] h-[100%] max-w-[165px] max-h-[165px] top-0 right-0'
       />
-      <div className='h-screen flex flex-col items-center justify-center'>
+      </div>
+      <div className='flex flex-col items-center justify-center min-h-[150px] h-screen'>
         <div className='flex gap-2 items-center'>
           <img
             src={logo}
@@ -23,11 +25,12 @@ export default function Splash() {
         </div>
         <p className='text-[#5C5C5C] mt-4'>도움을 품앗이해요</p>
       </div>
+      <div>
       <img
         src={splashBottom}
         alt='둥근 아래쪽 원'
-        className='w-[50%] fixed bottom-0 left-0'
-      />
+        className='fixed w-[100%] h-[100%] max-w-[165px] max-h-[265px] bottom-0'
+      /></div>
     </div>
   );
 }

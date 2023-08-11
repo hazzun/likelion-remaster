@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import ReactAudioPlayer from 'react-audio-player';
 import axios from 'axios';
 import CancelModal from '../components/CancelModal';
+import RecordIcon from '../components/icons/RecordIcon';
 
 export default function ReqConfirm() {
 
@@ -91,11 +92,15 @@ export default function ReqConfirm() {
           <div>다이소 중앙점</div>
         </div>
         <div className="flex items-center justify-center text-center bg-[#5A5A5A] rounded-2xl mb-5">
-          <button className="w-full py-4 text-[#FFC700] text-center "
+          <button className='flex items-center justify-center w-full py-4 rounded-2xl bg-[#5A5A5A]'
                   onClick={() => clickListenBtn()}
                   id="audio">
-            음성내용 듣기
+            <p className='flex items-center text-[#FFC700] text-[16px] font-medium gap-2'>
+              <RecordIcon size={'medium'} />
+              음성내용 듣기
+            </p>
           </button>
+
         </div>
       </div>
       <div className="hidden">

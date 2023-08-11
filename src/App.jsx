@@ -22,7 +22,7 @@ function App() {
     // 잠시 후 스플래시 화면 숨기기
     setTimeout(() => {
       setLoading(false);
-    }, 3000); // 3초 동안 스플래시 화면 보여주기
+    }, 1500); // 3초 동안 스플래시 화면 보여주기
   }, []);
 
   let title;
@@ -44,23 +44,22 @@ function App() {
 
   return (
     <div className='relative w-full bg-white min-h-screen'>
-      <Routes>
-        {/* <Route path='/login' element={loading ? <Splash /> : <Login />}></Route> */}
-        <Route path='/' element={loading ? <Splash /> : <Login />}></Route>
-      </Routes>
-      <Header title={title} back={backHandler} visiable={visiable} />
-      <div className='pt-[56px] h-screen'>
-        <Routes>
-          <Route path='/signup' element={<First />}></Route>
-          <Route path='/mainhelper' element={<MainHelper />}></Route>
-          <Route path='/reqconfirm' element={<ReqConfirm />}></Route>
-          <Route path='/beforemeeting' element={<BeforeMeeting />}></Route>
-          <Route path='/meeting' element={<Meeting />}></Route>
-          <Route
-            path='/recipient'
-            element={<Recipient page={page} next={() => setPage(page + 1)} />}
-          ></Route>
-        </Routes>
+      <div className='flex flex-col h-screen'>
+        <Header title={title} back={backHandler} visiable={visiable} />
+        <div className='flex-1'>
+          <Routes>
+            <Route path='/' element={loading ? <Splash /> : <Login />}></Route>
+            <Route path='/signup' element={<First />}></Route>
+            <Route path='/mainhelper' element={<MainHelper />}></Route>
+            <Route path='/reqconfirm' element={<ReqConfirm />}></Route>
+            <Route path='/beforemeeting' element={<BeforeMeeting />}></Route>
+            <Route path='/meeting' element={<Meeting />}></Route>
+            <Route
+              path='/recipient'
+              element={<Recipient page={page} next={() => setPage(page + 1)} />}
+            ></Route>
+          </Routes>
+        </div>
       </div>
     </div>
   );

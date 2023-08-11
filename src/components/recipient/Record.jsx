@@ -75,6 +75,7 @@ export default function Record() {
   }
 
   return (
+    <div className='pt-[56px] h-screen'>
     <div className='w-full h-full flex flex-col justify-between pb-[2.125rem] bg-white px-5'>
       <div className='font-semibold text-[24px] py-5'>
           도움이 필요한 내용을 녹음해 주세요.
@@ -115,6 +116,7 @@ export default function Record() {
         onClose={() => setModalShow(false)} 
         usertoken={usertoken} fileBlob={t_blob}
       />
+    </div>
     </div>
   );
 }

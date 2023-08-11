@@ -134,7 +134,7 @@ export default function Map({ click }) {
   };
 
   return (
-    <>
+    <div className='pt-[56px] h-screen'>
       {!userLocation ? (
         <div className='w-full h-full flex flex-col items-center justify-center text-center gap-8'>
           <AiOutlineLoading3Quarters className='animate-spin text-[40px]' />
@@ -158,6 +158,6 @@ export default function Map({ click }) {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

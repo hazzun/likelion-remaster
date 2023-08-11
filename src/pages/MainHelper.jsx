@@ -176,6 +176,7 @@ export default function MainHelper() {
   };
 
   return (
+    <div className='pt-[56px] h-screen'>
     <div className='relative h-full flex flex-col'>
       {!userLocation ? (
         <>
@@ -320,6 +321,7 @@ export default function MainHelper() {
           )}
         </>
       )}
+    </div>
     </div>
   );
 }

@@ -17,6 +17,7 @@ export default function Title({ click }) {
   ];
 
   return (
+    <div className='pt-[56px] h-screen'>
     <div className="flex flex-col justify-between pb-[2.125rem] px-5 h-full">
       <div>
         <p className="font-semibold text-[24px] py-5">
@@ -44,6 +45,7 @@ export default function Title({ click }) {
         /> */}
       </div>
       <BottomButton text="다음으로" click={click} />
+    </div>
     </div>
   );
 }

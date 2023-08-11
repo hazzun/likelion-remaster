@@ -22,7 +22,7 @@ function App() {
     // 잠시 후 스플래시 화면 숨기기
     setTimeout(() => {
       setLoading(false);
-    }, 3000); // 3초 동안 스플래시 화면 보여주기
+    }, 1500); // 1.5초 동안 스플래시 화면 보여주기
   }, []);
 
   let title;
@@ -49,7 +49,7 @@ function App() {
         <Route path='/' element={loading ? <Splash /> : <Login />}></Route>
       </Routes>
       <Header title={title} back={backHandler} visiable={visiable} />
-      <div className='pt-[56px] h-screen'>
+      <div>
         <Routes>
           <Route path='/signup' element={<First />}></Route>
           <Route path='/mainhelper' element={<MainHelper />}></Route>

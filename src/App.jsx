@@ -5,7 +5,7 @@ import First from './components/sign-up/First';
 import Recipient from './pages/Recipient';
 import MainHelper from './pages/MainHelper';
 import ReqConfirm from './pages/ReqConfirm';
-import BeforeMeeting from './pages/BeforeMeeting';
+import BeforeMeeting from './pages/Meeting';
 import Meeting from './pages/Meeting';
 import Splash from './components/Splash';
 import Login from './pages/Login';
@@ -37,6 +37,10 @@ function App() {
       title = '도움 글 작성';
       backHandler = page === 1 ? () => navigate(-1) : () => setPage(page - 1);
       break;
+    case '/meeting':
+      title = '도움 수락';
+      backHandler = page === 1 ? () => navigate(-1) : () => setPage(page - 1);
+      break;
     default:
       title = '와봐유';
       backHandler = () => navigate('/');
@@ -44,23 +48,21 @@ function App() {
 
   return (
     <div className='relative w-full bg-white min-h-screen'>
-      <Routes>
-        {/* <Route path='/login' element={loading ? <Splash /> : <Login />}></Route> */}
-        <Route path='/' element={loading ? <Splash /> : <Login />}></Route>
-      </Routes>
-      <Header title={title} back={backHandler} visiable={visiable} />
-      <div className='pt-[56px] h-screen'>
-        <Routes>
-          <Route path='/signup' element={<First />}></Route>
-          <Route path='/mainhelper' element={<MainHelper />}></Route>
-          <Route path='/reqconfirm' element={<ReqConfirm />}></Route>
-          <Route path='/beforemeeting' element={<BeforeMeeting />}></Route>
-          <Route path='/meeting' element={<Meeting />}></Route>
-          <Route
-            path='/recipient'
-            element={<Recipient page={page} next={() => setPage(page + 1)} />}
-          ></Route>
-        </Routes>
+      <div className='flex flex-col h-screen'>
+        <Header title={title} back={backHandler} visiable={visiable} />
+        <div className='flex-1'>
+          <Routes>
+            <Route path='/' element={loading ? <Splash /> : <Login />}></Route>
+            <Route path='/signup' element={<First />}></Route>
+            <Route path='/mainhelper' element={<MainHelper />}></Route>
+            <Route path='/reqconfirm' element={<ReqConfirm />}></Route>
+            <Route path='/meeting' element={<Meeting />}></Route>
+            <Route
+              path='/recipient'
+              element={<Recipient page={page} next={() => setPage(page + 1)} />}
+            ></Route>
+          </Routes>
+        </div>
       </div>
     </div>
   );

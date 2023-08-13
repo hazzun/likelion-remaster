@@ -12,10 +12,11 @@ export default function HelperInfo({ helperUser }) {
         님
         <br />
         <div className='flex items-center'>
-          {helperUser.ageg} ·{' '}
-          <span className='text-blue-400'>{helperUser.gender}</span>{' '}
+          {helperUser.age} ·
+          <span className='text-blue-400 ml-1'>{helperUser.gender}</span>{' '}
           {/* 별점에 해당하는 부분 백에도 있는지 확인하기 */}
-          <AiFillStar className='mx-1 text-[#FE8C33]' /> 4.0 (1)
+          <AiFillStar className='mx-1 text-[#FE8C33]' /> {helperUser.rating} (
+          {helperUser.ratingCount})
         </div>
       </p>
     </div>

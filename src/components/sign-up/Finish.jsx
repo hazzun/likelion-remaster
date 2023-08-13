@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router";
 import BottomButton from "../BottomButton";
 import { ReactComponent as Draw } from "../../assets/svg/signup-draw.svg";
 
-export default function Finish({ next }) {
+export default function Finish() {
+  const navigate = useNavigate();
   return (
     <>
       <div className="h-full flex flex-col justify-center items-center">
@@ -10,7 +12,7 @@ export default function Finish({ next }) {
         <p className="font-medium text-[1rem]">도움을 주고 받아보세요!</p>
       </div>
 
-      <BottomButton text="다음으로" click={next} />
+      <BottomButton text="완료" click={() => navigate("/")} />
     </>
   );
 }

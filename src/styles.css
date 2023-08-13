@@ -61,6 +61,11 @@ input {
   line-height: 1rem;
 }
 
+.title {
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+
 .gray1 {
   background-color: #efefef;
 }
@@ -77,6 +82,10 @@ input {
   background-color: #565656;
 }
 
+.yellow {
+  background-color: #ffc700;
+}
+
 .color-gray1 {
   color: #efefef;
 }
@@ -91,6 +100,14 @@ input {
 
 .color-gray4 {
   color: #565656;
+}
+
+.color-gray4 {
+  color: #565656;
+}
+
+.color-yellow {
+  color: #ffc700;
 }
 
 @font-face {
@@ -235,4 +252,39 @@ input {
     url("https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Black.ttf")
       format("truetype");
   font-display: swap;
+}
+
+/* 체크박스를 숨김 */
+.hidden-checkbox {
+  display: none;
+}
+
+/* 기본 원형 체크박스 디자인 */
+.custom-checkbox .checkmark {
+  display: inline-block;
+  width: 26.8px;
+  height: 26.8px;
+  /* margin-right: 10px; */
+  background-color: #d9d9d9;
+  border-radius: 50%;
+  vertical-align: middle;
+  position: relative;
+}
+
+/* 체크 상태일 때의 디자인 */
+.custom-checkbox input:checked + .checkmark {
+  background-color: #d9d9d9;
+}
+
+/* 선택된 체크박스 내부의 원 디자인 */
+.custom-checkbox input:checked + .checkmark::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16.79px;
+  height: 16.79px;
+  background-color: #ffc700;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
 }

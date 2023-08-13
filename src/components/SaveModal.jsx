@@ -59,14 +59,20 @@ export default function SaveModal({ isVisible, onClose, fileBlob, usertoken }) {
       style={{ background: 'rgba(0, 0, 0, 0.3)' }}
     >
       <div
-        className='absolute inset-y-2/4 inset-x-2/4 bg-white h-[10.125rem] w-full max-w-[19.375rem] rounded-[0.625rem]'
+        className='absolute inset-y-2/4 inset-x-2/4 bg-white h-[10.125rem] w-[310px] max-w-[19.375rem] rounded-[0.625rem]'
         style={{ transform: 'translate(-50%, -50%)' }}
       >
         <div>
-          <p className="font-normal text-[20px] text-center py-10">저장하시겠습니까?</p>
-          <div className="flex items-center justify-center">
-            <button className="font-normal text-[16px] text-[#A3A5A4] px-10" onClick={() => onClose()}>재녹음</button>
-            <button className="font-normal text-[16px] px-10" onClick={() => clickUpload()}>확인</button>
+          <p className="font-medium text-[20px] text-center py-10">
+            저장하시겠습니까?
+          </p>
+          <div className="flex items-center w-[310px] max-w-[19.375rem] h-14 bg-[#F3F3F3] place-content-around rounded-b-[0.625rem] rounded-br-[0.625rem]">
+            <button className="font-semibold text-[16px] w-[50%] h-[100%] text-[#181717] rounded-b-[0.625rem]" onClick={() => onClose()}>
+              재녹음
+            </button>
+            <button className="font-semibold text-[16px] w-[50%] h-[100%] bg-[#FED130] rounded-br-[0.625rem]" onClick={() => clickUpload()}>
+              확인
+            </button>
           </div>
         </div>
       </div>

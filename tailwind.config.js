@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 
-const defaultTheme = require('tailwindcss/defaultTheme')
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -21,7 +21,38 @@ module.exports = {
         'cate-rgba': 'rgba(247, 247, 247, 0.75)',
       },
       fontFamily: {
-        'sans': ['Pretendard', ...defaultTheme.fontFamily.sans],
+        sans: ['Pretendard', ...defaultTheme.fontFamily.sans],
+      },
+      keyframes: {
+        waving: {
+          '0%': {
+            transform: 'rotate(0deg)',
+          },
+          '10%': {
+            transform: 'rotate(20deg)',
+          },
+          '20%': {
+            transform: 'rotate(-8deg)',
+          },
+          '30%': {
+            transform: 'rotate(14deg)',
+          },
+          '40%': {
+            transform: 'rotate(-4deg)',
+          },
+          '50%': {
+            transform: 'rotate(10deg)',
+          },
+          '60%': {
+            transform: 'rotate(0deg)',
+          },
+          '100%': {
+            transform: 'rotate(0deg)',
+          },
+        },
+      },
+      animation: {
+        waving: 'waving 2.5s infinite',
       },
     },
   },

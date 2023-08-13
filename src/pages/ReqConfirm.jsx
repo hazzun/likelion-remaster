@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import ReactAudioPlayer from 'react-audio-player';
 import axios from 'axios';
+import CancelModal from '../components/CancelModal';
+import RecordIcon from '../components/icons/RecordIcon';
 
 export default function ReqConfirm() {
+
+  // 추후 로그인 검사코드 추가 
+  const [usertoken, setUsertoken] = useState('');
 
   // 백엔드에서 GET 해오는 함수
   const [mp3Url, setMp3Url] = useState("");
@@ -27,7 +32,7 @@ export default function ReqConfirm() {
         return `${betweenTime}${value.name}`;
       }
     }
-    return '00';
+    return '0분';
   }
 
   const isoStartTime = startTime
@@ -62,7 +67,10 @@ export default function ReqConfirm() {
     }
   }
   
-  // 요청 취소 POST
+  const [modalShow, setModalShow] = useState(false)
+  const clickCancel = () => {
+    setModalShow(true)
+  }
   
   return (
     <div className='w-full bg-white'>
@@ -83,12 +91,16 @@ export default function ReqConfirm() {
           </div>
           <div>다이소 중앙점</div>
         </div>
-        <div className="text-center">
-          <button className="mb-5 py-3.5 px-24 text-[#FFC700] bg-[#5A5A5A] text-center rounded-2xl"
+        <div className="flex items-center justify-center text-center bg-[#5A5A5A] rounded-2xl mb-5">
+          <button className='flex items-center justify-center w-full py-4 rounded-2xl bg-[#5A5A5A]'
                   onClick={() => clickListenBtn()}
                   id="audio">
-            음성내용 듣기
+            <p className='flex items-center text-[#FFC700] text-[16px] font-medium gap-2'>
+              <RecordIcon size={'medium'} />
+              음성내용 듣기
+            </p>
           </button>
+
         </div>
       </div>
       <div className="hidden">
@@ -108,6 +120,21 @@ export default function ReqConfirm() {
           </div>
         </div>
       </div>
+      <div className='px-4'>
+        <button onClick={clickCancel} 
+                className="w-[175px] h-[40px] rounded-2xl font-medium text-[16px] border-2">
+          요청 취소하기
+        </button>
+        <div className="pt-2 font-normal text-[12px] color-[#797979]">
+          요청한 도움을 취소하고 싶나요?<br/>위 버튼을 눌러 초기화면으로 돌아갈 수 있어요
+        </div>
+      </div>
+
+      <CancelModal
+        isVisible={modalShow}
+        onClose={() => setModalShow(false)} 
+        usertoken={usertoken}
+      />
     </div>
   );
 }

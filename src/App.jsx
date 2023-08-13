@@ -1,11 +1,9 @@
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
-import First from "./components/sign-up/First";
 import Recipient from "./pages/Recipient";
 import MainHelper from "./pages/MainHelper";
 import ReqConfirm from "./pages/ReqConfirm";
-import BeforeMeeting from "./pages/Meeting";
 import Meeting from "./pages/Meeting";
 import Splash from "./components/Splash";
 import Login from "./pages/Login";

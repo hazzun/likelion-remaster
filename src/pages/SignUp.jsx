@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import First from "../components/sign-up/First";
 import Id from "../components/sign-up/Id";
 import Pw from "../components/sign-up/Pw";
 import BirthGender from "../components/sign-up/BirthGender";
@@ -9,23 +8,20 @@ import Finish from "../components/sign-up/Finish";
 export default function SignUp() {
   const [page, setPage] = useState(1);
 
-  let components = <First />;
+  let components = <Id />;
 
   switch (page) {
     case 1:
-      components = <First next={() => setPage(page + 1)} />;
-      break;
-    case 2:
       components = <Id next={() => setPage(page + 1)} />;
       break;
-    case 3:
+    case 2:
       components = <Pw next={() => setPage(page + 1)} />;
       break;
-    case 4:
+    case 3:
       components = <BirthGender next={() => setPage(page + 1)} />;
       break;
-    case 5:
-      components = <Finish next={() => setPage(page + 1)} />;
+    case 4:
+      components = <Finish />;
       break;
     default:
       components = <div>잘못된 페이지에 접근하셨습니다.</div>;

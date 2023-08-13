@@ -1,16 +1,26 @@
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  Navigate,
+} from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Header from './components/Header';
-import First from './components/sign-up/First';
+import MainPage from './pages/MainPage';
 import Recipient from './pages/Recipient';
 import MainHelper from './pages/MainHelper';
 import ReqConfirm from './pages/ReqConfirm';
-import BeforeMeeting from './pages/Meeting';
 import Meeting from './pages/Meeting';
 import Splash from './components/Splash';
 import Login from './pages/Login';
+import MeetingAfter from './pages/MeetingAfter';
 
 function App() {
+  // 초기 화면에 user 정보가 있다면 '/' 으로 (역할고르는 화면)
+  // 초기 화면에 user 정보가 없다면 '/login' 으로 (로그인 화면)
+  let isLogin = true; // 사용자 정보가 없다는 가정 <- 추후에 백엔드 연동해서 값 불러와야 할 듯 합니다
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -52,11 +62,23 @@ function App() {
         <Header title={title} back={backHandler} visiable={visiable} />
         <div className='flex-1'>
           <Routes>
-            <Route path='/' element={loading ? <Splash /> : <Login />}></Route>
-            <Route path='/signup' element={<First />}></Route>
-            <Route path='/mainhelper' element={<MainHelper />}></Route>
+            <Route
+              path='/'
+              element={
+                loading ? (
+                  <Splash />
+                ) : isLogin ? (
+                  <MainPage />
+                ) : (
+                  <Navigate replace to='/login' />
+                )
+              }
+            ></Route>
+            <Route path='/login' element={<Login />}></Route>
+            <Route path='/mainHelper' element={<MainHelper />}></Route>
             <Route path='/reqconfirm' element={<ReqConfirm />}></Route>
             <Route path='/meeting' element={<Meeting />}></Route>
+            <Route path='/meetingAfter' element={<MeetingAfter />}></Route>
             <Route
               path='/recipient'
               element={<Recipient page={page} next={() => setPage(page + 1)} />}

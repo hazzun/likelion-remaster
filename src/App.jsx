@@ -10,6 +10,7 @@ import Meeting from "./pages/Meeting";
 import Splash from "./components/Splash";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import Mypage from "./pages/Mypage";
 
 function App() {
   const location = useLocation();
@@ -62,6 +63,7 @@ function App() {
               path="/recipient"
               element={<Recipient page={page} next={() => setPage(page + 1)} />}
             ></Route>
+            <Route path="/mypage" element={<Mypage />} />
           </Routes>
         </div>
       </div>

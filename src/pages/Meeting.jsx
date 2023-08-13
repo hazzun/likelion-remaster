@@ -2,11 +2,18 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import CompleteButton from '../components/CompleteButton';
 import IncompleteButton from '../components/IncompleteButton';
+import HelperInfo from '../components/HelperInfo';
+import AskerInfo from '../components/AskerInfo';
 
 export default function Meeting() {
-  let username = 'user0123';
-  let helpername = 'user9876';
   const [arrived, setArrived] = useState(false);
+
+  let username = 'user0123';
+  let askerUser = {
+    username: 'user9876',
+    age: '50대',
+    gender: '남성',
+  };
 
   return (
     <div className='h-full flex flex-col items-center justify-between p-8'>
@@ -15,14 +22,7 @@ export default function Meeting() {
         <br />
         도움을 수락했어요!
       </div>
-      <div className='w-full h-[40%] flex flex-col items-center justify-center bg-[#FFF6D6] rounded-2xl text-gray-500 gap-4'>
-        <div className='w-[100px] h-[100px] rounded-full bg-[#d9d9d9] flex items-center justify-center '></div>
-        <p className='text-center'>
-          <span className='font-bold text-lg text-black'>{helpername}</span> 님
-          <br />
-          50대 . 남성
-        </p>
-      </div>
+      <AskerInfo askerUser={askerUser} />
       {!arrived ? (
         <>
           <div className='text-center'>
@@ -50,7 +50,7 @@ export default function Meeting() {
             해결을 완료한 뒤<br />
             아래 버튼을 클릭해주세요!
           </div>
-          <div className='w-full h-20 grid grid-cols-2 text-[16px] font-bold gap-4 h-[50px]'>
+          <div className='w-full grid grid-cols-2 text-[16px] font-bold gap-4 h-[50px]'>
             <IncompleteButton />
             <CompleteButton />
           </div>

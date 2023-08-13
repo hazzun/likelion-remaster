@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import HelperMeetingSuccess from '../components/HelperMeetingSuccess';
 import HelperMeetingFail from '../components/HelperMeetingFail';
 import AskerMeetingSuccess from '../components/AskerMeetingSuccess';
-import AskerMeetingFail from '../components/sign-up/AskerMeetingFail';
+import AskerMeetingFail from '../components/AskerMeetingFail';
 
 export default function MeetingAfter() {
   const location = useLocation();

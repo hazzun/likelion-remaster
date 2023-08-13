@@ -11,7 +11,6 @@ import MainPage from './pages/MainPage';
 import Recipient from './pages/Recipient';
 import MainHelper from './pages/MainHelper';
 import ReqConfirm from './pages/ReqConfirm';
-import BeforeMeeting from './pages/Meeting';
 import Meeting from './pages/Meeting';
 import Splash from './components/Splash';
 import Login from './pages/Login';

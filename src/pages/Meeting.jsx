@@ -16,7 +16,7 @@ export default function Meeting() {
    *
    */
 
-  const [userType, setUserType] = useState('asker');
+  const [userType, setUserType] = useState('helper');
 
   return <>{userType === 'asker' ? <AskerMeeting /> : <HelperMeeting />}</>;
 }

@@ -7,7 +7,7 @@ import ToggleOpen from "../components/icons/ToggleOpen";
 import ProfileImage from "../components/ProfileImage";
 import Mypage from "../components/Mypage";
 import { AiOutlineClose } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const { kakao } = window;
 
@@ -31,6 +31,10 @@ export default function MainHelper({ mypage, closeMypage }) {
     "기타",
   ];
   const categoryClose = ["전체", "금융", "문서 및 이메일 작성"];
+
+  const location = useLocation();
+  const route = location.pathname;
+  // console.log('what = ', route);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -308,7 +312,7 @@ export default function MainHelper({ mypage, closeMypage }) {
                       </p>
                     </button>
                   </div>
-                  <Link to="/meeting">
+                  <Link to="/meeting" state={{ route }}>
                     <BottomButton text={"도움 수락하기"} />
                   </Link>
                 </div>

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function First({ next }) {
+export default function MainPage() {
   return (
     <div className="flex flex-col justify-between pt-10 pb-[2.8075rem] h-full">
       <div>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import First from "../components/sign-up/First";
 import Id from "../components/sign-up/Id";
 import Pw from "../components/sign-up/Pw";
 import BirthGender from "../components/sign-up/BirthGender";
@@ -11,15 +12,18 @@ export default function SignUp({ page, setPage }) {
 
   switch (page) {
     case 1:
-      components = <Id next={next} />;
+      components = <First next={next} />;
       break;
     case 2:
-      components = <Pw next={next} />;
+      components = <Id next={next} />;
       break;
     case 3:
-      components = <BirthGender next={next} />;
+      components = <Pw next={next} />;
       break;
     case 4:
+      components = <BirthGender next={next} />;
+      break;
+    case 5:
       components = <Finish />;
       break;
     default:

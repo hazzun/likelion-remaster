@@ -124,7 +124,7 @@ export default function Map({ click }) {
     places.keywordSearch(address, function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
         if (result.length > 0) {
-          console.log(result);
+          console.log('건물명 = ', result);
           setPlaceName(result[0].place_name);
         } else {
           console.log('해당 위치에 해당하는 건물명을 찾을 수 없습니다.');
@@ -145,7 +145,9 @@ export default function Map({ click }) {
       ) : (
         <div className='flex flex-col h-full'>
           <div className='py-5 px-5 font-semibold text-[24px]'>
-            핀을 이동하여<br/>도움을 요청할 장소를 골라주세요!
+            핀을 이동하여
+            <br />
+            도움을 요청할 장소를 골라주세요!
           </div>
           <div id='map' className='w-full h-[73%]'></div>
           <div className='z-30 flex flex-col h-[23%] justify-between absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] p-8 pl-5 pr-5 shadow-t-2xl'>

@@ -5,20 +5,19 @@ import Pw from "../components/sign-up/Pw";
 import BirthGender from "../components/sign-up/BirthGender";
 import Finish from "../components/sign-up/Finish";
 
-export default function SignUp() {
-  const [page, setPage] = useState(1);
-
+export default function SignUp({ page, setPage }) {
   let components = <Id />;
+  const next = () => setPage(page + 1);
 
   switch (page) {
     case 1:
-      components = <Id next={() => setPage(page + 1)} />;
+      components = <Id next={next} />;
       break;
     case 2:
-      components = <Pw next={() => setPage(page + 1)} />;
+      components = <Pw next={next} />;
       break;
     case 3:
-      components = <BirthGender next={() => setPage(page + 1)} />;
+      components = <BirthGender next={next} />;
       break;
     case 4:
       components = <Finish />;

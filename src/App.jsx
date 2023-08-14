@@ -41,6 +41,10 @@ function App() {
       title = "도움 수락";
       backHandler = page === 1 ? () => navigate(-1) : () => setPage(page - 1);
       break;
+    case "/signup":
+      title = "회원 가입";
+      backHandler = page === 1 ? () => navigate(-1) : () => setPage(page - 1);
+      break;
     default:
       title = "와봐유";
       backHandler = () => navigate("/");
@@ -53,7 +57,10 @@ function App() {
         <div className="flex-1">
           <Routes>
             <Route path="/" element={loading ? <Splash /> : <Login />}></Route>
-            <Route path="/signup" element={<SignUp />}></Route>
+            <Route
+              path="/signup"
+              element={<SignUp page={page} setPage={setPage} />}
+            ></Route>
             <Route path="/mainhelper" element={<MainHelper />}></Route>
             <Route path="/reqconfirm" element={<ReqConfirm />}></Route>
             <Route path="/meeting" element={<Meeting />}></Route>

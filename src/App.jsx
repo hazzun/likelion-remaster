@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
-import MainPage from "./pages/MainPage";
 import Recipient from "./pages/Recipient";
 import MainHelper from "./pages/MainHelper";
 import ReqConfirm from "./pages/ReqConfirm";
@@ -20,7 +19,7 @@ import SignUp from "./pages/SignUp";
 function App() {
   // 초기 화면에 user 정보가 있다면 '/' 으로 (역할고르는 화면)
   // 초기 화면에 user 정보가 없다면 '/login' 으로 (로그인 화면)
-  let isLogin = true; // 사용자 정보가 없다는 가정 <- 추후에 백엔드 연동해서 값 불러와야 할 듯 합니다
+  let isLogin = false; // 사용자 정보가 없다는 가정 <- 추후에 백엔드 연동해서 값 불러와야 할 듯 합니다
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -80,7 +79,7 @@ function App() {
                 loading ? (
                   <Splash />
                 ) : isLogin ? (
-                  <MainPage />
+                  <div>잘못된 페이지: 로그인 정보가 필요합니다.</div>
                 ) : (
                   <Navigate replace to="/login" />
                 )
@@ -106,6 +105,7 @@ function App() {
               path="/recipient"
               element={<Recipient page={page} next={() => setPage(page + 1)} />}
             />
+            <Route path="/login" element={<Login />}></Route>
           </Routes>
         </div>
       </div>

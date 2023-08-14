@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import First from "../components/sign-up/First";
 import Id from "../components/sign-up/Id";
 import Pw from "../components/sign-up/Pw";

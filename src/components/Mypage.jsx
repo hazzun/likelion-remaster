@@ -1,19 +1,29 @@
+import { useState, useEffect } from "react";
 import { ReactComponent as User } from "../assets/svg/user.svg";
 import { ReactComponent as UserImg } from "../assets/svg/user-img.svg";
 import { ReactComponent as Star } from "../assets/svg/star.svg";
+import { ReactComponent as Close } from "../assets/svg/close.svg";
 
-export default function Mypage() {
+export default function Mypage({ close }) {
   const comment = ["친철해요", "설명이 쉬워요", "빨라요", "인내심이 깊어요"];
   return (
     <>
-      <div className="w-full h-full bg-black bg-opacity-40">
+      <div
+        id="mypage-container"
+        className="absolute z-[51] top-0 mt-[-56px] w-full h-full bg-black bg-opacity-40 overflow-hidden"
+      >
         <div
           id="mypage-banner"
-          className="overflow-y-auto h-full w-[80%] px-[1rem] bg-white absolute right-0"
+          className="overflow-y-auto h-full w-[80%] px-[1rem] bg-white absolute right-0 animate-slideInFromRight"
         >
-          <div className="mt-[34px] flex">
-            <User />
-            <p className="ml-[7.79px] font-medium text-[24px]">마이페이지</p>
+          <div className="mt-[34px] flex justify-between items-center pr-[4px]">
+            <div className="flex items-center">
+              <User />
+              <p className="ml-[7.79px] font-medium text-[24px]">마이페이지</p>
+            </div>
+            <button onClick={close}>
+              <Close />
+            </button>
           </div>
           <div className="flex h-[20.3%] items-center border-b border-[#D9D9D9]">
             <UserImg />

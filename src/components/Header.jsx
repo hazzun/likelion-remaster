@@ -2,7 +2,13 @@ import { ReactComponent as BackButton } from "../assets/svg/back-button.svg";
 import logo from "../assets/logo.png";
 import { ReactComponent as User } from "../assets/svg/user.svg";
 
-export default function Header({ title, back, visiable = true, location }) {
+export default function Header({
+  title,
+  back,
+  visiable = true,
+  location,
+  mypage,
+}) {
   return (
     <>
       {visiable ? (
@@ -11,7 +17,7 @@ export default function Header({ title, back, visiable = true, location }) {
             <>
               <img src={logo} alt="Logo" className="w-[32.07px] h-[32.07px]" />
               <p className="text-[20px] font-bold">{title}</p>
-              <button>
+              <button onClick={mypage}>
                 <User />
               </button>
             </>

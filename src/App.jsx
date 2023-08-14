@@ -8,13 +8,13 @@ import Meeting from "./pages/Meeting";
 import Splash from "./components/Splash";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
-import Mypage from "./pages/Mypage";
 
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
   const [page, setPage] = useState(1);
+  const [mypage, setMypage] = useState();
 
   const [loading, setLoading] = useState(true);
 
@@ -53,22 +53,35 @@ function App() {
   return (
     <div className="relative w-full bg-white min-h-screen">
       <div className="flex flex-col h-screen">
-        <Header title={title} back={backHandler} visiable={visiable} />
+        <Header
+          title={title}
+          back={backHandler}
+          visiable={visiable}
+          location={location.pathname}
+          mypage={() => setMypage(true)}
+        />
         <div className="flex-1">
           <Routes>
             <Route path="/" element={loading ? <Splash /> : <Login />}></Route>
             <Route
               path="/signup"
               element={<SignUp page={page} setPage={setPage} />}
-            ></Route>
-            <Route path="/mainhelper" element={<MainHelper />}></Route>
-            <Route path="/reqconfirm" element={<ReqConfirm />}></Route>
-            <Route path="/meeting" element={<Meeting />}></Route>
+            />
+            <Route
+              path="/mainhelper"
+              element={
+                <MainHelper
+                  mypage={mypage}
+                  closeMypage={() => setMypage(false)}
+                />
+              }
+            />
+            <Route path="/reqconfirm" element={<ReqConfirm />} />
+            <Route path="/meeting" element={<Meeting />} />
             <Route
               path="/recipient"
               element={<Recipient page={page} next={() => setPage(page + 1)} />}
-            ></Route>
-            <Route path="/mypage" element={<Mypage />} />
+            />
           </Routes>
         </div>
       </div>

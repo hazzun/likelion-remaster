@@ -331,13 +331,30 @@ input {
   transform: translate(-50%, -50%);
 }
 
+#mypage-container {
+  height: calc(100% + 56px);
+}
+
 #mypage-banner {
-  height: calc(100% - 56px);
+  /* height: calc(100% - 56px); */
 }
 
 @media screen and (max-width: 330px) {
   #mypage-banner {
-    height: calc(100% - 56px);
+    /* height: calc(100% - 56px); */
     width: 100%;
   }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-slideInFromRight {
+  animation: slideInFromRight 0.5s ease-out forwards;
 }

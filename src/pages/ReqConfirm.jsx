@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import ReactAudioPlayer from 'react-audio-player';
 import axios from 'axios';
-import CancelModal from '../components/CancelModal';
+import CancelModal from '../components/modal/CancelModal';
 import RecordIcon from '../components/icons/RecordIcon';
 
 export default function ReqConfirm() {
-
-  // 추후 로그인 검사코드 추가 
+  // 추후 로그인 검사코드 추가
   const [usertoken, setUsertoken] = useState('');
 
   // 백엔드에서 GET 해오는 함수
-  const [mp3Url, setMp3Url] = useState("");
+  const [mp3Url, setMp3Url] = useState('');
 
   // startTime 백에서 받아올 것임. 임시로 현재시간 지정
   const [startTime, setStartTime] = useState(new Date());
@@ -33,16 +32,18 @@ export default function ReqConfirm() {
       }
     }
     return '0분';
-  }
+  };
 
-  const isoStartTime = startTime
+  const isoStartTime = startTime;
   const [runningTime, setRunningTime] = useState(getRunningTime(isoStartTime));
 
   // 경과시간 useEffect로 실시간 계산
   useEffect(() => {
     // 임시 버킷 주소
-    setMp3Url("https://record-upload-bucket.s3.ap-northeast-2.amazonaws.com/Christmas_Is_Coming.mp3");
-    
+    setMp3Url(
+      'https://record-upload-bucket.s3.ap-northeast-2.amazonaws.com/Christmas_Is_Coming.mp3'
+    );
+
     const interval = setInterval(() => {
       setRunningTime(getRunningTime(isoStartTime));
     }, 1000);
@@ -50,89 +51,91 @@ export default function ReqConfirm() {
       clearInterval(interval);
     };
   }, [isoStartTime]);
-  
+
   // audio 재생 함수
   const [start, setStart] = useState(false);
   const audio = document.querySelector('audio');
 
   const clickListenBtn = () => {
-    if(start) {
+    if (start) {
       setStart(false);
       audio.pause();
-      audio.currentTime = 0
-    }
-    else {
+      audio.currentTime = 0;
+    } else {
       setStart(true);
       audio.play();
     }
-  }
-  
-  const [modalShow, setModalShow] = useState(false)
+  };
+
+  const [modalShow, setModalShow] = useState(false);
   const clickCancel = () => {
-    setModalShow(true)
-  }
-  
+    setModalShow(true);
+  };
+
   return (
     <div className='w-full bg-white'>
-      <div className="pt-3 pb-12 px-4 font-medium text-2xl">
-          작성한 내용을 확인해 주세요.
+      <div className='pt-3 pb-12 px-4 font-medium text-2xl'>
+        작성한 내용을 확인해 주세요.
       </div>
-      <div className="px-4">
-        <div className="mb-3.5 font-semibold text-lg text-[#797979]">
+      <div className='px-4'>
+        <div className='mb-3.5 font-semibold text-lg text-[#797979]'>
           내가 요청한 도움
         </div>
-        <hr className="py-4"/>
-        <div className="mb-3.5 bg-[#FFF9E9] w-[100px] rounded-[5px] font-semibold text-2xl px-[8px] py-[4px]">
+        <hr className='py-4' />
+        <div className='mb-3.5 bg-[#FFF9E9] w-[100px] rounded-[5px] font-semibold text-2xl px-[8px] py-[4px]'>
           키오스크
         </div>
-        <div className="flex mb-8 font-normal text-lg">
-          <div className="font-semibold mr-5">
-            위치
-          </div>
+        <div className='flex mb-8 font-normal text-lg'>
+          <div className='font-semibold mr-5'>위치</div>
           <div>다이소 중앙점</div>
         </div>
-        <div className="flex items-center justify-center text-center bg-[#5A5A5A] rounded-2xl mb-5">
-          <button className='flex items-center justify-center w-full py-4 rounded-2xl bg-[#5A5A5A]'
-                  onClick={() => clickListenBtn()}
-                  id="audio">
+        <div className='flex items-center justify-center text-center bg-[#5A5A5A] rounded-2xl mb-5'>
+          <button
+            className='flex items-center justify-center w-full py-4 rounded-2xl bg-[#5A5A5A]'
+            onClick={() => clickListenBtn()}
+            id='audio'
+          >
             <p className='flex items-center text-[#FFC700] text-[16px] font-medium gap-2'>
               <RecordIcon size={'medium'} />
               음성내용 듣기
             </p>
           </button>
-
         </div>
       </div>
-      <div className="hidden">
-        <ReactAudioPlayer
-          src={mp3Url}
-          controls
-        />
+      <div className='hidden'>
+        <ReactAudioPlayer src={mp3Url} controls />
       </div>
-      <hr/>
-      <div className="flex px-4 py-5 justify-between">
-        <div className="font-medium text-base">도움 제공자가 나타날 때까지<br/>기다려 주세요!</div>
-        <div className="flex flex-col justify-center bg-[#FFF6D6] px-[7px] py-[10px] rounded-xl">
-          <div className="font-normal text-xs">경과 시간</div>
-          <div className="flex flex-row justify-center items-baseline">
-            <div className="font-semibold text-xl">{runningTime}</div>
+      <hr />
+      <div className='flex px-4 py-5 justify-between'>
+        <div className='font-medium text-base'>
+          도움 제공자가 나타날 때까지
+          <br />
+          기다려 주세요!
+        </div>
+        <div className='flex flex-col justify-center bg-[#FFF6D6] px-[7px] py-[10px] rounded-xl'>
+          <div className='font-normal text-xs'>경과 시간</div>
+          <div className='flex flex-row justify-center items-baseline'>
+            <div className='font-semibold text-xl'>{runningTime}</div>
             {/*<div className="font-normal text-xs">분</div>*/}
           </div>
         </div>
       </div>
       <div className='px-4'>
-        <button onClick={clickCancel} 
-                className="w-[175px] h-[40px] rounded-2xl font-medium text-[16px] border-2">
+        <button
+          onClick={clickCancel}
+          className='w-[175px] h-[40px] rounded-2xl font-medium text-[16px] border-2'
+        >
           요청 취소하기
         </button>
-        <div className="pt-2 font-normal text-[12px] color-[#797979]">
-          요청한 도움을 취소하고 싶나요?<br/>위 버튼을 눌러 초기화면으로 돌아갈 수 있어요
+        <div className='pt-2 font-normal text-[12px] color-[#797979]'>
+          요청한 도움을 취소하고 싶나요?
+          <br />위 버튼을 눌러 초기화면으로 돌아갈 수 있어요
         </div>
       </div>
 
       <CancelModal
         isVisible={modalShow}
-        onClose={() => setModalShow(false)} 
+        onClose={() => setModalShow(false)}
         usertoken={usertoken}
       />
     </div>

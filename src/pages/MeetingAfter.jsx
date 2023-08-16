@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import HelperMeetingSuccess from '../components/HelperMeetingSuccess';
 import HelperMeetingFail from '../components/HelperMeetingFail';
@@ -11,13 +11,15 @@ export default function MeetingAfter() {
 
   console.log(location.state.props);
 
+  const [page, setPage] = useState(1);
+
   switch (userState) {
     case 'helperSuccess':
       return <HelperMeetingSuccess />;
     case 'helperFail':
       return <HelperMeetingFail />;
     case 'askerSuccess':
-      return <AskerMeetingSuccess />;
+      return <AskerMeetingSuccess page={page} next={() => setPage(page + 1)} />;
     case 'askerFail':
       return <AskerMeetingFail />;
     default:

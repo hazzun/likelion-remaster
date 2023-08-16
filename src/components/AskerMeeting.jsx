@@ -61,7 +61,11 @@ export default function AskerMeeting() {
             아래 버튼을 눌러주세요!
           </div>
           <div className='w-full grid grid-cols-2 text-[16px] font-bold gap-2 h-[50px]'>
-            <IncompleteButton props='askerFail' asker='도움을 받지 못했어요' />
+            <IncompleteButton
+              props='askerFail'
+              asker='도움을 받지 못했어요'
+              isHelp={false}
+            />
             <CompleteButton props='askerSuccess' />
           </div>
         </>

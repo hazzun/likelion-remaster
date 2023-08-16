@@ -8,6 +8,8 @@ import ProfileImage from '../components/ProfileImage';
 import Mypage from '../components/Mypage';
 import { AiOutlineClose } from 'react-icons/ai';
 import { Link, useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { client } from '../client';
 
 const { kakao } = window;
 
@@ -18,14 +20,16 @@ export default function MainHelper({ mypage, closeMypage }) {
   const [onToggle, setOnToggle] = useState(true);
   const [cateSelect, setCateSelect] = useState('전체');
   const [distance, setDistance] = useState(0);
+  const [helpList, setHelpList] = useState([]);
+  // const [keyValue, setKeyValue] = useState('');
 
   const category = [
     '전체',
     '금융',
+    '문서 및 이메일 작성',
     '쇼핑',
     '인터넷',
     '기기고장',
-    '문서 및 이메일 작성',
     '영상 및 사진',
     '예약/예매',
     '기타',
@@ -36,7 +40,17 @@ export default function MainHelper({ mypage, closeMypage }) {
   const route = location.pathname;
   // console.log('what = ', route);
 
+  const loginData = {
+    username: 'admin',
+    email: '',
+    password: '1234',
+  };
   useEffect(() => {
+    client
+      .post('/accounts/login/', loginData)
+      .then((response) => console.log(response.data))
+      .catch((error) => console.log('err : ', error));
+
     if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
       navigator.geolocation.getCurrentPosition((position) => {
@@ -52,7 +66,14 @@ export default function MainHelper({ mypage, closeMypage }) {
   }, []);
 
   useEffect(() => {
-    console.log('cate 리랜더링 - ', cateSelect);
+    client
+      .get('/mainhelper/')
+      .then((res) => {
+        console.log(res.data);
+        setHelpList(res.data);
+      })
+      .catch((error) => console.log('에러입니다 : ', error));
+
     if (userLocation) {
       const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
       const options = {
@@ -106,9 +127,14 @@ export default function MainHelper({ mypage, closeMypage }) {
       let helpImage = '/images/marker.png';
       // let helpMarker;
 
-      for (let i = 0; i < positions.length; i++) {
+      for (let i = 0; i < helpList.length; i++) {
         // 마커 이미지의 이미지 크기 입니다
         let helpImageSize = new kakao.maps.Size(20, 40);
+
+        let latlng = new kakao.maps.LatLng(
+          helpList[i].location_latitude,
+          helpList[i].location_longtitude
+        );
 
         // 마커 이미지를 생성합니다
         let helpMarkerImage = new kakao.maps.MarkerImage(
@@ -122,37 +148,42 @@ export default function MainHelper({ mypage, closeMypage }) {
           console.log('cateSelect : ', cateSelect);
           helpMarker = new kakao.maps.Marker({
             map: map, // 마커를 표시할 지도
-            position: positions[i].latlng, // 마커를 표시할 위치
-            title: positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+            position: latlng, // 마커를 표시할 위치
+            title: helpList[i].building_name, // 장소(건물명)
             image: helpMarkerImage, // 마커 이미지
           });
           kakao.maps.event.addListener(helpMarker, 'click', () =>
-            helpInfoOpen(positions[i])
+            helpInfoOpen(helpList[i])
           );
-        } else if (cateSelect === positions[i].cate) {
+        } else if (cateSelect === helpList[i].cate) {
           console.log('cateSelect : ', cateSelect);
           helpMarker = new kakao.maps.Marker({
             map: map, // 마커를 표시할 지도
-            position: positions[i].latlng, // 마커를 표시할 위치
-            title: positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+            position: latlng, // 마커를 표시할 위치
+            title: helpList[i].building_name, // 장소(건물명)
             image: helpMarkerImage, // 마커 이미지
           });
           kakao.maps.event.addListener(helpMarker, 'click', () =>
-            helpInfoOpen(positions[i])
+            helpInfoOpen(helpList[i])
           );
         }
       }
 
       // 특정 마커를 클릭하면 동작하는 함수
       const helpInfoOpen = (info) => {
+        let latlng = new kakao.maps.LatLng(
+          info.location_latitude,
+          info.location_longtitude
+        );
+
         let line = new kakao.maps.Polyline({
-          path: [userLocation, info.latlng],
+          path: [userLocation, latlng],
         });
         setDistance(Math.round(line.getLength()));
 
         console.log(info);
         setIsInfoModal(() => true);
-        map.setCenter(info.latlng);
+        map.setCenter(latlng);
 
         setHelpInfo(info);
       };
@@ -295,12 +326,12 @@ export default function MainHelper({ mypage, closeMypage }) {
                   <div className='flex flex-col'>
                     <div className='flex gap-2 mb-5'>
                       <span className='bg-[#FFF9E9] px-2 py-1 rounded-md text-[16px] font-semibold'>
-                        {helpInfo.cate}
+                        {helpInfo.category}
                       </span>
                     </div>
                     <div>
                       <span className='font-extrabold mr-8'>위치</span>
-                      <span>{helpInfo.title}</span>
+                      <span>{helpInfo.building_name}</span>
                     </div>
                     <div>
                       <span className='font-extrabold mr-8'>거리</span>

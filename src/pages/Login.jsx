@@ -12,7 +12,7 @@ export default function Login() {
   console.log(autoLogin);
 
   return (
-    <div className='h-screen text-center flex flex-col justify-center gap-20 overflow-scroll'>
+    <div className='h-screen text-center flex flex-col justify-center gap-20 overflow-hidden'>
       <div className='flex flex-col justify-center'>
         <div className='flex gap-2 justify-center items-center'>
           <img

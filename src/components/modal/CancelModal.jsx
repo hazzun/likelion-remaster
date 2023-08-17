@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { createPortal } from 'react-dom';
 import AWS from "aws-sdk"
 
-export default function CancelModal({ isVisible, onClose, usertoken }) {
+export default function CancelModal({ isVisible, onClose }) {
   
   const navigate = useNavigate();
 

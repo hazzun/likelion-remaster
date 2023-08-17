@@ -20,10 +20,18 @@ export default function Meeting() {
    */
 
   const location = useLocation();
-  console.log(location.state.route);
+  console.log(location.state);
   const routeCheck = location.state.route;
+  const postId = location.state.postId;
+  const distance = location.state.distance;
 
   return (
-    <>{routeCheck === "/mainHelper" ? <HelperMeeting /> : <AskerMeeting />}</>
+    <>
+      {routeCheck === "/mainhelper" ? (
+        <HelperMeeting postId={postId} distance={distance} />
+      ) : (
+        <AskerMeeting />
+      )}
+    </>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import ReactAudioPlayer from "react-audio-player";
 import axios from "axios";
 import CancelModal from "../components/modal/CancelModal";
@@ -6,12 +6,18 @@ import RecordIcon from "../components/icons/RecordIcon";
 import TwoButton from "../components/TwoButton";
 
 export default function ReqConfirm() {
-  // 추후 로그인 검사코드 추가
-  const [usertoken, setUsertoken] = useState("");
 
-  // 백엔드에서 GET 해오는 함수
+  // 백엔드에서 GET 해서 mp3Url에 저장
   const [mp3Url, setMp3Url] = useState("");
 
+  useEffect(() => {
+    // 임시 버킷 주소
+    setMp3Url(
+      "https://record-upload-bucket.s3.ap-northeast-2.amazonaws.com/Christmas_Is_Coming.mp3"
+    );
+  }, []);
+
+  /*
   // startTime 백에서 받아올 것임. 임시로 현재시간 지정
   const [startTime, setStartTime] = useState(new Date());
 
@@ -52,6 +58,7 @@ export default function ReqConfirm() {
       clearInterval(interval);
     };
   }, [isoStartTime]);
+  */
 
   // audio 재생 함수
   const [start, setStart] = useState(false);
@@ -74,13 +81,12 @@ export default function ReqConfirm() {
   };
 
   return (
-    <div className="h-full w-full bg-white pt-[29px] pb-[35.04px] flex flex-col justify-between">
-      <div className="px-4 heading-2">작성한 내용을 확인해 주세요.</div>
-
-      {/* <div className="hidden">
-          <ReactAudioPlayer src={mp3Url} controls />
-        </div> */}
-      <div className="px-4">
+    <div className="h-full w-full bg-white pb-[35.04px] flex flex-col px-5">
+      <div className="font-semibold text-[24px] pt-5 pb-14">작성한 내용을 확인해 주세요.</div>
+      <div className="hidden">
+        <ReactAudioPlayer src={mp3Url} controls />
+      </div>
+      <div className="flex-1">
         <div className="mb-3.5 pb-[16.93px] font-semibold text-lg text-[#797979] border-b border-[#d9d9d9]">
           내가 요청한 도움
         </div>
@@ -104,12 +110,17 @@ export default function ReqConfirm() {
           </button>
         </div>
       </div>
-      <div className="px-4">
+      <div className="">
         <p className="w-full mb-[18.96px] text-center text-[#797979] text-[12px]">
           작성한 내용이 맞다면 버튼을 눌러 도움을 요청하세요.
         </p>
-        <TwoButton leftText="도움 취소하기" rightText="도움 요청하기" />
+        <TwoButton leftClick={clickCancel} 
+                   leftText="도움 취소하기" rightText="도움 요청하기" />
       </div>
+      <CancelModal
+        isVisible={modalShow}
+        onClose={() => setModalShow(false)}
+      />
     </div>
   );
 }

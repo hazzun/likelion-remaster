@@ -3,7 +3,7 @@ import { AiFillStar } from 'react-icons/ai';
 
 export default function HelperInfo({ helperUser }) {
   return (
-    <div className='w-full h-[40%] flex flex-col items-center justify-center bg-[#FFF6D6] rounded-2xl text-gray-500 gap-4'>
+    <div className='w-[300px] h-[240px] flex flex-col items-center justify-center bg-[#FFF6D6] rounded-md text-gray-500 gap-4'>
       <div className='w-[100px] h-[100px] rounded-full bg-[#d9d9d9] flex items-center justify-center '></div>
       <p className='text-center'>
         <span className='font-bold text-lg text-black'>

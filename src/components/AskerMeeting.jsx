@@ -10,9 +10,6 @@ import ReRequestModal from "../components/modal/ReRequestModal";
 export default function AskerMeeting() {
   const [arrived, setArrived] = useState(false);
 
-  // 토큰 헤더에서 가져오기?
-  const [usertoken, setUsertoken] = useState("");
-
   // 백에서 받아온 요청시간 저장하기
   const [startTime, setStartTime] = useState(new Date());
 
@@ -120,7 +117,6 @@ export default function AskerMeeting() {
           <CancelModal
             isVisible={modalShow}
             onClose={() => setModalShow(false)}
-            usertoken={usertoken}
           />
         </div>
       )}

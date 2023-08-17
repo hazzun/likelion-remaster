@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import ReactAudioPlayer from "react-audio-player";
 import axios from "axios";
 import CancelModal from "../components/modal/CancelModal";
@@ -6,12 +6,18 @@ import RecordIcon from "../components/icons/RecordIcon";
 import TwoButton from "../components/TwoButton";
 
 export default function ReqConfirm() {
-  // 추후 로그인 검사코드 추가
-  const [usertoken, setUsertoken] = useState("");
 
-  // 백엔드에서 GET 해오는 함수
+  // 백엔드에서 GET 해서 mp3Url에 저장
   const [mp3Url, setMp3Url] = useState("");
 
+  useEffect(() => {
+    // 임시 버킷 주소
+    setMp3Url(
+      "https://record-upload-bucket.s3.ap-northeast-2.amazonaws.com/Christmas_Is_Coming.mp3"
+    );
+  }, []);
+
+  /*
   // startTime 백에서 받아올 것임. 임시로 현재시간 지정
   const [startTime, setStartTime] = useState(new Date());
 
@@ -52,6 +58,7 @@ export default function ReqConfirm() {
       clearInterval(interval);
     };
   }, [isoStartTime]);
+  */
 
   // audio 재생 함수
   const [start, setStart] = useState(false);
@@ -113,7 +120,6 @@ export default function ReqConfirm() {
       <CancelModal
         isVisible={modalShow}
         onClose={() => setModalShow(false)}
-        usertoken={usertoken}
       />
     </div>
   );

@@ -369,7 +369,14 @@ export default function MainHelper({ mypage, closeMypage }) {
                       </p>
                     </button>
                   </div>
-                  <Link to='/meeting' state={{ route }}>
+                  <Link
+                    to='/meeting'
+                    state={{
+                      route,
+                      postId: helpInfo.post.id,
+                      distance: distance,
+                    }}
+                  >
                     <button
                       className='w-full h-[52px] min-h-[52px] rounded-2xl yellow'
                       onClick={() => selectHelper(helpInfo.post.id)}

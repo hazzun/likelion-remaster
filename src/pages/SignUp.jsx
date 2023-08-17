@@ -23,10 +23,6 @@ export default function SignUp({ page, setPage }) {
     setPage(page + 1);
   };
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   switch (page) {
     case 1:
       components = <First next={next} setData={setData} prevData={data} />;

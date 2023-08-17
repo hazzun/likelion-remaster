@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPortal } from 'react-dom';
 import AWS from "aws-sdk"
+import axios from 'axios';
 
-export default function SaveModal({ isVisible, onClose, fileBlob, usertoken }) {
+export default function SaveModal({ isVisible, onClose, fileBlob, category, lat, long, buildingName, address}) {
   
   const navigate = useNavigate();
   
@@ -23,7 +24,7 @@ export default function SaveModal({ isVisible, onClose, fileBlob, usertoken }) {
       lastModified: new Date().getTime(),
     });
 
-    const t_filename = usertoken + file.name
+    const t_filename = localStorage.getItem('jwtToken') + file.name
     console.log(file)
     console.log(file.type)
 
@@ -42,8 +43,18 @@ export default function SaveModal({ isVisible, onClose, fileBlob, usertoken }) {
         alert("업로드에 성공했습니다.")
         const start = new Date(new Date().getTime());
         console.log(start)
-        // 백엔드에 POST
-        // POST할 voice_record_name = https://record-upload-bucket.s3.ap-northeast-2.amazonaws.com/ + t_filename
+        
+        /* 수정 필요 !!!!!!!!!!!!!!!!!!!!!!!!!!! */
+        /* 백엔드에 POST */
+        let res = axios.post(process.env.REACT_APP_BASE_URL+"recipient/",
+        {
+          category_name:category,
+          latitude:lat,
+          longtitude:long,
+          building_name:buildingName,
+          address:address,
+          voice_record_name:"https://record-upload-bucket.s3.ap-northeast-2.amazonaws.com/"+t_filename,
+        });
         // 이후 ReqConfirm으로 이동
         navigate("/reqconfirm");
       },

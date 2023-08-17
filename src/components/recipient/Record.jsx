@@ -2,16 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 import SaveModal from '../modal/SaveModal';
 import { BsFillMicFill, BsFillStopFill } from 'react-icons/bs';
-import axios from 'axios';
 
 export default function Record() {
-  // 추후 로그인 검사코드 추가
-  const [usertoken, setUsertoken] = useState('');
-
-  useEffect(() => {
-    setUsertoken('유저토큰코드');
-  }, []);
-
+  
   const recorderControls = useAudioRecorder(
     {
       noiseSuppression: true,
@@ -133,8 +126,12 @@ export default function Record() {
       <SaveModal
         isVisible={modalShow}
         onClose={() => setModalShow(false)}
-        usertoken={usertoken}
         fileBlob={t_blob}
+        category={""}
+        lat={""} 
+        long={""} 
+        buildingName={""}
+        address={""}
       />
     </div>
   );

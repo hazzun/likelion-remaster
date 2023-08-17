@@ -4,17 +4,18 @@ import {
   useLocation,
   useNavigate,
   Navigate,
-} from "react-router-dom";
-import { useEffect, useState } from "react";
-import Header from "./components/Header";
-import Recipient from "./pages/Recipient";
-import MainHelper from "./pages/MainHelper";
-import ReqConfirm from "./pages/ReqConfirm";
-import Meeting from "./pages/Meeting";
-import Splash from "./components/Splash";
-import Login from "./pages/Login";
-import MeetingAfter from "./pages/MeetingAfter";
-import SignUp from "./pages/SignUp";
+} from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import Header from './components/Header';
+import Recipient from './pages/Recipient';
+import MainHelper from './pages/MainHelper';
+import ReqConfirm from './pages/ReqConfirm';
+import Meeting from './pages/Meeting';
+import Splash from './components/Splash';
+import Login from './pages/Login';
+import MeetingAfter from './pages/MeetingAfter';
+import SignUp from './pages/SignUp';
+import MainAsker from './pages/MainAsker';
 
 function App() {
   // 초기 화면에 user 정보가 있다면 '/' 으로 (역할고르는 화면)
@@ -33,64 +34,74 @@ function App() {
     // 잠시 후 스플래시 화면 숨기기
     setTimeout(() => {
       setLoading(false);
-    }, 1500); // 1.5초 동안 스플래시 화면 보여주기
+    }, 2000); // 2초 동안 스플래시 화면 보여주기
   }, []);
 
   let title;
   let backHandler;
-  let visiable;
+  let visible;
+  let backVisible;
 
   switch (location.pathname) {
-    case "/":
-      visiable = false;
+    case '/':
+      visible = false;
       break;
-    case "/recipient":
-      title = "도움 글 작성";
+    case '/login':
+      visible = false;
+      break;
+    case '/mainasker':
+      backVisible = false;
+      title = '도움 요청';
+      break;
+    case '/recipient':
+      title = '도움 글 작성';
       backHandler = page === 1 ? () => navigate(-1) : () => setPage(page - 1);
       break;
-    case "/meeting":
-      title = "도움 수락";
+    case '/meeting':
+      title = '도움 수락';
       backHandler = page === 1 ? () => navigate(-1) : () => setPage(page - 1);
       break;
-    case "/signup":
-      title = "회원 가입";
+    case '/signup':
+      title = '회원 가입';
       backHandler = page === 1 ? () => navigate(-1) : () => setPage(page - 1);
       break;
     default:
-      title = "와봐유";
-      backHandler = () => navigate("/");
+      title = '와봐유';
+      backHandler = () => navigate('/');
   }
 
   return (
-    <div className="relative w-full bg-white min-h-screen">
-      <div className="flex flex-col h-screen">
+    <div className='relative w-full bg-white min-h-screen'>
+      <div className='flex flex-col h-screen'>
         <Header
           title={title}
           back={backHandler}
-          visiable={visiable}
+          visible={visible}
+          backVisible={backVisible}
           location={location.pathname}
           mypage={() => setMypage(true)}
         />
-        <div className="flex-1">
+        <div className='flex-1'>
           <Routes>
             <Route
-              path="/"
+              path='/'
               element={
                 loading ? (
                   <Splash />
                 ) : isLogin ? (
                   <div>잘못된 페이지: 로그인 정보가 필요합니다.</div>
                 ) : (
-                  <Navigate replace to="/login" />
+                  <Navigate replace to='/login' />
                 )
               }
             ></Route>
             <Route
-              path="/signup"
+              path='/signup'
               element={<SignUp page={page} setPage={setPage} />}
             />
+            <Route path='/mainasker' element={<MainAsker />} />
             <Route
-              path="/mainhelper"
+              path='/mainhelper'
               element={
                 <MainHelper
                   mypage={mypage}
@@ -98,14 +109,14 @@ function App() {
                 />
               }
             />
-            <Route path="/reqconfirm" element={<ReqConfirm />} />
-            <Route path="/meeting" element={<Meeting />} />
-            <Route path="/meetingAfter" element={<MeetingAfter />}></Route>
+            <Route path='/reqconfirm' element={<ReqConfirm />} />
+            <Route path='/meeting' element={<Meeting />} />
+            <Route path='/meetingafter' element={<MeetingAfter />}></Route>
             <Route
-              path="/recipient"
+              path='/recipient'
               element={<Recipient page={page} next={() => setPage(page + 1)} />}
             />
-            <Route path="/login" element={<Login />}></Route>
+            <Route path='/login' element={<Login />}></Route>
           </Routes>
         </div>
       </div>

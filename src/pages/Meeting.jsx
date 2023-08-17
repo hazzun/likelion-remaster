@@ -24,6 +24,6 @@ export default function Meeting() {
   const routeCheck = location.state.route;
 
   return (
-    <>{routeCheck === '/mainHelper' ? <HelperMeeting /> : <AskerMeeting />}</>
+    <>{routeCheck === '/mainhelper' ? <HelperMeeting /> : <AskerMeeting />}</>
   );
 }

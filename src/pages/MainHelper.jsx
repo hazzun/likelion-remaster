@@ -8,7 +8,6 @@ import ProfileImage from '../components/ProfileImage';
 import Mypage from '../components/Mypage';
 import { AiOutlineClose } from 'react-icons/ai';
 import { Link, useLocation } from 'react-router-dom';
-import axios from 'axios';
 import { client } from '../client';
 
 const { kakao } = window;
@@ -41,14 +40,19 @@ export default function MainHelper({ mypage, closeMypage }) {
   // console.log('what = ', route);
 
   const loginData = {
-    username: 'admin',
-    email: '',
-    password: '1234',
+    username: 'hazzunHelper',
+    password: '1234!@#$',
   };
   useEffect(() => {
     client
       .post('/accounts/login/', loginData)
-      .then((response) => console.log(response.data))
+      .then((response) => {
+        console.log(
+          `${loginData.username} 으로 로그인 성공!\n 발급된 토큰 값 -> `,
+          response.data.access_token
+        );
+        localStorage.setItem('jwtToken', response.data.access_token);
+      })
       .catch((error) => console.log('err : ', error));
 
     if (navigator.geolocation) {
@@ -155,7 +159,7 @@ export default function MainHelper({ mypage, closeMypage }) {
           kakao.maps.event.addListener(helpMarker, 'click', () =>
             helpInfoOpen(helpList[i])
           );
-        } else if (cateSelect === helpList[i].cate) {
+        } else if (cateSelect === helpList[i].category) {
           console.log('cateSelect : ', cateSelect);
           helpMarker = new kakao.maps.Marker({
             map: map, // 마커를 표시할 지도
@@ -171,6 +175,14 @@ export default function MainHelper({ mypage, closeMypage }) {
 
       // 특정 마커를 클릭하면 동작하는 함수
       const helpInfoOpen = (info) => {
+        console.log('마커클릭 넘어온 정보 : ', info);
+        client
+          .get(`/selecthelper/${info.id}/`)
+          .then((response) => {
+            console.log('selecthelper 호츌 : ', response.data);
+            setHelpInfo(response.data);
+          })
+          .catch((error) => console.log(error));
         let latlng = new kakao.maps.LatLng(
           info.location_latitude,
           info.location_longtitude
@@ -181,11 +193,10 @@ export default function MainHelper({ mypage, closeMypage }) {
         });
         setDistance(Math.round(line.getLength()));
 
-        console.log(info);
         setIsInfoModal(() => true);
         map.setCenter(latlng);
 
-        setHelpInfo(info);
+        // setHelpInfo(info);
       };
       /* ---------------------------------------------------------------------------- */
       /* --------------------------- 도움요청자의 정보 받기완료 ---------------------------- */
@@ -225,7 +236,12 @@ export default function MainHelper({ mypage, closeMypage }) {
   const selectCategory = (item) => {
     if (item !== cateSelect) setCateSelect(item);
   };
-
+  const selectHelper = (postId) => {
+    client
+      .post(`/selecthelper/${postId}/`)
+      .then((response) => console.log(response))
+      .catch((error) => console.log(error));
+  };
   return (
     <div className='relative h-full flex flex-col'>
       {!userLocation ? (
@@ -313,8 +329,10 @@ export default function MainHelper({ mypage, closeMypage }) {
                   <div className='flex items-center gap-5'>
                     <ProfileImage size='small' />
                     <div className='flex flex-col'>
-                      <span className='font-bold'>user1234 님</span>
-                      <span className='text-gray-500'>60대 남성</span>
+                      <span className='font-bold'>
+                        {helpInfo.asker.nickname} 님
+                      </span>
+                      <span className='text-gray-500'>{`${helpInfo.asker.age_range} 대 ${helpInfo.asker.gender}`}</span>
                     </div>
                     <button
                       className='absolute top-0 right-0 mt-7 mr-7 text-xl'
@@ -326,23 +344,23 @@ export default function MainHelper({ mypage, closeMypage }) {
                   <div className='flex flex-col'>
                     <div className='flex gap-2 mb-5'>
                       <span className='bg-[#FFF9E9] px-2 py-1 rounded-md text-[16px] font-semibold'>
-                        {helpInfo.category}
+                        {helpInfo.post.category}
                       </span>
                     </div>
                     <div>
+                      <span className='font-extrabold mr-8'>장소</span>
+                      <span>{helpInfo.post.building_name}</span>
+                    </div>
+                    <div>
                       <span className='font-extrabold mr-8'>위치</span>
-                      <span>{helpInfo.building_name}</span>
+                      <span>{helpInfo.post.address}</span>
                     </div>
                     <div>
                       <span className='font-extrabold mr-8'>거리</span>
-                      {/* <span>
-                        {helpInfo.latlng.La}, {helpInfo.latlng.Ma}
-                      </span> */}
                       <span>{distance} m</span>
-                    </div>
-                    <div>
-                      <span className='font-extrabold mr-8'>시간</span>
-                      <span>도보 약 {Math.floor(distance / 67)}분 소요</span>
+                      <span className='ml-1 text-gray-500 font-light text-sm'>
+                        (도보 약 {Math.floor(distance / 67)}분 소요)
+                      </span>
                     </div>
                     <button className='flex items-center justify-center w-[70%] h-[45px] mt-4 rounded-2xl bg-[#5A5A5A]'>
                       <p className='flex items-center text-[#FFC700] text-[16px] font-medium gap-2'>
@@ -351,8 +369,22 @@ export default function MainHelper({ mypage, closeMypage }) {
                       </p>
                     </button>
                   </div>
-                  <Link to='/meeting' state={{ route }}>
-                    <BottomButton text={'도움 수락하기'} />
+                  <Link
+                    to='/meeting'
+                    state={{
+                      route,
+                      postId: helpInfo.post.id,
+                      distance: distance,
+                    }}
+                  >
+                    <button
+                      className='w-full h-[52px] min-h-[52px] rounded-2xl yellow'
+                      onClick={() => selectHelper(helpInfo.post.id)}
+                    >
+                      <p className='text-[1.25rem] font-medium'>
+                        도움 수락하기
+                      </p>
+                    </button>
                   </Link>
                 </div>
               )}

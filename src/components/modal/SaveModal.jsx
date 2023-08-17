@@ -43,6 +43,7 @@ export default function SaveModal({ isVisible, onClose, fileBlob, usertoken }) {
         const start = new Date(new Date().getTime());
         console.log(start)
         // 백엔드에 POST
+        // POST할 voice_record_name = https://record-upload-bucket.s3.ap-northeast-2.amazonaws.com/ + t_filename
         // 이후 ReqConfirm으로 이동
         navigate("/reqconfirm");
       },

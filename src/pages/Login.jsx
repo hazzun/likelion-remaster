@@ -26,7 +26,7 @@ export default function Login() {
         <form className='mt-20 flex flex-col gap-1 items-center justify-center'>
           <div className='w-[75%]'>
             <div className='flex flex-row gap-1 items-center justify-between w-full'>
-              <div className="text-[#CACACA] text-[16px] w-[80px] text-left pl-0.5">
+              <div className='text-[#CACACA] text-[16px] w-[80px] text-left pl-0.5'>
                 아이디
               </div>
               <input
@@ -36,7 +36,7 @@ export default function Login() {
               />
             </div>
             <div className='flex flex-row gap-1 items-center justify-between w-full'>
-              <div className="text-[#CACACA] text-[16px] w-[80px] text-left pl-0.5">
+              <div className='text-[#CACACA] text-[16px] w-[80px] text-left pl-0.5'>
                 비밀번호
               </div>
               <input
@@ -55,7 +55,7 @@ export default function Login() {
                 id='auto-login'
                 type='checkbox'
                 checked={autoLogin}
-                onClick={() => handleAutoLogin()}
+                onChange={() => handleAutoLogin()}
               />
               <label htmlFor='auto-login'>자동로그인</label>
             </div>

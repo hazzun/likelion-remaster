@@ -67,8 +67,8 @@ export default function HelperMeeting({ postId, distance }) {
                 아래 버튼을 클릭해주세요!
               </div>
               <div className='w-full grid grid-cols-2 text-[16px] font-bold gap-2 h-[50px]'>
-                <IncompleteButton props='helperFail' />
-                <CompleteButton props='helperSuccess' />
+                <IncompleteButton props='helper' postId={postId} />
+                <CompleteButton props='helper' postId={postId} />
               </div>
             </>
           )}

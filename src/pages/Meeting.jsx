@@ -31,7 +31,7 @@ export default function Meeting() {
         <HelperMeeting postId={postId} distance={distance} />
       )}
 
-      {routeCheck === '/recipient' && <AskerMeeting />}
+      {routeCheck === '/recipient' && <AskerMeeting postId={postId} />}
     </>
   );
 }

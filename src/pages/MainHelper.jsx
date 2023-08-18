@@ -8,7 +8,7 @@ import ProfileImage from '../components/ProfileImage';
 import Mypage from '../components/Mypage';
 import { AiOutlineClose } from 'react-icons/ai';
 import { Link, useLocation } from 'react-router-dom';
-import { client, login } from '../client';
+import { auth, client } from '../client';
 
 const { kakao } = window;
 
@@ -39,21 +39,21 @@ export default function MainHelper({ mypage, closeMypage }) {
   const route = location.pathname;
   // console.log('what = ', route);
 
-  const loginData = {
-    username: 'helpertest',
-    password: '1234!@#$',
-  };
+  // const loginData = {
+  //   username: 'helpertest',
+  //   password: '1234!@#$',
+  // };
   useEffect(() => {
-    login
-      .post('/accounts/login/', loginData)
-      .then((response) => {
-        console.log(
-          `${loginData.username} 으로 로그인 성공!\n 발급된 토큰 값 -> `,
-          response.data.access_token
-        );
-        localStorage.setItem('jwtToken', response.data.access_token);
-      })
-      .catch((error) => console.log('err : ', error));
+    // auth
+    //   .post('/accounts/login/', loginData)
+    //   .then((response) => {
+    //     console.log(
+    //       `${loginData.username} 으로 로그인 성공!\n 발급된 토큰 값 -> `,
+    //       response.data.access_token
+    //     );
+    //     localStorage.setItem('jwtToken', response.data.access_token);
+    //   })
+    //   .catch((error) => console.log('err : ', error));
 
     if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다

@@ -1,35 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import HelperInfo from './HelperInfo';
 import TwoButton from './TwoButton';
 import CancelModal from '../components/modal/CancelModal';
 import ReRequestModal from '../components/modal/ReRequestModal';
 import { client } from '../client';
 
-export default function AskerMeeting() {
+export default function AskerMeeting({ postId }) {
+  // const location = useLocation();
+  console.log('postId : ', postId);
   const [arrived, setArrived] = useState(false);
+  const [handleAccept, setHandleAccept] = useState();
 
   // 백에서 받아온 요청시간 저장하기
   const [startTime, setStartTime] = useState(new Date());
-
-  // post id 알 수가 없음...
-  // let res = client.get(process.env.REACT_APP_BASE_URL+"요청내용GET/", {
-  //   params: {
-<<<<<<< HEAD
-
-  //   },
-  // });
-  console.log('===GET 결과===');
-  // console.log(res.data);
-=======
-      
-  //   },
-  // });
-  // console.log("===GET 결과===")
-  // console.log(res.data)
->>>>>>> 656bb11444dad473089660ddaa63f567bb3a74b5
-  // startTime에 res.data중 date값 저장
-  // setStartTime()
 
   // 경과시간 계산
   const getRunningTime = (date) => {
@@ -45,6 +29,7 @@ export default function AskerMeeting() {
     for (const value of times) {
       const betweenTime = Math.floor(diff / value.milliSeconds);
       if (betweenTime > 0) {
+        console.log('betweenTime = ', betweenTime);
         return `${betweenTime}${value.name}`;
       }
     }
@@ -58,36 +43,34 @@ export default function AskerMeeting() {
   useEffect(() => {
     const interval = setInterval(() => {
       setRunningTime(getRunningTime(isoStartTime));
-    }, 1000);
 
-    // 이것도 post id 모름...
-<<<<<<< HEAD
-    let res = client.get(
-      process.env.REACT_APP_BASE_URL + '요청상태확인-GET-PATH/',
-      {
-        params: {},
-      }
-    );
-    console.log('===GET 결과===');
-    let datajson = res.data;
-    console.log(datajson);
-=======
-    // let res = client.get(process.env.REACT_APP_BASE_URL+"요청상태확인-GET-PATH/", {
-    //   params: {
-        
-    //   },
-    // });
-    // console.log("===GET 결과===")
-    // let datajson = res.data;
-    // console.log(datajson)
->>>>>>> 656bb11444dad473089660ddaa63f567bb3a74b5
-    // 만약에 res 가 뭐 바뀌는 경우,,
-    //setArrived(true)
+      client
+        .get(`/reqconfirm/${postId}/`)
+        .then((response) => {
+          // console.log(response.data);
+          if (response.data.helper) {
+            acceptHelper(response.data.id);
+            setArrived(true);
+            clearInterval(interval);
+          }
+        })
+        .catch((error) => console.log('그만 : ', error));
+    }, 1000);
 
     return () => {
       clearInterval(interval);
     };
   }, [isoStartTime]);
+
+  const acceptHelper = (postIndex) => {
+    client
+      .get(`/meeting/${postIndex}/`)
+      .then((response) => {
+        console.log(response.data);
+        setHandleAccept(response.data);
+      })
+      .catch((error) => console.log(error));
+  };
 
   const [modalShow, setModalShow] = useState(false);
   const clickCancel = () => {
@@ -104,18 +87,19 @@ export default function AskerMeeting() {
 
   return (
     <div className='h-full flex flex-col items-center justify-between pt-[52.87px] px-[20px] pb-[37.19px]'>
-      {arrived ? (
+      {arrived && handleAccept ? (
         <>
           <div>
             <div className='mb-[33.49px] font-bold text-center heading-2'>
-              {helperUser.username} 님이
+              {handleAccept.helper.nickname} 님이
               <br />
               도움을 수락했어요!
             </div>
-            <HelperInfo helperUser={helperUser} />
+            <HelperInfo helperUser={handleAccept.helper} />
             <div className='mt-[18.23px] text-center'>
               <p>
-                <span className='font-bold mr-4'>도움 위치</span>다이소 중앙점
+                <span className='font-bold mr-4'>도움 위치</span>
+                {handleAccept.post.building_name}
               </p>
               <p>
                 <span className='font-bold mr-4'>소요 시간</span>도보 약{' '}

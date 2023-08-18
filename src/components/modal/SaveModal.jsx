@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { createPortal } from 'react-dom';
 import AWS from "aws-sdk"
 import { client } from '../../client';
+import { isCompositeComponent } from "react-dom/test-utils";
 
 export default function SaveModal({ isVisible, onClose, fileBlob, prevData}) {
   
@@ -41,19 +42,20 @@ export default function SaveModal({ isVisible, onClose, fileBlob, prevData}) {
     promise.then(
       function (data) {
         alert("업로드에 성공했습니다.")
-        console.log(prevData)
         const start = new Date(new Date().getTime());
         console.log(start)
-        
-        /* category, lat, long, buildingName, address Record.jsx에서 받아와야 합니다 */
+        const postData = prevData.prevData
+        console.log(postData)
+        console.log("https://record-upload-bucket.s3.ap-northeast-2.amazonaws.com/"+t_filename)
+
         /* 백엔드에 POST */
-        client.post(process.env.REACT_APP_BASE_URL+"recipient/",
+        client.post("/recipient/",
         {
-          category_name:category,
-          latitude:lat,
-          longtitude:long,
-          building_name:buildingName,
-          address:address,
+          category_name:postData.category_name,
+          latitude:postData.latitude,
+          longtitude:postData.longitude,
+          building_name:postData.building_name,
+          address:postData.address,
           voice_record_name:"https://record-upload-bucket.s3.ap-northeast-2.amazonaws.com/"+t_filename,
         })
         .then(res => {
@@ -63,13 +65,12 @@ export default function SaveModal({ isVisible, onClose, fileBlob, prevData}) {
           console.log(res.data)
         })
         // 이후 ReqConfirm으로 이동
-        navigate("/reqconfirm");
+        navigate("/meeting");
       },
       function (err) {
         return alert("오류가 발생했습니다: ", err.message)
       }
     )
-
   }
 
   return createPortal(
@@ -83,7 +84,7 @@ export default function SaveModal({ isVisible, onClose, fileBlob, prevData}) {
       >
         <div>
           <p className="font-medium text-[20px] text-center py-10">
-            저장하시겠습니까?
+            해당 내용으로<br/>요청하시겠습니까?
           </p>
           <div className="flex items-center w-[310px] max-w-[19.375rem] h-14 bg-[#F3F3F3] place-content-around rounded-b-[0.625rem] rounded-br-[0.625rem]">
             <button className="font-semibold text-[16px] w-[50%] h-[100%] text-[#181717] rounded-b-[0.625rem]" onClick={() => onClose()}>

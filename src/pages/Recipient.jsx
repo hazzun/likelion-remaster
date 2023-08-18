@@ -5,9 +5,9 @@ import { useState } from 'react';
 
 export default function Recipient({ page, next }) {
   const [data, setData] = useState({
-    category_name: '',
+    category_name: '금융',
     latitude: '',
-    longtitude: '',
+    longitude: '',
     building_name: '',
     address: '',
     voice_record_name: '',

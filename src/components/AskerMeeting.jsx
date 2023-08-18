@@ -15,11 +15,19 @@ export default function AskerMeeting() {
   // post id 알 수가 없음...
   // let res = client.get(process.env.REACT_APP_BASE_URL+"요청내용GET/", {
   //   params: {
+<<<<<<< HEAD
 
   //   },
   // });
   console.log('===GET 결과===');
   // console.log(res.data);
+=======
+      
+  //   },
+  // });
+  // console.log("===GET 결과===")
+  // console.log(res.data)
+>>>>>>> 656bb11444dad473089660ddaa63f567bb3a74b5
   // startTime에 res.data중 date값 저장
   // setStartTime()
 
@@ -53,6 +61,7 @@ export default function AskerMeeting() {
     }, 1000);
 
     // 이것도 post id 모름...
+<<<<<<< HEAD
     let res = client.get(
       process.env.REACT_APP_BASE_URL + '요청상태확인-GET-PATH/',
       {
@@ -62,6 +71,16 @@ export default function AskerMeeting() {
     console.log('===GET 결과===');
     let datajson = res.data;
     console.log(datajson);
+=======
+    // let res = client.get(process.env.REACT_APP_BASE_URL+"요청상태확인-GET-PATH/", {
+    //   params: {
+        
+    //   },
+    // });
+    // console.log("===GET 결과===")
+    // let datajson = res.data;
+    // console.log(datajson)
+>>>>>>> 656bb11444dad473089660ddaa63f567bb3a74b5
     // 만약에 res 가 뭐 바뀌는 경우,,
     //setArrived(true)
 

@@ -19,6 +19,13 @@ import MainAsker from "./pages/MainAsker";
 import AskerMeeting from "./components/AskerMeeting";
 
 function App() {
+  // 배포 환경에서 console.log, console.warn, console.error 지우기
+  if (process.env.NODE_ENV === "production") {
+    console.log = function no_console() {};
+    console.warn = function no_console() {};
+    console.warn = function () {};
+  }
+
   // 초기 화면에 user 정보가 있다면 '/' 으로 (역할고르는 화면)
   // 초기 화면에 user 정보가 없다면 '/login' 으로 (로그인 화면)
   let isLogin = false; // 사용자 정보가 없다는 가정 <- 추후에 백엔드 연동해서 값 불러와야 할 듯 합니다

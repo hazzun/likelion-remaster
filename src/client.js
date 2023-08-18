@@ -1,10 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export const client = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
 });
 
-export const login = axios.create({
+export const auth = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
 });
 
@@ -23,11 +24,29 @@ client.interceptors.request.use((config) => {
 
 export async function signUp(data) {
   try {
-    console.log(process.env.REACT_APP_BASE_URL + "registration/");
-    const res = await client.post("registration/", data);
-    console.log(res);
+    // console.log(process.env.REACT_APP_BASE_URL + "registration/");
+    const res = await auth.post("registration/", data);
+    return res;
+    // console.log(res);
   } catch (err) {
-    alert("로그인에 실패하였습니다. 오류 내용: " + err.message);
+    // alert("로그인에 실패하였습니다. 오류 내용: " + err.message);
+    console.log(err);
+  }
+}
+
+export async function loginAuth({ id, pw }) {
+  try {
+    const res = await auth.post("accounts/login/", {
+      username: id,
+      password: pw,
+    });
+    console.log("로그인 성공");
+    console.log(res);
+    const token = res.data.access_token;
+    localStorage.setItem("jwtToken", token);
+    return res.data.type;
+  } catch (err) {
+    // alert("로그인에 실패하였습니다. 오류 내용: " + err.message);
     console.log(err);
   }
 }

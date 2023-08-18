@@ -15,6 +15,7 @@ export default function AskerMeeting({ postId }) {
   const [handleAccept, setHandleAccept] = useState();
   const [arrived, setArrived] = useState(false);
   const [helperReset, setHelperReset] = useState(false);
+  const [distance, setDistance] = useState();
 
   // 백에서 받아온 요청시간 저장하기
   const [startTime, setStartTime] = useState(new Date());
@@ -72,6 +73,14 @@ export default function AskerMeeting({ postId }) {
       .get(`/meeting/${postIndex}/`)
       .then((response) => {
         console.log(response.data);
+        setDistance(
+          haversineDistance(
+            response.data.helper.user_latitude,
+            response.data.helper.user_longtitude,
+            response.data.post.location_latitude,
+            response.data.post.location_longtitude
+          )
+        );
         setHandleAccept(response.data);
       })
       .catch((error) => console.log(error));
@@ -81,6 +90,29 @@ export default function AskerMeeting({ postId }) {
   const clickCancel = () => {
     setModalShow(true);
   };
+  function degToRad(degrees) {
+    return degrees * (Math.PI / 180);
+  }
+
+  function haversineDistance(lat1, lon1, lat2, lon2) {
+    const earthRadius = 6371000; // 지구 반지름 (미터)
+
+    const dLat = degToRad(lat2 - lat1);
+    const dLon = degToRad(lon2 - lon1);
+
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(degToRad(lat1)) *
+        Math.cos(degToRad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const distance = earthRadius * c;
+
+    return distance;
+  }
 
   return (
     <div className='h-full flex flex-col items-center justify-between pt-[52.87px] px-[20px] pb-[37.19px]'>
@@ -106,9 +138,12 @@ export default function AskerMeeting({ postId }) {
                 </p> */}
                   <p>
                     <span className='font-bold mr-4'>소요 시간</span>도보 약{' '}
-                    {/* {Math.floor(distance / 67)}분 */}
+                    {Math.floor(distance / 67)}분
                   </p>
-                  <p className='text-sm'>거리 'distance'm</p>
+                  <p className='text-sm'>
+                    <span className='font-bold mr-4'>거리</span> 약{' '}
+                    {Math.floor(distance)}m
+                  </p>
                   <p className='mt-4 text-xl font-semibold'>
                     만남을 가진 뒤<br /> 도착버튼을 눌러주세요!
                   </p>

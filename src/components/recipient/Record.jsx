@@ -2,16 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 import SaveModal from '../modal/SaveModal';
 import { BsFillMicFill, BsFillStopFill } from 'react-icons/bs';
-import axios from 'axios';
 
-export default function Record() {
-  // 추후 로그인 검사코드 추가
-  const [usertoken, setUsertoken] = useState('');
+import { client, login } from '../../client';
 
-  useEffect(() => {
-    setUsertoken('유저토큰코드');
-  }, []);
-
+export default function Record(prevData) {
+  
+  /* category 는 Title.jsx에서 넘어온 값을 Map으로 그리고 */
+  /* category, lat, long, buildingName, address Map.jsx에서 받아와야 합니다 */
+  
   const recorderControls = useAudioRecorder(
     {
       noiseSuppression: true,
@@ -66,6 +64,7 @@ export default function Record() {
         console.log('재생 멈춤');
       } else {
         setStart(true);
+        audio.loop = true;
         audio.play();
         console.log('재생 시작');
       }
@@ -77,6 +76,20 @@ export default function Record() {
   const [modalShow, setModalShow] = useState(false);
   const clickHelp = () => {
     if (existAudio) {
+      const loginData = {
+        username: 'mihyunasker',
+        password: 'algus1234!',
+      };
+      login
+        .post('/accounts/login/', loginData)
+        .then((response) => {
+          console.log(
+            `${loginData.username} 으로 로그인 성공!\n 발급된 토큰 값 -> `,
+            response.data.access_token
+          );
+          localStorage.setItem('jwtToken', response.data.access_token);
+        })
+        .catch((error) => console.log('err : ', error));
       setModalShow(true);
     } else {
       alert('녹음 후 도움을 요청해 주세요 :)');
@@ -97,9 +110,10 @@ export default function Record() {
         />
       </div>
       <div className='flex gap-5 items-center justify-center'>
+        <div id="side-round" className='rounded-full bg-transparent border-[#FFC700] w-[185px] h-[185px] border-4'>
         <button
           onClick={(e) => setRecording(!recording)}
-          className='bg-[#5C5C5C] rounded-full p-5'
+          className='bg-[#5C5C5C] rounded-full p-14 ml-2 mt-2'
         >
           {!recording ? (
             <BsFillMicFill color='#FFC700' size='50' />
@@ -107,10 +121,11 @@ export default function Record() {
             <BsFillStopFill color='#FFC700' size='50' className='blinking' />
           )}
         </button>
+        </div>
       </div>
       <div
         id='myDiv'
-        className='flex flex-col items-center justify-center gap-5'
+        className='flex flex-col items-center justify-center gap-5 mt-5'
       >
         <button
           className='w-full h-[3.25rem] text-xl font-medium rounded-2xl bg-[#5C5C5C] text-[#FFC700]'
@@ -130,8 +145,8 @@ export default function Record() {
       <SaveModal
         isVisible={modalShow}
         onClose={() => setModalShow(false)}
-        usertoken={usertoken}
         fileBlob={t_blob}
+        prevData={prevData}
       />
     </div>
   );

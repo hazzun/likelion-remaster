@@ -16,6 +16,7 @@ import Login from './pages/Login';
 import MeetingAfter from './pages/MeetingAfter';
 import SignUp from './pages/SignUp';
 import MainAsker from './pages/MainAsker';
+import AskerMeeting from './components/AskerMeeting';
 
 function App() {
   // 초기 화면에 user 정보가 있다면 '/' 으로 (역할고르는 화면)
@@ -117,6 +118,7 @@ function App() {
               element={<Recipient page={page} next={() => setPage(page + 1)} />}
             />
             <Route path='/login' element={<Login />}></Route>
+            <Route path='/askermeeting' element={<AskerMeeting />} />
           </Routes>
         </div>
       </div>

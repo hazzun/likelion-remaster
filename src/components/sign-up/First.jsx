@@ -1,6 +1,8 @@
-import React from "react";
-
-export default function First({ next }) {
+export default function First({ next, prevData, setData }) {
+  const nav = (type) => {
+    next();
+    setData({ ...prevData, type: type });
+  };
   return (
     <div className="flex flex-col justify-between pt-10 pb-[2.8075rem] h-full">
       <div>
@@ -18,7 +20,7 @@ export default function First({ next }) {
         </p>
       </div>
       <div>
-        <button className="w-full text-left" onClick={next}>
+        <button className="w-full text-left" onClick={() => nav("asker")}>
           <div className="flex flex-col justify-between mb-[1.5975rem] pt-[0.91rem] pb-[1.31125rem] pl-[1.275rem] yellow rounded-[0.625rem] h-[7.65125rem]">
             <p className="heading-2">도움요청자로 시작!</p>
             <p className="font-medium text-[0.875rem] leading-[1.095rem] text-[#5C5C5C]">
@@ -28,7 +30,7 @@ export default function First({ next }) {
             </p>
           </div>
         </button>
-        <button className="w-full text-left" onClick={next}>
+        <button className="w-full text-left" onClick={() => nav("helper")}>
           <div className="flex flex-col justify-between pt-[0.91rem] pb-[1.31125rem] pl-[1.275rem] gray1 rounded-[0.625rem] h-[7.65125rem] ">
             <p className="heading-2">도움제공자로 시작!</p>
             <p className="font-medium text-[0.875rem] leading-[1.095rem] text-[#5C5C5C]">

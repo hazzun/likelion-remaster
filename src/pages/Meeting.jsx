@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import AskerMeeting from '../components/AskerMeeting';
-import HelperMeeting from '../components/HelperMeeting';
-import { useLocation } from 'react-router-dom';
+import React, { useState } from "react";
+import AskerMeeting from "../components/AskerMeeting";
+import HelperMeeting from "../components/HelperMeeting";
+import { useLocation } from "react-router-dom";
 
 export default function Meeting() {
   /**
@@ -20,10 +20,18 @@ export default function Meeting() {
    */
 
   const location = useLocation();
-  console.log(location.state.route);
+  console.log(location.state);
   const routeCheck = location.state.route;
+  const postId = location.state.postId;
+  const distance = location.state.distance;
 
   return (
-    <>{routeCheck === '/mainhelper' ? <HelperMeeting /> : <AskerMeeting />}</>
+    <>
+      {routeCheck === '/mainhelper' && (
+        <HelperMeeting postId={postId} distance={distance} />
+      )}
+
+      {routeCheck === '/recipient' && <AskerMeeting />}
+    </>
   );
 }

@@ -2,48 +2,56 @@ import { useState } from "react";
 import CategoryBox from "../CategoryBox";
 import BottomButton from "../BottomButton";
 
-export default function Title({ click }) {
-  const [idx, setIdx] = useState();
+export default function Title({ click, prevData, setData }) {
+  const [cateSelect, setCateSelect] = useState('금융');
 
   const category = [
-    "내용1",
-    "내용2",
-    "내용3",
-    "내용4",
-    "내용5",
-    "내용6",
-    "내용7",
-    "내용8",
+    '금융',
+    '쇼핑',
+    '문서 및 이메일 작성',
+    '영상 및 사진',
+    '예약/예매',
+    '인터넷',
+    '기기고장',
+    '기타',
   ];
+  
+  const selectCategory = (item) => {
+    if(item !== cateSelect) {
+      setCateSelect(item)
+      setData({...prevData, category_name: item})
+    }
+  }
 
   return (
-    <div className="flex flex-col justify-between pb-[2.125rem] px-5 h-full">
+    <div className='flex flex-col justify-between pb-[2.125rem] px-5 h-full'>
       <div>
-        <p className="font-semibold text-[24px] py-5">
+        <p className='font-semibold text-[24px] py-5'>
           도움이 필요한 분야를 선택해주세요.
         </p>
-        <div className="w-[85%] grid grid-cols-4 gap-2">
-          {category.map((item, i) => {
-            const check = idx === i ? true : false;
-            return (
-              <CategoryBox
-                text={item}
-                click={() => setIdx((prev) => (prev === i ? "" : i))}
-                check={check}
-              />
-            );
-          })}
+        <div className='w-full overflow-auto'>
+          {category.map((item, key) =>
+            item === cateSelect ? (
+              <button
+                key={key}
+                className='bg-[#FED130] px-[10px] py-[2px] rounded-2xl text-lg m-1'
+                onClick={() => selectCategory(item)}
+              >
+                {item}
+              </button>
+            ) : (
+              <button
+                key={key}
+                className='bg-white border border-[#D9D9D9] text-[18px] px-[10px] py-[2px] rounded-2xl text-lg m-1'
+                onClick={() => selectCategory(item)}
+              >
+                {item}
+              </button>
+            )
+          )}
         </div>
-        {/* <p className="mt-[3.375rem] text-[1.25rem] font-medium mb-[1.875rem]">
-          제목을 입력해주세요.
-        </p>
-        <p className="font-medium text-[1rem] text-[#616161] mb-2.5">제목</p>
-        <input
-          className="w-[85%] h-[2.875rem] rounded-md pl-4 border border-solid	border-[#5C5C5C]"
-          placeholder="최대 10자"
-        /> */}
       </div>
-      <BottomButton text="다음으로" click={click} />
+      <BottomButton text='다음으로' click={click} />
     </div>
   );
 }

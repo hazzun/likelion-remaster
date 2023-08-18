@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { signUp } from "../../client";
 import BottomButton from "../BottomButton";
+import ConfirmLoading from "../ConfirmLoading";
 
-export default function BirthGender({ next, prevData, setData }) {
+export default function BirthGender({ next, prevData, setData, setPage }) {
   const [year, setYear] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
   const [gender, setGender] = useState("");
+  const [loading, setLoading] = useState();
 
   useEffect(() => {
     setYear(prevData.birth_Year);
@@ -69,85 +71,101 @@ export default function BirthGender({ next, prevData, setData }) {
     setData({ ...prevData, gender: gender });
   };
 
-  const nav = () => {
+  const nav = async () => {
     if (year !== "" && month !== "" && day !== "" && gender !== "") {
-      signUp(prevData);
-      next();
+      setLoading(true);
+      try {
+        const res = await signUp(prevData);
+        console.log(res);
+        if (res.result) {
+          await next();
+        } else {
+          setPage(2);
+        }
+      } catch (error) {
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
   return (
     <>
-      <div className="pt-[5.375rem]">
-        <p className="title mb-[1.875rem]">생년월일을 입력해주세요.</p>
-        <p className="mb-2.5 font-medium text-[1rem] text-[#616161]">
-          생년월일
-        </p>
-        <div className="flex items-end mb-[40.04px]">
-          <input
-            className="w-[103.32px] mr-[5.36px] px-3.5 border border-solid border-[#5C5C5C] rounded-md h-[2.75rem] placeholder:font-medium placeholder:text-[0.75rem] placeholder:text-[#D9D9D9]"
-            onInput={(e) => handlerInput("year", e)}
-            value={year}
-          />
-          <p className="mr-[13.68px] font-medium text-[1rem] text-[#616161]">
-            년
-          </p>
-          <input
-            className="w-[54.76px] mr-[5.36px] px-3.5 border border-solid border-[#5C5C5C] rounded-md h-[2.75rem] placeholder:font-medium placeholder:text-[0.75rem] placeholder:text-[#D9D9D9]"
-            onInput={(e) => handlerInput("month", e)}
-            value={month}
-          />
-          <p className="mr-[13.68px] font-medium text-[1rem] text-[#616161]">
-            월
-          </p>
-          <input
-            className="w-[54.76px] mr-[5.36px] px-3.5 border border-solid border-[#5C5C5C] rounded-md h-[2.75rem] placeholder:font-medium placeholder:text-[0.75rem] placeholder:text-[#D9D9D9]"
-            onInput={(e) => handlerInput("day", e)}
-            value={day}
-          />
-          <p className="mr-[13.68px] font-medium text-[1rem] text-[#616161]">
-            일
-          </p>
-        </div>
-        <p className="mb-[28.18px] font-medium text-[1rem] text-[#616161]">
-          성별을 입력해주세요.
-        </p>
-        <p className="mb-[11.68px] font-medium text-[1rem] text-[#616161]">
-          성별
-        </p>
-        <div className="flex items-center">
-          <label className="custom-checkbox">
-            <input
-              className="hidden-checkbox"
-              type="checkbox"
-              name="gender"
-              value="male"
-              onChange={() => handleGender("남성")}
-              checked={gender === "남성"}
-            />
-            <span className="checkmark" />
-          </label>
-          <p className="ml-[10px] mr-[26.12px] font-medium text-[1rem] text-[#616161]">
-            남성
-          </p>
-          <label className="custom-checkbox">
-            <input
-              className="hidden-checkbox"
-              type="checkbox"
-              name="gender"
-              value="female"
-              onChange={() => handleGender("여성")}
-              checked={gender === "여성"}
-            />
-            <span className="checkmark" />
-          </label>
-          <p className="ml-[10px] font-medium text-[1rem] text-[#616161]">
-            여성
-          </p>
-        </div>
-      </div>
-
-      <BottomButton text="다음으로" click={nav} />
+      {!loading ? (
+        <>
+          <div className="pt-[5.375rem]">
+            <p className="title mb-[1.875rem]">생년월일을 입력해주세요.</p>
+            <p className="mb-2.5 font-medium text-[1rem] text-[#616161]">
+              생년월일
+            </p>
+            <div className="flex items-end mb-[40.04px]">
+              <input
+                className="w-[103.32px] mr-[5.36px] px-3.5 border border-solid border-[#5C5C5C] rounded-md h-[2.75rem] placeholder:font-medium placeholder:text-[0.75rem] placeholder:text-[#D9D9D9]"
+                onInput={(e) => handlerInput("year", e)}
+                value={year}
+              />
+              <p className="mr-[13.68px] font-medium text-[1rem] text-[#616161]">
+                년
+              </p>
+              <input
+                className="w-[54.76px] mr-[5.36px] px-3.5 border border-solid border-[#5C5C5C] rounded-md h-[2.75rem] placeholder:font-medium placeholder:text-[0.75rem] placeholder:text-[#D9D9D9]"
+                onInput={(e) => handlerInput("month", e)}
+                value={month}
+              />
+              <p className="mr-[13.68px] font-medium text-[1rem] text-[#616161]">
+                월
+              </p>
+              <input
+                className="w-[54.76px] mr-[5.36px] px-3.5 border border-solid border-[#5C5C5C] rounded-md h-[2.75rem] placeholder:font-medium placeholder:text-[0.75rem] placeholder:text-[#D9D9D9]"
+                onInput={(e) => handlerInput("day", e)}
+                value={day}
+              />
+              <p className="mr-[13.68px] font-medium text-[1rem] text-[#616161]">
+                일
+              </p>
+            </div>
+            <p className="mb-[28.18px] font-medium text-[1rem] text-[#616161]">
+              성별을 입력해주세요.
+            </p>
+            <p className="mb-[11.68px] font-medium text-[1rem] text-[#616161]">
+              성별
+            </p>
+            <div className="flex items-center">
+              <label className="custom-checkbox">
+                <input
+                  className="hidden-checkbox"
+                  type="checkbox"
+                  name="gender"
+                  value="male"
+                  onChange={() => handleGender("남성")}
+                  checked={gender === "남성"}
+                />
+                <span className="checkmark" />
+              </label>
+              <p className="ml-[10px] mr-[26.12px] font-medium text-[1rem] text-[#616161]">
+                남성
+              </p>
+              <label className="custom-checkbox">
+                <input
+                  className="hidden-checkbox"
+                  type="checkbox"
+                  name="gender"
+                  value="female"
+                  onChange={() => handleGender("여성")}
+                  checked={gender === "여성"}
+                />
+                <span className="checkmark" />
+              </label>
+              <p className="ml-[10px] font-medium text-[1rem] text-[#616161]">
+                여성
+              </p>
+            </div>
+          </div>
+          <BottomButton text="다음으로" click={nav} />
+        </>
+      ) : (
+        <ConfirmLoading text="회원가입을 진행하고 있습니다." />
+      )}
     </>
   );
 }

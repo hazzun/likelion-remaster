@@ -17,6 +17,20 @@ export default function SignUp({ page, setPage }) {
     birth_Day: "",
   });
 
+  useEffect(() => {
+    setData({
+      username: "",
+      password: "",
+      type: "",
+      gender: "",
+      nickname: "",
+      birth_Year: "",
+      birth_Month: "",
+      birth_Day: "",
+    });
+    setPage(1);
+  }, []);
+
   let components = <Id />;
 
   const next = () => {
@@ -35,7 +49,12 @@ export default function SignUp({ page, setPage }) {
       break;
     case 4:
       components = (
-        <BirthGender setData={setData} next={next} prevData={data} />
+        <BirthGender
+          setData={setData}
+          next={next}
+          prevData={data}
+          setPage={setPage}
+        />
       );
       break;
     case 5:

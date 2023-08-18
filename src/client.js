@@ -24,12 +24,19 @@ client.interceptors.request.use((config) => {
 
 export async function signUp(data) {
   try {
-    // console.log(process.env.REACT_APP_BASE_URL + "registration/");
+    // console.log("회원가입 성공");
     const res = await auth.post("registration/", data);
-    return res;
+    if (res.data.ERROR.includes("username")) {
+      alert("이미 존재하는 아이디입니다.");
+    }
+    if (res.data.ERROR.includes("nickname")) {
+      alert("이미 존재하는 닉네임입니다.");
+    }
+    // // console.log(res);
+    return res.data;
     // console.log(res);
   } catch (err) {
-    // alert("로그인에 실패하였습니다. 오류 내용: " + err.message);
+    alert("회원가입을 실패하였습니다. 오류 내용: " + err.message);
     console.log(err);
   }
 }
@@ -41,12 +48,11 @@ export async function loginAuth({ id, pw }) {
       password: pw,
     });
     console.log("로그인 성공");
-    console.log(res);
     const token = res.data.access_token;
     localStorage.setItem("jwtToken", token);
     return res.data.type;
   } catch (err) {
-    // alert("로그인에 실패하였습니다. 오류 내용: " + err.message);
+    alert("로그인에 실패하였습니다. 오류 내용: " + err.message);
     console.log(err);
   }
 }

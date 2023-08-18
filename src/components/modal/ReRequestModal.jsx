@@ -1,8 +1,22 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
+import { client } from '../../client';
+import { useNavigate } from 'react-router-dom';
 
-export default function ReRequestModal({ isVisible, onClose }) {
+export default function ReRequestModal({
+  isVisible,
+  onClose,
+  postId,
+  setHelperReset,
+}) {
+  const navigate = useNavigate();
   if (!isVisible) return null;
+
+  const clickNope = () => {
+    client.post(`/meeting/${postId}/`, { command: 'remove' });
+    onClose();
+    navigate('/mainasker');
+  };
 
   return createPortal(
     <div
@@ -21,15 +35,19 @@ export default function ReRequestModal({ isVisible, onClose }) {
           <div className='flex items-center w-[310px] max-w-[19.375rem] h-14 bg-[#F3F3F3] place-content-around rounded-b-[0.625rem] rounded-br-[0.625rem]'>
             <button
               className='font-semibold text-[16px] w-[50%] h-[100%] text-[#181717] rounded-b-[0.625rem]'
-              onClick={() => onClose()}
+              onClick={clickNope}
             >
-              취소
+              아니요
             </button>
             <button
               className='font-semibold text-[16px] w-[50%] h-[100%] bg-[#FED130] rounded-br-[0.625rem]'
-              onClick={() => console.log('입력한 요청 확인하는 화면으로 가기')}
+              onClick={() => {
+                client.post(`/meeting/${postId}/`, { command: 'retry' });
+                setHelperReset(true);
+                window.location.reload('/meeting');
+              }}
             >
-              확인
+              네
             </button>
           </div>
         </div>

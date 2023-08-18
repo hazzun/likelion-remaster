@@ -124,8 +124,8 @@ export default function Map({ click, prevData, setData }) {
 
   // 건물명 찾기 함수
   const searchPlaceByAddress = (address, lat, lon) => {
-    if(lat === undefined) lat = userLocation.getLat();
-    if(lon === undefined) lon = userLocation.getLng();
+    if (lat === undefined) lat = userLocation.getLat();
+    if (lon === undefined) lon = userLocation.getLng();
     let places = new kakao.maps.services.Places();
     places.keywordSearch(address, function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
@@ -138,7 +138,7 @@ export default function Map({ click, prevData, setData }) {
             longitude: lon,
             address: address,
             building_name: result[0].place_name,
-          })
+          });
         } else {
           console.log('해당 위치에 해당하는 건물명을 찾을 수 없습니다.');
         }

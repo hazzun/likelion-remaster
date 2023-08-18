@@ -7,18 +7,21 @@ import ToggleOpen from '../components/icons/ToggleOpen';
 import ProfileImage from '../components/ProfileImage';
 import Mypage from '../components/Mypage';
 import { AiOutlineClose } from 'react-icons/ai';
-import { Link, useLocation } from 'react-router-dom';
-import { client } from '../client';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { auth, client } from '../client';
 
 const { kakao } = window;
 
 export default function MainHelper({ mypage, closeMypage }) {
+  const navigate = useNavigate();
   const [userLocation, setUserLocation] = useState();
   const [helpInfo, setHelpInfo] = useState();
   const [isInfoModal, setIsInfoModal] = useState(false);
   const [onToggle, setOnToggle] = useState(true);
   const [cateSelect, setCateSelect] = useState('전체');
   const [distance, setDistance] = useState(0);
+  const [helperLat, setHelperLat] = useState(0);
+  const [helperLon, setHelperLon] = useState(0);
   const [helpList, setHelpList] = useState([]);
   // const [keyValue, setKeyValue] = useState('');
 
@@ -37,24 +40,8 @@ export default function MainHelper({ mypage, closeMypage }) {
 
   const location = useLocation();
   const route = location.pathname;
-  // console.log('what = ', route);
 
-  const loginData = {
-    username: 'hazzunHelper',
-    password: '1234!@#$',
-  };
   useEffect(() => {
-    client
-      .post('/accounts/login/', loginData)
-      .then((response) => {
-        console.log(
-          `${loginData.username} 으로 로그인 성공!\n 발급된 토큰 값 -> `,
-          response.data.access_token
-        );
-        localStorage.setItem('jwtToken', response.data.access_token);
-      })
-      .catch((error) => console.log('err : ', error));
-
     if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
       navigator.geolocation.getCurrentPosition((position) => {
@@ -79,11 +66,13 @@ export default function MainHelper({ mypage, closeMypage }) {
       .catch((error) => console.log('에러입니다 : ', error));
 
     if (userLocation) {
+      setHelperLat(userLocation.La);
+      setHelperLon(userLocation.Ma);
       const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
       const options = {
         //지도를 생성할 때 필요한 기본 옵션
         center: userLocation, //지도의 중심좌표.
-        level: 10, //지도의 레벨(확대, 축소 정도), default = 3
+        level: 4, //지도의 레벨(확대, 축소 정도), default = 3
       };
 
       const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
@@ -91,49 +80,12 @@ export default function MainHelper({ mypage, closeMypage }) {
       /* ---------------------------------------------------------------------------- */
       /* --------------------------- 도움요청자의 정보 받아오기 ---------------------------- */
       /* ---------------------------------------------------------------------------- */
-      let positions = [
-        {
-          title: '수원역',
-          cate: '문서 및 이메일 작성',
-          latlng: new kakao.maps.LatLng(37.266714775928556, 127.00048478122952),
-        },
-        {
-          title: '판교',
-          cate: '금융',
-          latlng: new kakao.maps.LatLng(37.39033774639587, 127.0905994639179),
-        },
-        {
-          title: '인천국제공항',
-          cate: '쇼핑',
-          latlng: new kakao.maps.LatLng(37.47686451580999, 126.42996911223717),
-        },
-        {
-          title: '야탑역',
-          cate: '인터넷',
-          latlng: new kakao.maps.LatLng(37.4114916235998, 127.12920236033524),
-        },
-        {
-          title: '한대앞역',
-          cate: '기기고장',
-          latlng: new kakao.maps.LatLng(37.3102050791496, 126.85350336500038),
-        },
-        {
-          title: '잠실역',
-          cate: '기타',
-          latlng: new kakao.maps.LatLng(37.51541730466366, 127.07299456527649),
-        },
-        {
-          title: '어디게?',
-          cate: '핸드폰',
-          latlng: new kakao.maps.LatLng(37.4051373046637, 126.99999456527652),
-        },
-      ];
       let helpImage = '/images/marker.png';
       // let helpMarker;
 
       for (let i = 0; i < helpList.length; i++) {
         // 마커 이미지의 이미지 크기 입니다
-        let helpImageSize = new kakao.maps.Size(20, 40);
+        let helpImageSize = new kakao.maps.Size(25, 32);
 
         let latlng = new kakao.maps.LatLng(
           helpList[i].location_latitude,
@@ -236,10 +188,22 @@ export default function MainHelper({ mypage, closeMypage }) {
   const selectCategory = (item) => {
     if (item !== cateSelect) setCateSelect(item);
   };
-  const selectHelper = (postId) => {
-    client
-      .post(`/selecthelper/${postId}/`)
-      .then((response) => console.log(response))
+  const selectHelper = async (postId) => {
+    await client
+      .post(`/selecthelper/${postId}/`, {
+        latitude: helperLat,
+        longtitude: helperLon,
+      })
+      .then((response) => {
+        console.log(response);
+        navigate('/meeting', {
+          state: {
+            route,
+            postId: helpInfo.post.id,
+            distance: distance,
+          },
+        });
+      })
       .catch((error) => console.log(error));
   };
   return (
@@ -369,23 +333,21 @@ export default function MainHelper({ mypage, closeMypage }) {
                       </p>
                     </button>
                   </div>
-                  <Link
-                    to='/meeting'
+                  {/* <Link
+                    to="/meeting"
                     state={{
                       route,
                       postId: helpInfo.post.id,
                       distance: distance,
                     }}
+                  > */}
+                  <button
+                    className='w-full h-[52px] min-h-[52px] rounded-2xl yellow'
+                    onClick={() => selectHelper(helpInfo.post.id)}
                   >
-                    <button
-                      className='w-full h-[52px] min-h-[52px] rounded-2xl yellow'
-                      onClick={() => selectHelper(helpInfo.post.id)}
-                    >
-                      <p className='text-[1.25rem] font-medium'>
-                        도움 수락하기
-                      </p>
-                    </button>
-                  </Link>
+                    <p className='text-[1.25rem] font-medium'>도움 수락하기</p>
+                  </button>
+                  {/* </Link> */}
                 </div>
               )}
             </>

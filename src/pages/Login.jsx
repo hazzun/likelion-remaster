@@ -78,17 +78,10 @@ export default function Login() {
           <div className="text-[12px] text-[#828282] flex w-[75%] justify-between">
             <div className="flex items-center gap-1">
               <input
-<<<<<<< HEAD
                 id="auto-login"
                 type="checkbox"
                 // checked={autoLogin}
                 // onChange={() => handleAutoLogin()}
-=======
-                id='auto-login'
-                type='checkbox'
-                checked={autoLogin}
-                onChange={handleAutoLogin}
->>>>>>> e8e9949dcd09dd91f257eeb62b4dbaa4d8584de8
               />
               <label htmlFor="auto-login">자동로그인</label>
             </div>

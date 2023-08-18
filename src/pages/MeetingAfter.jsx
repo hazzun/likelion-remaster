@@ -69,10 +69,8 @@ export default function MeetingAfter() {
       if (helperState === 'helperSuccess')
         return <>{isLoading ? <ConfirmLoading /> : <HelperMeetingSuccess />}</>;
       break;
-    case 'askerSuccess':
+    case 'asker':
       return <AskerMeetingSuccess page={page} next={() => setPage(page + 1)} />;
-    case 'askerFail':
-      return <AskerMeetingFail />;
     default:
       return <div>test</div>;
   }

@@ -1,9 +1,5 @@
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-// 로컬 스토리지에서 토큰 값을 가져오는 함수
-const getAuthToken = () => {
-  return localStorage.getItem("jwtToken");
-};
 
 export const client = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
@@ -36,7 +32,7 @@ export async function signUp(data) {
     if (res.data.ERROR.includes("nickname")) {
       alert("이미 존재하는 닉네임입니다.");
     }
-    // console.log(res);
+    // // console.log(res);
     return res.data;
     // console.log(res);
   } catch (err) {

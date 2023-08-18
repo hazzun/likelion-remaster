@@ -7,6 +7,8 @@ export default function IncompleteButton({
   props,
   asker = '도움을 주지 못했어요',
   isHelp = true,
+  postId,
+  setHelperReset,
 }) {
   const [modalShow, setModalShow] = useState(false);
   const clickCancel = () => {
@@ -31,6 +33,8 @@ export default function IncompleteButton({
           <ReRequestModal
             isVisible={modalShow}
             onClose={() => setModalShow(false)}
+            postId={postId}
+            setHelperReset={setHelperReset}
           />
         </>
       )}

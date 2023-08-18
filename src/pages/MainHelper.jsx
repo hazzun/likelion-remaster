@@ -9,6 +9,7 @@ import Mypage from '../components/Mypage';
 import { AiOutlineClose } from 'react-icons/ai';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { auth, client } from '../client';
+import ReactAudioPlayer from 'react-audio-player';
 
 const { kakao } = window;
 
@@ -23,6 +24,7 @@ export default function MainHelper({ mypage, closeMypage }) {
   const [helperLat, setHelperLat] = useState(0);
   const [helperLon, setHelperLon] = useState(0);
   const [helpList, setHelpList] = useState([]);
+  const [mp3Url, setMp3Url] = useState('');
   // const [keyValue, setKeyValue] = useState('');
 
   const category = [
@@ -147,7 +149,7 @@ export default function MainHelper({ mypage, closeMypage }) {
 
         setIsInfoModal(() => true);
         map.setCenter(latlng);
-
+        
         // setHelpInfo(info);
       };
       /* ---------------------------------------------------------------------------- */
@@ -206,6 +208,22 @@ export default function MainHelper({ mypage, closeMypage }) {
       })
       .catch((error) => console.log(error));
   };
+
+  // audio 재생 함수
+  const [start, setStart] = useState(false);
+  const audio = document.querySelector('audio');
+
+  const clickListenBtn = () => {
+    if (start) {
+      setStart(false);
+      audio.pause();
+      audio.currentTime = 0;
+    } else {
+      setStart(true);
+      audio.play();
+    }
+  };
+
   return (
     <div className='relative h-full flex flex-col'>
       {!userLocation ? (
@@ -326,8 +344,11 @@ export default function MainHelper({ mypage, closeMypage }) {
                         (도보 약 {Math.floor(distance / 67)}분 소요)
                       </span>
                     </div>
-                    <button className='flex items-center justify-center w-[70%] h-[45px] mt-4 rounded-2xl bg-[#5A5A5A]'>
+                    <button className='flex items-center justify-center w-[70%] h-[45px] mt-4 rounded-2xl bg-[#5A5A5A]'
+                            onClick={() => clickListenBtn()}
+                            id='audio'>
                       <p className='flex items-center text-[#FFC700] text-[16px] font-medium gap-2'>
+                        <ReactAudioPlayer src={helpInfo.post.voice_record_name} controls className='hidden'/>
                         <RecordIcon size={'medium'} />
                         음성내용 듣기
                       </p>

@@ -135,7 +135,7 @@ export default function Map({ click, prevData, setData }) {
           setData({
             ...prevData,
             latitude: lat,
-            longtitude: lon,
+            longitude: lon,
             address: address,
             building_name: result[0].place_name,
           });

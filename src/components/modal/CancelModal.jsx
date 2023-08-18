@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
-import AWS from 'aws-sdk';
+import { client } from '../../client';
 
 export default function CancelModal({ isVisible, onClose }) {
   const navigate = useNavigate();
@@ -9,8 +9,17 @@ export default function CancelModal({ isVisible, onClose }) {
   if (!isVisible) return null;
 
   const clickCheck = () => {
-    // 백엔드로 요청취소 POST
-
+    // 백엔드로 요청취소 POST -> 마찬가지로 post id를 알 수 있는 방법이 현재로써는X
+    client
+      .post(process.env.REACT_APP_BASE_URL + '취소요청할 PATH/', {
+        command: 'cancel',
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((res) => {
+        console.log(res.data);
+      });
     navigate('/');
   };
 

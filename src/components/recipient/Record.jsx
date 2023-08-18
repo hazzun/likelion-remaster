@@ -4,7 +4,8 @@ import SaveModal from '../modal/SaveModal';
 import { BsFillMicFill, BsFillStopFill } from 'react-icons/bs';
 
 export default function Record(prevData) {
-  console.log(prevData);
+  /* category 는 Title.jsx에서 넘어온 값을 Map으로 그리고 */
+  /* category, lat, long, buildingName, address Map.jsx에서 받아와야 합니다 */
 
   const recorderControls = useAudioRecorder(
     {

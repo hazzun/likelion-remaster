@@ -1,17 +1,27 @@
-// 사용자가 Asker (도움요청자) 일 때 Meeting 화면입니다
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import HelperInfo from "./HelperInfo";
 import TwoButton from "./TwoButton";
 import CancelModal from "../components/modal/CancelModal";
 import ReRequestModal from "../components/modal/ReRequestModal";
+import { client } from '../client';
 
 export default function AskerMeeting() {
   const [arrived, setArrived] = useState(false);
 
   // 백에서 받아온 요청시간 저장하기
   const [startTime, setStartTime] = useState(new Date());
+
+  // post id 알 수가 없음...
+  let res = client.get(process.env.REACT_APP_BASE_URL+"요청내용GET/", {
+    params: {
+      
+    },
+  });
+  console.log("===GET 결과===")
+  console.log(res.data)
+  // startTime에 res.data중 date값 저장
+  // setStartTime()
 
   // 경과시간 계산
   const getRunningTime = (date) => {
@@ -41,6 +51,19 @@ export default function AskerMeeting() {
     const interval = setInterval(() => {
       setRunningTime(getRunningTime(isoStartTime));
     }, 1000);
+
+    // 이것도 post id 모름...
+    let res = client.get(process.env.REACT_APP_BASE_URL+"요청상태확인-GET-PATH/", {
+      params: {
+        
+      },
+    });
+    console.log("===GET 결과===")
+    let datajson = res.data;
+    console.log(datajson)
+    // 만약에 res 가 뭐 바뀌는 경우,,
+    //setArrived(true)
+
     return () => {
       clearInterval(interval);
     };

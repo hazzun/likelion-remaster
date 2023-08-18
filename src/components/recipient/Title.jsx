@@ -3,8 +3,6 @@ import CategoryBox from '../CategoryBox';
 import BottomButton from '../BottomButton';
 
 export default function Title({ click, prevData, setData }) {
-  // const [idx, setIdx] = useState();
-  // const [cate, setCate] = useState();
   const [cateSelect, setCateSelect] = useState('금융');
 
   const category = [
@@ -17,13 +15,13 @@ export default function Title({ click, prevData, setData }) {
     '기기고장',
     '기타',
   ];
+
   const selectCategory = (item) => {
     if (item !== cateSelect) {
       setCateSelect(item);
       setData({ ...prevData, category_name: item });
     }
   };
-  // console.log(cateSelect);
 
   return (
     <div className='flex flex-col justify-between pb-[2.125rem] px-5 h-full'>

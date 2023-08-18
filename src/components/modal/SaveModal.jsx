@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 import AWS from "aws-sdk"
 import { client } from '../../client';
 
-export default function SaveModal({ isVisible, onClose, fileBlob, category, lat, long, buildingName, address}) {
+export default function SaveModal({ isVisible, onClose, fileBlob, prevData}) {
   
   const navigate = useNavigate();
   
@@ -41,6 +41,7 @@ export default function SaveModal({ isVisible, onClose, fileBlob, category, lat,
     promise.then(
       function (data) {
         alert("업로드에 성공했습니다.")
+        console.log(prevData)
         const start = new Date(new Date().getTime());
         console.log(start)
         

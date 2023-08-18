@@ -1,14 +1,17 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation} from "react-router-dom";
 import { createPortal } from 'react-dom';
 import AWS from "aws-sdk"
 import { client } from '../../client';
 import { isCompositeComponent } from "react-dom/test-utils";
 
+
 export default function SaveModal({ isVisible, onClose, fileBlob, prevData}) {
   
   const navigate = useNavigate();
-  
+  const location = useLocation();
+  const route = location.pathname;
+
   if(!isVisible) return null;
 
   /* AWS 설정 객체 업데이트 */
@@ -65,7 +68,9 @@ export default function SaveModal({ isVisible, onClose, fileBlob, prevData}) {
           console.log(res.data)
         })
         // 이후 ReqConfirm으로 이동
-        navigate("/meeting");
+        navigate("/meeting", {state:{
+          route:route,
+        }});
       },
       function (err) {
         return alert("오류가 발생했습니다: ", err.message)

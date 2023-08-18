@@ -72,7 +72,7 @@ export default function MainHelper({ mypage, closeMypage }) {
       const options = {
         //지도를 생성할 때 필요한 기본 옵션
         center: userLocation, //지도의 중심좌표.
-        level: 10, //지도의 레벨(확대, 축소 정도), default = 3
+        level: 4, //지도의 레벨(확대, 축소 정도), default = 3
       };
 
       const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
@@ -85,7 +85,7 @@ export default function MainHelper({ mypage, closeMypage }) {
 
       for (let i = 0; i < helpList.length; i++) {
         // 마커 이미지의 이미지 크기 입니다
-        let helpImageSize = new kakao.maps.Size(20, 40);
+        let helpImageSize = new kakao.maps.Size(25, 32);
 
         let latlng = new kakao.maps.LatLng(
           helpList[i].location_latitude,

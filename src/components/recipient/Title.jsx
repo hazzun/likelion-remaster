@@ -2,26 +2,28 @@ import { useEffect, useState } from 'react';
 import CategoryBox from '../CategoryBox';
 import BottomButton from '../BottomButton';
 
-export default function Title({ click }) {
+export default function Title({ click, prevData, setData }) {
   // const [idx, setIdx] = useState();
   // const [cate, setCate] = useState();
-  const [cateSelect, setCateSelect] = useState('전체');
+  const [cateSelect, setCateSelect] = useState('금융');
 
   const category = [
-    '전체',
     '금융',
+    '쇼핑',
     '문서 및 이메일 작성',
     '영상 및 사진',
     '예약/예매',
-    '쇼핑',
     '인터넷',
     '기기고장',
     '기타',
   ];
   const selectCategory = (item) => {
-    if (item !== cateSelect) setCateSelect(item);
+    if (item !== cateSelect) {
+      setCateSelect(item);
+      setData({ ...prevData, category_name: item });
+    }
   };
-  console.log(cateSelect);
+  // console.log(cateSelect);
 
   return (
     <div className='flex flex-col justify-between pb-[2.125rem] px-5 h-full'>

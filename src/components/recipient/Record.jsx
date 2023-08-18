@@ -3,8 +3,9 @@ import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 import SaveModal from '../modal/SaveModal';
 import { BsFillMicFill, BsFillStopFill } from 'react-icons/bs';
 
-export default function Record() {
-  
+export default function Record(prevData) {
+  console.log(prevData);
+
   const recorderControls = useAudioRecorder(
     {
       noiseSuppression: true,
@@ -51,6 +52,7 @@ export default function Record() {
   const [start, setStart] = useState(false);
   const clickListenBtn = () => {
     const audio = document.querySelector('audio');
+    console.log('audio? ', audio);
     if (audio != null) {
       if (start) {
         setStart(false);
@@ -91,17 +93,20 @@ export default function Record() {
         />
       </div>
       <div className='flex gap-5 items-center justify-center'>
-        <div id="side-round" className='rounded-full bg-transparent border-[#FFC700] w-[185px] h-[185px] border-4'>
-        <button
-          onClick={(e) => setRecording(!recording)}
-          className='bg-[#5C5C5C] rounded-full p-14 ml-2 mt-2'
+        <div
+          id='side-round'
+          className='rounded-full bg-transparent border-[#FFC700] w-[185px] h-[185px] border-4'
         >
-          {!recording ? (
-            <BsFillMicFill color='#FFC700' size='50' />
-          ) : (
-            <BsFillStopFill color='#FFC700' size='50' className='blinking' />
-          )}
-        </button>
+          <button
+            onClick={(e) => setRecording(!recording)}
+            className='bg-[#5C5C5C] rounded-full p-14 ml-2 mt-2'
+          >
+            {!recording ? (
+              <BsFillMicFill color='#FFC700' size='50' />
+            ) : (
+              <BsFillStopFill color='#FFC700' size='50' className='blinking' />
+            )}
+          </button>
         </div>
       </div>
       <div
@@ -127,11 +132,7 @@ export default function Record() {
         isVisible={modalShow}
         onClose={() => setModalShow(false)}
         fileBlob={t_blob}
-        category={""}
-        lat={""} 
-        long={""} 
-        buildingName={""}
-        address={""}
+        prevData={prevData}
       />
     </div>
   );

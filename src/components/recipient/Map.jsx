@@ -5,7 +5,7 @@ import BottomButton from '../BottomButton';
 
 const { kakao } = window;
 
-export default function Map({ click }) {
+export default function Map({ click, prevData, setData }) {
   const [userLocation, setUserLocation] = useState();
   const [callLoc, setCallLoc] = useState();
   const [placeName, setPlaceName] = useState();
@@ -93,10 +93,10 @@ export default function Map({ click }) {
         let moveMarker = marker.getPosition();
         map.setCenter(moveMarker);
 
-        // console.log(
-        //   '클릭한 위치의 위도는 ' + moveMarker.getLat() + ' 이고, ',
-        //   '경도는 ' + moveMarker.getLng() + '임'
-        // );
+        console.log(
+          '클릭한 위치의 위도는 ' + moveMarker.getLat() + ' 이고, ',
+          '경도는 ' + moveMarker.getLng() + '임'
+        );
 
         const callback = (result, status) => {
           if (status === kakao.maps.services.Status.OK) {
@@ -105,7 +105,11 @@ export default function Map({ click }) {
               result[0].address.address_name + '\n장소명 = '
             );
             setCallLoc(result[0].address.address_name);
-            searchPlaceByAddress(result[0].address.address_name);
+            searchPlaceByAddress(
+              result[0].address.address_name,
+              moveMarker.getLat(),
+              moveMarker.getLng()
+            );
           }
         };
         geocoder.coord2Address(
@@ -119,13 +123,22 @@ export default function Map({ click }) {
   }, [userLocation]);
 
   // 건물명 찾기 함수
-  const searchPlaceByAddress = (address) => {
+  const searchPlaceByAddress = (address, lat, lon) => {
+    if (lat === undefined) lat = userLocation.getLat();
+    if (lon === undefined) lon = userLocation.getLng();
     let places = new kakao.maps.services.Places();
     places.keywordSearch(address, function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
         if (result.length > 0) {
           console.log('건물명 = ', result);
           setPlaceName(result[0].place_name);
+          setData({
+            ...prevData,
+            latitude: lat,
+            longtitude: lon,
+            address: address,
+            building_name: result[0].place_name,
+          });
         } else {
           console.log('해당 위치에 해당하는 건물명을 찾을 수 없습니다.');
         }

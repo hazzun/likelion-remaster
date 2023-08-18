@@ -13,13 +13,13 @@ export default function AskerMeeting() {
   const [startTime, setStartTime] = useState(new Date());
 
   // post id 알 수가 없음...
-  let res = client.get(process.env.REACT_APP_BASE_URL+"요청내용GET/", {
-    params: {
+  // let res = client.get(process.env.REACT_APP_BASE_URL+"요청내용GET/", {
+  //   params: {
       
-    },
-  });
-  console.log("===GET 결과===")
-  console.log(res.data)
+  //   },
+  // });
+  // console.log("===GET 결과===")
+  // console.log(res.data)
   // startTime에 res.data중 date값 저장
   // setStartTime()
 
@@ -53,14 +53,14 @@ export default function AskerMeeting() {
     }, 1000);
 
     // 이것도 post id 모름...
-    let res = client.get(process.env.REACT_APP_BASE_URL+"요청상태확인-GET-PATH/", {
-      params: {
+    // let res = client.get(process.env.REACT_APP_BASE_URL+"요청상태확인-GET-PATH/", {
+    //   params: {
         
-      },
-    });
-    console.log("===GET 결과===")
-    let datajson = res.data;
-    console.log(datajson)
+    //   },
+    // });
+    // console.log("===GET 결과===")
+    // let datajson = res.data;
+    // console.log(datajson)
     // 만약에 res 가 뭐 바뀌는 경우,,
     //setArrived(true)
 

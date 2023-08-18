@@ -27,11 +27,11 @@ export default function Meeting() {
 
   return (
     <>
-      {routeCheck === "/mainhelper" ? (
+      {routeCheck === '/mainhelper' && (
         <HelperMeeting postId={postId} distance={distance} />
-      ) : (
-        <AskerMeeting />
       )}
+
+      {routeCheck === '/recipient' && <AskerMeeting />}
     </>
   );
 }

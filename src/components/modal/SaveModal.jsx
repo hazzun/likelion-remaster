@@ -1,13 +1,17 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { createPortal } from "react-dom";
-import AWS from "aws-sdk";
-import { client } from "../../client";
+import { useNavigate, useLocation} from "react-router-dom";
+import { createPortal } from 'react-dom';
+import AWS from "aws-sdk"
+import { client } from '../../client';
+import { isCompositeComponent } from "react-dom/test-utils";
+
 
 export default function SaveModal({ isVisible, onClose, fileBlob, prevData }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const route = location.pathname;
 
-  if (!isVisible) return null;
+  if(!isVisible) return null;
 
   /* AWS 설정 객체 업데이트 */
   AWS.config.update({
@@ -38,38 +42,39 @@ export default function SaveModal({ isVisible, onClose, fileBlob, prevData }) {
 
     promise.then(
       function (data) {
-        alert("업로드에 성공했습니다.");
-        console.log(prevData);
+        alert("업로드에 성공했습니다.")
         const start = new Date(new Date().getTime());
-        console.log(start);
+        console.log(start)
+        const postData = prevData.prevData
+        console.log(postData)
+        console.log("https://record-upload-bucket.s3.ap-northeast-2.amazonaws.com/"+t_filename)
 
-        /* category, lat, long, buildingName, address Record.jsx에서 받아와야 합니다 */
         /* 백엔드에 POST */
-        client
-          .post(process.env.REACT_APP_BASE_URL + "recipient/", {
-            // category_name:category,
-            // latitude:lat,
-            // longtitude:long,
-            // building_name:buildingName,
-            // address:address,
-            voice_record_name:
-              "https://record-upload-bucket.s3.ap-northeast-2.amazonaws.com/" +
-              t_filename,
-          })
-          .then((res) => {
-            console.log(res.data);
-          })
-          .catch((res) => {
-            console.log(res.data);
-          });
+        client.post("/recipient/",
+        {
+          category_name:postData.category_name,
+          latitude:postData.latitude,
+          longtitude:postData.longitude,
+          building_name:postData.building_name,
+          address:postData.address,
+          voice_record_name:"https://record-upload-bucket.s3.ap-northeast-2.amazonaws.com/"+t_filename,
+        })
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(res => {
+          console.log(res.data)
+        })
         // 이후 ReqConfirm으로 이동
-        navigate("/reqconfirm");
+        navigate("/meeting", {state:{
+          route:route,
+        }});
       },
       function (err) {
         return alert("오류가 발생했습니다: ", err.message);
       }
-    );
-  };
+    )
+  }
 
   return createPortal(
     <div
@@ -82,7 +87,7 @@ export default function SaveModal({ isVisible, onClose, fileBlob, prevData }) {
       >
         <div>
           <p className="font-medium text-[20px] text-center py-10">
-            저장하시겠습니까?
+            해당 내용으로<br/>요청하시겠습니까?
           </p>
           <div className="flex items-center w-[310px] max-w-[19.375rem] h-14 bg-[#F3F3F3] place-content-around rounded-b-[0.625rem] rounded-br-[0.625rem]">
             <button

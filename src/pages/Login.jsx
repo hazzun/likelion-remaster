@@ -55,7 +55,7 @@ export default function Login() {
                 id='auto-login'
                 type='checkbox'
                 checked={autoLogin}
-                onChange={() => handleAutoLogin()}
+                onChange={handleAutoLogin}
               />
               <label htmlFor='auto-login'>자동로그인</label>
             </div>

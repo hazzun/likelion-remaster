@@ -23,6 +23,38 @@
   animation: blink 0.5s ease-in-out infinite alternate;
 }
 
+input:focus {
+    outline: none;
+    -webkit-tap-highlight-color : transparent;
+}
+input:-webkit-autofill { -webkit-box-shadow: 0 0 0 30px #D3D3D3 inset ; -webkit-text-fill-color: #000; }
+input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active { transition: background-color 5000s ease-in-out 0s; }
+button:focus {outline: none;}
+
+input, textarea { 
+  -webkit-user-select : auto;
+}
+
+div {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+div::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+}
+
+Image{
+    -webkit-tap-highlight-color:transparent;
+}
+
+a{
+    -webkit-tap-highlight-color:transparent;
+}
+
+img{
+    -webkit-tap-highlight-color:transparent;
+}
+
 ::placeholder {
   color: #d9d9d9;
   font-size: 13px;

@@ -8,7 +8,7 @@ import ProfileImage from '../components/ProfileImage';
 import Mypage from '../components/Mypage';
 import { AiOutlineClose } from 'react-icons/ai';
 import { Link, useLocation } from 'react-router-dom';
-import { client } from '../client';
+import { client, login } from '../client';
 
 const { kakao } = window;
 
@@ -40,11 +40,11 @@ export default function MainHelper({ mypage, closeMypage }) {
   // console.log('what = ', route);
 
   const loginData = {
-    username: 'hazzunHelper',
+    username: 'helpertest',
     password: '1234!@#$',
   };
   useEffect(() => {
-    client
+    login
       .post('/accounts/login/', loginData)
       .then((response) => {
         console.log(

@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { createPortal } from 'react-dom';
 import AWS from "aws-sdk"
-import axios from 'axios';
+import { client } from '../../client';
 
 export default function SaveModal({ isVisible, onClose, fileBlob, category, lat, long, buildingName, address}) {
   
@@ -44,9 +44,9 @@ export default function SaveModal({ isVisible, onClose, fileBlob, category, lat,
         const start = new Date(new Date().getTime());
         console.log(start)
         
-        /* 수정 필요 !!!!!!!!!!!!!!!!!!!!!!!!!!! */
+        /* category, lat, long, buildingName, address Record.jsx에서 받아와야 합니다 */
         /* 백엔드에 POST */
-        let res = axios.post(process.env.REACT_APP_BASE_URL+"recipient/",
+        client.post(process.env.REACT_APP_BASE_URL+"recipient/",
         {
           category_name:category,
           latitude:lat,
@@ -54,7 +54,13 @@ export default function SaveModal({ isVisible, onClose, fileBlob, category, lat,
           building_name:buildingName,
           address:address,
           voice_record_name:"https://record-upload-bucket.s3.ap-northeast-2.amazonaws.com/"+t_filename,
-        });
+        })
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(res => {
+          console.log(res.data)
+        })
         // 이후 ReqConfirm으로 이동
         navigate("/reqconfirm");
       },

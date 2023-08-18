@@ -3,7 +3,10 @@ import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 import SaveModal from '../modal/SaveModal';
 import { BsFillMicFill, BsFillStopFill } from 'react-icons/bs';
 
-export default function Record() {
+export default function Record(prevData) {
+  
+  /* category 는 Title.jsx에서 넘어온 값을 Map으로 그리고 */
+  /* category, lat, long, buildingName, address Map.jsx에서 받아와야 합니다 */
   
   const recorderControls = useAudioRecorder(
     {
@@ -127,11 +130,7 @@ export default function Record() {
         isVisible={modalShow}
         onClose={() => setModalShow(false)}
         fileBlob={t_blob}
-        category={""}
-        lat={""} 
-        long={""} 
-        buildingName={""}
-        address={""}
+        prevData={prevData}
       />
     </div>
   );

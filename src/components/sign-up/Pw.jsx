@@ -46,7 +46,7 @@ export default function Pw({ next, prevData, setData }) {
         <input
           type="password"
           className="w-full px-3.5 mb-[18.97px] border border-solid border-[#5C5C5C] rounded-md h-[2.75rem] placeholder:font-medium placeholder:text-[0.75rem] placeholder:text-[#D9D9D9]"
-          placeholder="영문+숫자 조합 8자리 이상"
+          placeholder="영문,숫자,특수문자 조합 8자리 이상"
           onChange={handlePwChange}
           value={pw}
         />
@@ -56,7 +56,7 @@ export default function Pw({ next, prevData, setData }) {
         <input
           type="password"
           className="w-full px-3.5 mb-[9.96px] border border-solid border-[#5C5C5C] rounded-md h-[2.75rem] placeholder:font-medium placeholder:text-[0.75rem] placeholder:text-[#D9D9D9]"
-          placeholder="영문+숫자 조합 8자리 이상"
+          placeholder="영문,숫자,특수문자 조합 8자리 이상"
           onChange={handlePwCheck}
           value={pwCheck}
         />

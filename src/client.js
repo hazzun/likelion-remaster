@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // 로컬 스토리지에서 토큰 값을 가져오는 함수
@@ -45,8 +46,10 @@ export async function loginAuth({ id, pw }) {
       password: pw,
     });
     console.log("로그인 성공");
+    console.log(res);
     const token = res.data.access_token;
     localStorage.setItem("jwtToken", token);
+    return res.data.type;
   } catch (err) {
     // alert("로그인에 실패하였습니다. 오류 내용: " + err.message);
     console.log(err);

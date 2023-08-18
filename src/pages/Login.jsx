@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { loginAuth } from "../client";
 import logo from "../assets/logo.png";
 import title from "../assets/title.png";
 import { Link } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
   const [id, setId] = useState();
   const [pw, setPw] = useState();
   // const [autoLogin, setAutoLogin] = useState(false);
@@ -21,8 +23,15 @@ export default function Login() {
 
   async function handleLogin() {
     try {
-      await loginAuth({ id: id, pw: pw });
+      const type = await loginAuth({ id: id, pw: pw });
+      if (type === "helper") {
+        navigate("/mainhelper");
+      }
+      if (type === "asker") {
+        navigate("/mainasker");
+      }
     } catch (err) {
+      alert("로그인 정보를 다시 확인해주세요.");
       console.log(err);
     }
   }
@@ -71,7 +80,7 @@ export default function Login() {
           </div>
           <button
             className="w-[75%] h-[40px] bg-[#FFC700] rounded-lg my-4"
-            onClick={() => loginAuth({ id: id, pw: pw })}
+            onClick={handleLogin}
           >
             로그인
           </button>

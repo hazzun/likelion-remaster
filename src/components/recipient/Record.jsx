@@ -3,8 +3,6 @@ import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 import SaveModal from '../modal/SaveModal';
 import { BsFillMicFill, BsFillStopFill } from 'react-icons/bs';
 
-import { auth, client, login } from '../../client';
-
 export default function Record(prevData) {
   /* category 는 Title.jsx에서 넘어온 값을 Map으로 그리고 */
   /* category, lat, long, buildingName, address Map.jsx에서 받아와야 합니다 */
@@ -76,20 +74,6 @@ export default function Record(prevData) {
   const [modalShow, setModalShow] = useState(false);
   const clickHelp = () => {
     if (existAudio) {
-      // const loginData = {
-      //   username: 'mihyunasker',
-      //   password: 'algus1234!',
-      // };
-      // auth
-      //   .post('/accounts/login/', loginData)
-      //   .then((response) => {
-      //     console.log(
-      //       `${loginData.username} 으로 로그인 성공!\n 발급된 토큰 값 -> `,
-      //       response.data.access_token
-      //     );
-      //     localStorage.setItem('jwtToken', response.data.access_token);
-      //   })
-      //   .catch((error) => console.log('err : ', error));
       setModalShow(true);
     } else {
       alert('녹음 후 도움을 요청해 주세요 :)');
